@@ -13,10 +13,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.android.politicalpreparedness.databinding.FragmentLaunchBinding
+import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.network.models.Address
 import java.util.Locale
 
-class DetailFragment : Fragment() {
+class RepresentativeFragment : Fragment() {
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 0
@@ -34,9 +35,9 @@ class DetailFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
 
-        val binding = FragmentLaunchBinding.inflate(inflater)
+        val binding = FragmentRepresentativeBinding.inflate(inflater)
         binding.lifecycleOwner = this
 
         return binding.root
@@ -61,26 +62,20 @@ class DetailFragment : Fragment() {
          //TODO: Handle location permission result to get location on permission granted
      }*/
 
-    private fun isLocationPermissionGranted(): Boolean {
-        return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(
-                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
-        )
-    }
-
     private fun checkLocationPermission() {
         if (!isLocationPermissionGranted()) {
             requestLocationPermission()
         }
     }
 
-    private fun requestLocationPermission() {
-        startForAuthResult.launch(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .setAuthMethodPickerLayout(customLayout)
-                        .build()
+    private fun isLocationPermissionGranted(): Boolean {
+        return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
         )
+    }
+
+    private fun requestLocationPermission() {
+        startForPermissionResult.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
 
