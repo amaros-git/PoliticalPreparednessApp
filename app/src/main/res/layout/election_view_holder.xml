@@ -8,7 +8,7 @@
 
         <variable
             name="election"
-            type="com.example.android.politicalpreparedness.network.models.Election" />
+            type="com.example.android.politicalpreparedness.data.network.models.Election" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
