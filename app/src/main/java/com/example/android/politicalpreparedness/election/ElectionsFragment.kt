@@ -54,37 +54,7 @@ class ElectionsFragment: Fragment() {
             val result = repository.getElections()
             when (result) {
                 is Result.Success -> {
-                    Log.d(TAG, "Received elections: ${result.data}")
-
-                   /* val data = """{"elections": [
-                        {
-                            "name": "VIP Test Election",
-                            "electionDay": "2021-06-06",
-                            "ocdDivisionId": "ocd-division/country:us"
-                        }
-                    ]}"""*/
-
-                    val data = """
-                        {
-                            "id": "2000",
-                            "name": "VIP Test Election",
-                            "electionDay": "2021-06-06",
-                            "ocdDivisionId": "ocd-division/country:us"
-                        }"""
-
-                    val moshi = Moshi.Builder()
-                            .add(KotlinJsonAdapterFactory())
-                            //.add(Division::class, ElectionAdapter())
-                            //.add(Date::class.java, DateJsonAdapter)
-                            .build()
-
-                    val adapter: JsonAdapter<Election> = moshi.adapter(Election::class.java)
-                    adapter.fromJson(data)
-                    Log.d(TAG, "election = ${adapter.fromJson(data)}")
-
-                /*result.data.forEach {
-                        Log.d(TAG, it.toString())
-                    }*/
+                    Log.d(TAG, result.data.toString())
                 }
                 is Result.Error -> {
                     Log.d(TAG, "Error: ${result.message}")
