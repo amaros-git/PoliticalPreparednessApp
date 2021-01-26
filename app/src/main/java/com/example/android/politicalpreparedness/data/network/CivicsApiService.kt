@@ -31,8 +31,12 @@ private val retrofit = Retrofit.Builder()
  */
 
 interface CivicsApiService {
+    /**
+     * @throws HttpException
+     * @throws SocketTimeoutException
+     */
     @GET("elections")
-    suspend fun getElections(): ElectionResponse
+    suspend fun getElections(): ElectionResponse ?
     //TODO: Add elections API Call
 
     //TODO: Add voterinfo API Call
