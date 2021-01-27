@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.android.politicalpreparedness.data.ApplicationRepository
 import com.example.android.politicalpreparedness.data.Result
 import com.example.android.politicalpreparedness.data.database.ElectionDatabase
@@ -20,13 +21,31 @@ class ElectionsFragment: Fragment() {
 
     private val TAG = ElectionsFragment::class.java.simpleName
 
-    //TODO: Declare ViewModel
+    private val viewModel by viewModels<ElectionsViewModel> {
+        ElectionsViewModelFactory(ApplicationRepository(
+                LocalDataSource(ElectionDatabase.getInstance(requireContext())),
+                CivicsApi
+        ))
+    }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
         val binding = FragmentElectionBinding.inflate(inflater)
+
+        binding.lifecycleOwner = this.viewLifecycleOwner
+
+        viewModel.upcomingElections.observe(viewLifecycleOwner) { result ->
+            Log.d(TAG, "Observed elections: ")
+            (result as Result.Success).data.forEach {
+                Log.d(TAG, it.toString())
+            }
+        }
+
+        viewModel.refreshUpcomingElections()
+
+
 
         //TODO: Add ViewModel values and create ViewModel
 
@@ -39,22 +58,6 @@ class ElectionsFragment: Fragment() {
         //TODO: Populate recycler adapters
 
         return binding.root
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val repository = ApplicationRepository(LocalDataSource(ElectionDatabase.getInstance(requireContext())), CivicsApi)
-        GlobalScope.launch {
-            try {
-                repository.refreshElections()
-            }catch (e:Exception) {
-
-            }
-        }
-
-
-
-
     }
 
     //TODO: Refresh adapters when fragment loads

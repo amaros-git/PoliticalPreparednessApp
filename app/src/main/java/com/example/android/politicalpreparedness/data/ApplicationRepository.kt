@@ -1,6 +1,7 @@
 package com.example.android.politicalpreparedness.data
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import com.example.android.politicalpreparedness.data.DataSource
 import com.example.android.politicalpreparedness.data.Result
 import com.example.android.politicalpreparedness.data.network.CivicsApi
@@ -18,14 +19,7 @@ class ApplicationRepository(
 
     private val TAG = ApplicationRepository::class.java.simpleName
 
-    /*   suspend fun getElections(): Result<ElectionResponse> = withContext(ioDispatcher) {
-           return@withContext try {
-               remoteDataSource.getElections()
-               Result.Success(remoteDataSource.retrofitService.getElections())
-           } catch (e: Exception) {
-               Result.Error(e.localizedMessage)
-           }
-       }*/
+    fun observeTasks(): LiveData<Result<List<Election>>> = localDataSource.observeElections()
 
     /**
      * @throws HttpException
