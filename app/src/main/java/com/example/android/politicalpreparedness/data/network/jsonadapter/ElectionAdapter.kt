@@ -8,7 +8,6 @@ import com.squareup.moshi.ToJson
 class ElectionAdapter {
     @FromJson
     fun divisionFromJson (ocdDivisionId: String): Division {
-        Log.d("ElectionAdapter", "divisionFromJson called")
         val countryDelimiter = "country:"
         val stateDelimiter = "state:"
         val country = ocdDivisionId.substringAfter(countryDelimiter,"")
@@ -20,7 +19,6 @@ class ElectionAdapter {
 
     @ToJson
     fun divisionToJson (division: Division): String {
-        Log.d("ElectionAdapter", "divisionToJson called")
         return division.id
     }
 }

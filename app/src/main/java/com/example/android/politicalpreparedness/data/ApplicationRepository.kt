@@ -19,7 +19,7 @@ class ApplicationRepository(
 
     private val TAG = ApplicationRepository::class.java.simpleName
 
-    fun observeTasks(): LiveData<Result<List<Election>>> = localDataSource.observeElections()
+    fun observeElections(): LiveData<Result<List<Election>>> = localDataSource.observeElections()
 
     /**
      * @throws HttpException

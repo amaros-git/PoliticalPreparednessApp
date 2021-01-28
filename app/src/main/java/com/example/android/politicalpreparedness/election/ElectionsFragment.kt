@@ -55,18 +55,28 @@ class ElectionsFragment: Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
-        binding = FragmentElectionBinding.inflate(inflater).apply {
-            this.viewModel = viewModel
-        }
+        binding = FragmentElectionBinding.inflate(inflater)
+
+
+        binding.viewModel = viewModel
+
 
         binding.lifecycleOwner = this.viewLifecycleOwner
+
+        viewModel.upcomingElections.observe(viewLifecycleOwner) {
+            Log.d(TAG, it.toString())
+        }
+
+        setupListAdapter()
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupListAdapter()
+
+
+        viewModel.refreshUpcomingElections()
     }
 
     private fun setupListAdapter() {

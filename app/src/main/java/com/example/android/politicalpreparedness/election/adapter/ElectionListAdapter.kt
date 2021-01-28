@@ -1,5 +1,6 @@
 package com.example.android.politicalpreparedness.election.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -28,6 +29,8 @@ class ElectionViewHolder(val binding: ElectionItemBinding): RecyclerView.ViewHol
         binding.viewModel = viewMode
         binding.election = item
 
+        Log.d("TEST", "bind called")
+
         binding.executePendingBindings()
     }
 
@@ -37,9 +40,7 @@ class ElectionViewHolder(val binding: ElectionItemBinding): RecyclerView.ViewHol
                     LayoutInflater.from(parent.context),
                     parent,
                     false
-            ).apply {
-                this.lifecycleOwner = lifecycleOwner
-            }
+            )
             return ElectionViewHolder(binding)
         }
     }
