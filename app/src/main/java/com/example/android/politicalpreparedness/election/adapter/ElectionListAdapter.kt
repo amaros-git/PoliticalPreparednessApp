@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.android.politicalpreparedness.databinding.ElectionViewHolderBinding
+import com.example.android.politicalpreparedness.databinding.ElectionItemBinding
 import com.example.android.politicalpreparedness.data.network.models.Election
 import com.example.android.politicalpreparedness.election.ElectionsViewModel
 
@@ -22,7 +22,7 @@ class ElectionListAdapter(private val viewModel: ElectionsViewModel): ListAdapte
     }
 }
 
-class ElectionViewHolder(val binding: ElectionViewHolderBinding): RecyclerView.ViewHolder(binding.root) {
+class ElectionViewHolder(val binding: ElectionItemBinding): RecyclerView.ViewHolder(binding.root) {
 
     fun bind(viewMode: ElectionsViewModel, item: Election) {
         binding.viewModel = viewMode
@@ -33,7 +33,7 @@ class ElectionViewHolder(val binding: ElectionViewHolderBinding): RecyclerView.V
 
     companion object {
         fun from(parent: ViewGroup): ElectionViewHolder {
-            val binding = ElectionViewHolderBinding.inflate(
+            val binding = ElectionItemBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false

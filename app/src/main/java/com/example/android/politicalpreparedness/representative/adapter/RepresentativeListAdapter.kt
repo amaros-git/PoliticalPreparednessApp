@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.politicalpreparedness.R
-import com.example.android.politicalpreparedness.databinding.RepresantiveViewHolderBinding
+import com.example.android.politicalpreparedness.databinding.RepresantiveItemBinding
 import com.example.android.politicalpreparedness.data.network.models.Channel
 import com.example.android.politicalpreparedness.representative.model.Representative
 
@@ -27,7 +27,7 @@ class RepresentativeListAdapter: ListAdapter<Representative, RepresentativeViewH
     }
 }
 
-class RepresentativeViewHolder(val binding: RepresantiveViewHolderBinding): RecyclerView.ViewHolder(binding.root) {
+class RepresentativeViewHolder(val binding: RepresantiveItemBinding): RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: Representative) {
         binding.representative = item
@@ -41,7 +41,7 @@ class RepresentativeViewHolder(val binding: RepresantiveViewHolderBinding): Recy
 
     companion object {
         fun from(parent: ViewGroup): RepresentativeViewHolder {
-            val binding = RepresantiveViewHolderBinding.inflate(
+            val binding = RepresantiveItemBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
