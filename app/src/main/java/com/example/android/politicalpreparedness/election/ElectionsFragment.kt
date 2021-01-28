@@ -8,18 +8,41 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.android.politicalpreparedness.data.ApplicationRepository
-import com.example.android.politicalpreparedness.data.Result
 import com.example.android.politicalpreparedness.data.database.ElectionDatabase
 import com.example.android.politicalpreparedness.data.database.LocalDataSource
 import com.example.android.politicalpreparedness.data.network.CivicsApi
 import com.example.android.politicalpreparedness.databinding.FragmentElectionBinding
+import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+/*viewModel.upcomingElections.observe(viewLifecycleOwner) { result ->
+            Log.d(TAG, "Observed elections: ")
+            (result as Result.Success).data.forEach {
+                Log.d(TAG, it.toString())
+            }
+        }
+
+        viewModel.refreshUpcomingElections()*/
+
+
+
+//TODO: Add ViewModel values and create ViewModel
+
+//TODO: Add binding values
+
+//TODO: Link elections to voter info
+
+//TODO: Initiate recycler adapters
+
+//TODO: Populate recycler adapters
+
 
 class ElectionsFragment: Fragment() {
 
     private val TAG = ElectionsFragment::class.java.simpleName
+
+    private lateinit var listAdapter: ElectionListAdapter
+
+    private lateinit var binding: FragmentElectionBinding
 
     private val viewModel by viewModels<ElectionsViewModel> {
         ElectionsViewModelFactory(ApplicationRepository(
@@ -32,33 +55,25 @@ class ElectionsFragment: Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
-        val binding = FragmentElectionBinding.inflate(inflater)
+        binding = FragmentElectionBinding.inflate(inflater).apply {
+            this.viewModel = viewModel
+        }
 
         binding.lifecycleOwner = this.viewLifecycleOwner
 
-        viewModel.upcomingElections.observe(viewLifecycleOwner) { result ->
-            Log.d(TAG, "Observed elections: ")
-            (result as Result.Success).data.forEach {
-                Log.d(TAG, it.toString())
-            }
-        }
-
-        viewModel.refreshUpcomingElections()
-
-
-
-        //TODO: Add ViewModel values and create ViewModel
-
-        //TODO: Add binding values
-
-        //TODO: Link elections to voter info
-
-        //TODO: Initiate recycler adapters
-
-        //TODO: Populate recycler adapters
-
         return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupListAdapter()
+    }
+
+    private fun setupListAdapter() {
+        listAdapter = ElectionListAdapter(viewModel)
+        binding.upcomingElections.adapter = listAdapter
+    }
+
 
     //TODO: Refresh adapters when fragment loads
 

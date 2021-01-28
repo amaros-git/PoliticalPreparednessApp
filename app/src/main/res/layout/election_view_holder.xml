@@ -7,6 +7,10 @@
     <data>
 
         <variable
+            name="viewModel"
+            type="com.example.android.politicalpreparedness.election.ElectionsViewModel" />
+
+        <variable
             name="election"
             type="com.example.android.politicalpreparedness.data.network.models.Election" />
     </data>
