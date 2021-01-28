@@ -10,9 +10,7 @@ import com.example.android.politicalpreparedness.data.network.models.Election
  */
 @BindingAdapter("app:items")
 fun setItems(listView: RecyclerView, items: List<Election>?) {
-    Log.d("TEST", "setItems called")
     items?.let {
-        Log.d("TEST", "items not null")
         (listView.adapter as ElectionListAdapter).submitList(items)
     }
 }

@@ -29,8 +29,6 @@ class ElectionViewHolder(val binding: ElectionItemBinding): RecyclerView.ViewHol
         binding.viewModel = viewMode
         binding.election = item
 
-        Log.d("TEST", "bind called")
-
         binding.executePendingBindings()
     }
 

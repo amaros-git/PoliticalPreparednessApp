@@ -7,10 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.android.politicalpreparedness.data.ApplicationRepository
 import com.example.android.politicalpreparedness.data.database.ElectionDatabase
 import com.example.android.politicalpreparedness.data.database.LocalDataSource
 import com.example.android.politicalpreparedness.data.network.CivicsApi
+import com.example.android.politicalpreparedness.data.network.models.Division
 import com.example.android.politicalpreparedness.databinding.FragmentElectionBinding
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 
@@ -63,8 +65,13 @@ class ElectionsFragment: Fragment() {
 
         binding.lifecycleOwner = this.viewLifecycleOwner
 
-        viewModel.upcomingElections.observe(viewLifecycleOwner) {
+       /* viewModel.upcomingElections.observe(viewLifecycleOwner) {
             Log.d(TAG, it.toString())
+        }*/
+
+        viewModel.openElectionDetailsEvent.observe(viewLifecycleOwner) {
+            Log.d(TAG, "Click")
+            findNavController().navigate(ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(200, Division("2000", "00", "00" )))
         }
 
         setupListAdapter()

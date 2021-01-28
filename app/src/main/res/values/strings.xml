@@ -4,6 +4,8 @@
     <string name="app_logo_description">Application logo: hand is voting</string>
     <string name="find_my_representatives">Find my representatives</string>
     <string name="upcoming_elections">Upcoming elections</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- TODO: Add necessary string values -->
 

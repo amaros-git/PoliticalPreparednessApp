@@ -1,17 +1,15 @@
 package com.example.android.politicalpreparedness.election
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.example.android.politicalpreparedness.base.BaseViewModel
 import com.example.android.politicalpreparedness.data.ApplicationRepository
 import com.example.android.politicalpreparedness.data.Result
-import com.example.android.politicalpreparedness.data.network.models.Division
 import com.example.android.politicalpreparedness.data.network.models.Election
+import com.example.android.politicalpreparedness.utils.SingleLiveEvent
 import kotlinx.coroutines.launch
 
 //TODO: Construct ViewModel and provide election datasource
-class ElectionsViewModel(private val repository: ApplicationRepository): ViewModel() {
+class ElectionsViewModel(private val repository: ApplicationRepository): BaseViewModel() {
 
     //TODO: Create live data val for upcoming elections
     val upcomingElections: LiveData<List<Election>?> = repository.observeElections().map {
@@ -22,7 +20,8 @@ class ElectionsViewModel(private val repository: ApplicationRepository): ViewMod
         }
     }
 
-    val test = listOf<Election>(Election(1, "Name", "Date", Division("2000", " ", " ")))
+    val openElectionDetailsEvent = SingleLiveEvent<Election>()
+
 
     //TODO: Create live data val for saved elections
 
@@ -34,6 +33,10 @@ class ElectionsViewModel(private val repository: ApplicationRepository): ViewMod
         viewModelScope.launch {
             repository.refreshElections()
         }
+    }
+
+    fun openElectionDetails(election: Election) {
+        openElectionDetailsEvent.value = election
     }
 
 }
