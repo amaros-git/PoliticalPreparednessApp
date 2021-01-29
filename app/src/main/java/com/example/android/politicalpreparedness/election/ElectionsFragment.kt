@@ -65,13 +65,12 @@ class ElectionsFragment: Fragment() {
 
         binding.lifecycleOwner = this.viewLifecycleOwner
 
-       /* viewModel.upcomingElections.observe(viewLifecycleOwner) {
+        viewModel.upcomingElections.observe(viewLifecycleOwner) {
             Log.d(TAG, it.toString())
-        }*/
+        }
 
-        viewModel.openElectionDetailsEvent.observe(viewLifecycleOwner) {
-            Log.d(TAG, "Click")
-            findNavController().navigate(ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(200, Division("2000", "00", "00" )))
+        viewModel.openVoterInfoEvent.observe(viewLifecycleOwner) { election ->
+            findNavController().navigate(ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(election.id, election.division))
         }
 
         setupListAdapter()
@@ -83,7 +82,7 @@ class ElectionsFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        viewModel.refreshUpcomingElections()
+        //viewModel.refreshUpcomingElections()
     }
 
     private fun setupListAdapter() {

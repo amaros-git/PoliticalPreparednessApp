@@ -20,7 +20,7 @@ class ElectionsViewModel(private val repository: ApplicationRepository): BaseVie
         }
     }
 
-    val openElectionDetailsEvent = SingleLiveEvent<Election>()
+    val openVoterInfoEvent = SingleLiveEvent<Election>()
 
 
     //TODO: Create live data val for saved elections
@@ -35,8 +35,8 @@ class ElectionsViewModel(private val repository: ApplicationRepository): BaseVie
         }
     }
 
-    fun openElectionDetails(election: Election) {
-        openElectionDetailsEvent.value = election
+    fun openVoterInfo(election: Election) {
+        openVoterInfoEvent.value = election
     }
 
 }
