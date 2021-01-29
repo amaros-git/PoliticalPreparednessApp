@@ -82,7 +82,7 @@ class ElectionsFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        //viewModel.refreshUpcomingElections()
+        viewModel.refreshUpcomingElections()
     }
 
     private fun setupListAdapter() {
