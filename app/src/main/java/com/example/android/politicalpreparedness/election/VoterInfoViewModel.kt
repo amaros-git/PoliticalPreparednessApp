@@ -12,6 +12,7 @@ import com.example.android.politicalpreparedness.data.network.models.VoterInfoRe
 import kotlinx.coroutines.launch
 import com.example.android.politicalpreparedness.data.Result
 import com.example.android.politicalpreparedness.data.network.models.Division
+import kotlinx.coroutines.Dispatchers
 
 class VoterInfoViewModel(private val repository: ApplicationRepository) : BaseViewModel() {
 
@@ -20,16 +21,17 @@ class VoterInfoViewModel(private val repository: ApplicationRepository) : BaseVi
     get() = _voterInfo
 
     fun getVoterInfo(electionId: Int, division: Division) {
-        viewModelScope.launch {
+        //by default viewModelScope uses
+        viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getVoterInfo(
                     electionId,
                     division.state + " " + division.country
             )
             if (result is Result.Success) {
-                _voterInfo.value = result.data
+                _voterInfo.postValue(result.data)
             } else {
                 Log.e("VoterInfoViewModel", "${(result as Result.Error).message}")
-                showErrorMessage.value = (result as Result.Error).message
+                showErrorMessage.postValue(result.message)
             }
         }
     }

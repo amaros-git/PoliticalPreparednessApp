@@ -3,6 +3,7 @@ package com.example.android.politicalpreparedness.election
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.android.politicalpreparedness.base.BaseFragment
@@ -10,7 +11,9 @@ import com.example.android.politicalpreparedness.data.ApplicationRepository
 import com.example.android.politicalpreparedness.data.database.ElectionDatabase
 import com.example.android.politicalpreparedness.data.database.LocalDataSource
 import com.example.android.politicalpreparedness.data.network.CivicsApi
+import com.example.android.politicalpreparedness.data.network.models.Election
 import com.example.android.politicalpreparedness.databinding.FragmentVoterInfoBinding
+import com.example.android.politicalpreparedness.utils.setTitle
 
 class VoterInfoFragment : BaseFragment() {
 
@@ -23,6 +26,8 @@ class VoterInfoFragment : BaseFragment() {
         )
     }
 
+    private lateinit var election: Election
+
     private val args: VoterInfoFragmentArgs by navArgs()
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -30,22 +35,29 @@ class VoterInfoFragment : BaseFragment() {
                               savedInstanceState: Bundle?): View {
 
         val binding = FragmentVoterInfoBinding.inflate(inflater)
+
         binding.lifecycleOwner = viewLifecycleOwner
 
-        Log.d(TAG, "ID = ${args.argElectionId}, Division = ${args.argDivision}")
+        election = args.argElection
 
-        _viewModel.voterInfo.observe(viewLifecycleOwner) {
-            it?.let {
-                Log.d(TAG, "Voter info = $it")
+        _viewModel.voterInfo.observe(viewLifecycleOwner) { response ->
+            response?.let { it ->
+                it.state?.forEach { state ->
+                    Log.d(TAG, "Voting URL ${state.electionAdministrationBody.votingLocationFinderUrl}")
+                    Log.d(TAG, "Ballot URL ${state.electionAdministrationBody.ballotInfoUrl}")
+                }
             }
         }
+
+        setTitle(election.name)
 
         return binding.root
     }
 
+
     override fun onStart() {
         super.onStart()
-        _viewModel.getVoterInfo(args.argElectionId, args.argDivision)
+        _viewModel.getVoterInfo(election.id, election.division)
     }
 
     //TODO: Add ViewModel values and create ViewModel

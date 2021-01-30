@@ -69,7 +69,7 @@ class ElectionsFragment : Fragment() {
         }
 
         viewModel.openVoterInfoEvent.observe(viewLifecycleOwner) { election ->
-            findNavController().navigate(ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(election.id, election.division))
+            findNavController().navigate(ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(election))
         }
 
         setupListAdapter()
