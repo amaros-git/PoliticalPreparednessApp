@@ -18,15 +18,16 @@ import java.util.Locale
 
 class RepresentativeFragment : Fragment() {
 
+    private val TAG = RepresentativeFragment::class.java.simpleName
+
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 0
-        private const val TAG = "DetailFragment"
     }
 
     private val startForPermissionResult = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
     ) { result ->
-        Log.d(TAG, "result = $result")
+        Log.d(TAG, "permission result = $result") //TODO if false show snack bar with settings
     }
 
 

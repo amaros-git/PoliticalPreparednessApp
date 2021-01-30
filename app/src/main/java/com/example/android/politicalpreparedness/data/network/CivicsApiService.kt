@@ -44,7 +44,7 @@ interface CivicsApiService {
 
     @GET("voterinfo")
     suspend fun getVoterInfo(
-            @Query("electionId") id: Long,
+            @Query("electionId") id: Int,
             @Query("address") address: String, //address in format "state country".
             @Query("officialOnly") officialOnly: Boolean = false): VoterInfoResponse?
 

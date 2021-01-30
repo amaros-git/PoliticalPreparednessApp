@@ -1,18 +1,36 @@
 package com.example.android.politicalpreparedness.election
 
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.android.politicalpreparedness.base.BaseViewModel
 import com.example.android.politicalpreparedness.data.ApplicationRepository
 import com.example.android.politicalpreparedness.data.database.ElectionDao
+import com.example.android.politicalpreparedness.data.network.models.VoterInfoResponse
 import kotlinx.coroutines.launch
+import com.example.android.politicalpreparedness.data.Result
+import com.example.android.politicalpreparedness.data.network.models.Division
 
-class VoterInfoViewModel(private val repository: ApplicationRepository) : ViewModel() {
+class VoterInfoViewModel(private val repository: ApplicationRepository) : BaseViewModel() {
 
+    private val _voterInfo = MutableLiveData<VoterInfoResponse>()
+    val voterInfo: LiveData<VoterInfoResponse>
+    get() = _voterInfo
 
-
-    fun getVoterInfo(electionId: Long, address: String, officialOnly: Boolean = false) {
+    fun getVoterInfo(electionId: Int, division: Division) {
         viewModelScope.launch {
-            repository.getVoterInfo(electionId, address, officialOnly)
+            val result = repository.getVoterInfo(
+                    electionId,
+                    division.state + " " + division.country
+            )
+            if (result is Result.Success) {
+                _voterInfo.value = result.data
+            } else {
+                Log.e("VoterInfoViewModel", "${(result as Result.Error).message}")
+                showErrorMessage.value = (result as Result.Error).message
+            }
         }
     }
 

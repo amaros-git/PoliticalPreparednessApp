@@ -66,9 +66,9 @@ class ApplicationRepository(
      * @throws Exception is no data received
      */
     suspend fun getVoterInfo(
-            electionId: Long,
+            electionId: Int,
             address: String,
-            officialOnly: Boolean
+            officialOnly: Boolean = false
     ): Result<VoterInfoResponse> {
         return try {
             val response = network.retrofitService.getVoterInfo(electionId, address, officialOnly)
@@ -82,16 +82,16 @@ class ApplicationRepository(
         } catch (e: Exception) {
             when (e) {
                 is HttpException -> {
-                    Result.Error((e as HttpException).localizedMessage)
+                    Result.Error(e.localizedMessage)
                 }
                 is SocketTimeoutException -> {
-                    Result.Error((e as SocketTimeoutException).localizedMessage)
+                    Result.Error(e.localizedMessage)
                 }
                 is JsonDataException -> {
-                    Result.Error((e as JsonDataException).localizedMessage)
+                    Result.Error(e.localizedMessage)
                 }
                 is IOException -> {
-                    Result.Error((e as IOException).localizedMessage)
+                    Result.Error(e.localizedMessage)
                 }
                 else -> Result.Error("Unknown exception: ${e.localizedMessage}")
             }

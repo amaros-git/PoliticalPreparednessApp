@@ -20,7 +20,19 @@ abstract class BaseFragment : Fragment() {
         _viewModel.showErrorMessage.observe(this) {
             Toast.makeText(activity, it, Toast.LENGTH_LONG).show()
         }
-        _viewModel.showToast.observe(this) {
+
+        _viewModel.navigationCommand.observe(this) { command ->
+            when (command) {
+                is NavigationCommand.To -> findNavController().navigate(command.directions)
+                is NavigationCommand.Back -> findNavController().popBackStack()
+                is NavigationCommand.BackTo -> findNavController().popBackStack(
+                        command.destinationId,
+                        false
+                )
+            }
+        }
+
+       /* _viewModel.showToast.observe(this) {
             Toast.makeText(activity, it, Toast.LENGTH_LONG).show()
         }
         _viewModel.showSnackBar.observe(this) {
@@ -28,17 +40,8 @@ abstract class BaseFragment : Fragment() {
         }
         _viewModel.showSnackBarInt.observe(this) {
             Snackbar.make(this.requireView(), getString(it), Snackbar.LENGTH_LONG).show()
-        }
+        }*/
 
-        _viewModel.navigationCommand.observe(this) { command ->
-            when (command) {
-                is NavigationCommand.To -> findNavController().navigate(command.directions)
-                is NavigationCommand.Back -> findNavController().popBackStack()
-                is NavigationCommand.BackTo -> findNavController().popBackStack(
-                    command.destinationId,
-                    false
-                )
-            }
-        }
+
     }
 }

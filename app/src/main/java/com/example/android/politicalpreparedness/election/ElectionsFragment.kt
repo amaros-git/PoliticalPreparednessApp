@@ -26,7 +26,6 @@ import com.example.android.politicalpreparedness.election.adapter.ElectionListAd
         viewModel.refreshUpcomingElections()*/
 
 
-
 //TODO: Add ViewModel values and create ViewModel
 
 //TODO: Add binding values
@@ -38,7 +37,7 @@ import com.example.android.politicalpreparedness.election.adapter.ElectionListAd
 //TODO: Populate recycler adapters
 
 
-class ElectionsFragment: Fragment() {
+class ElectionsFragment : Fragment() {
 
     private val TAG = ElectionsFragment::class.java.simpleName
 
@@ -49,8 +48,8 @@ class ElectionsFragment: Fragment() {
     private val viewModel by viewModels<ElectionsViewModel> {
         ElectionsViewModelFactory(ApplicationRepository(
                 LocalDataSource(ElectionDatabase.getInstance(requireContext())),
-                CivicsApi
-        ))
+                CivicsApi)
+        )
     }
 
     override fun onCreateView(inflater: LayoutInflater,
