@@ -1,6 +1,7 @@
 package com.example.android.politicalpreparedness.election
 
 import android.opengl.Visibility
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.constraintlayout.widget.Group
@@ -13,7 +14,7 @@ import java.util.*
  * [BindingAdapter] to set address group visibility
  */
 @BindingAdapter("app:addressVisibility")
-fun addressVisibility(group: Group, address: Address?) { //TODO rework. What is epmpty ?
+fun addressVisibility(group: Group, address: Address?) { //TODO rework. What is empty ?
     if (null == address) {
         group.visibility = View.GONE
     } else {

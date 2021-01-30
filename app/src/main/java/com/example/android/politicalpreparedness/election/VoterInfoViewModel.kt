@@ -1,6 +1,11 @@
 package com.example.android.politicalpreparedness.election
 
+import android.content.ActivityNotFoundException
+import android.content.ComponentName
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,14 +16,21 @@ import com.example.android.politicalpreparedness.data.database.ElectionDao
 import com.example.android.politicalpreparedness.data.network.models.VoterInfoResponse
 import kotlinx.coroutines.launch
 import com.example.android.politicalpreparedness.data.Result
+import com.example.android.politicalpreparedness.data.network.models.Address
 import com.example.android.politicalpreparedness.data.network.models.Division
+import com.example.android.politicalpreparedness.utils.SingleLiveEvent
 import kotlinx.coroutines.Dispatchers
 
 class VoterInfoViewModel(private val repository: ApplicationRepository) : BaseViewModel() {
 
+    private val TAG = VoterInfoViewModel::class.java.simpleName
+
     private val _voterInfo = MutableLiveData<VoterInfoResponse>()
     val voterInfo: LiveData<VoterInfoResponse>
-    get() = _voterInfo
+        get() = _voterInfo
+
+    val openUrlEvent = SingleLiveEvent<String>()
+
 
     fun getVoterInfo(electionId: Int, division: Division) {
         //by default viewModelScope uses
@@ -34,6 +46,16 @@ class VoterInfoViewModel(private val repository: ApplicationRepository) : BaseVi
                 showErrorMessage.postValue(result.message)
             }
         }
+    }
+
+
+    fun openUrl(url: String?) {
+        url?.let {
+            openUrlEvent.value = it
+        }
+       /* url?.let {
+
+        }*/
     }
 
     //TODO: Add live data to hold voter info

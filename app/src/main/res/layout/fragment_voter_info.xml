@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.example.android.politicalpreparedness.election.VoterInfoViewModel" />
@@ -17,7 +16,13 @@
             name="election"
             type="com.example.android.politicalpreparedness.data.network.models.Election" />
 
+        <variable
+            name="voterUrl"
+            type="String" />
 
+        <variable
+            name="ballotUrl"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -69,7 +74,7 @@
             tools:text="12 November 2055" />
 
         <TextView
-            android:id="@+id/state_header"
+            android:id="@+id/election_header"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_big_double"
@@ -83,28 +88,32 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_big"
+            android:text="@string/voting_locations"
+            android:onClick="@{() -> viewModel.openUrl(voterUrl)}"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/state_header"
-            tools:text="Voting Locations" />
+            app:layout_constraintTop_toBottomOf="@+id/election_header" />
 
         <TextView
-            android:id="@+id/state_ballot"
+            android:id="@+id/ballot_information"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/margin_big"
+            android:text="@string/ballot_information"
+            android:onClick="@{() -> viewModel.openUrl(ballotUrl)}"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/voting_locations"
-            tools:text="Ballot information" />
+            app:layout_constraintTop_toBottomOf="@+id/voting_locations"/>
+
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/address_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="visible"
             app:addressVisibility="@{address}"
-            app:constraint_referenced_ids="state_correspondence_header,address" />
+            app:constraint_referenced_ids="state_correspondence_header,address_text" />
 
         <!-- TODO: Add visual styling and content -->
 
@@ -114,17 +123,19 @@
             android:id="@+id/state_correspondence_header"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="@dimen/margin_big_double"
+            android:text="@string/correspondence_address"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/state_ballot"
+            app:layout_constraintTop_toBottomOf="@+id/ballot_information"
             tools:text="Correspondence Address" />
 
         <TextView
-            android:id="@+id/address"
+            android:id="@+id/address_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:text="@{address.toFormattedString()}"
+            android:layout_marginTop="@dimen/margin_big"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/state_correspondence_header"

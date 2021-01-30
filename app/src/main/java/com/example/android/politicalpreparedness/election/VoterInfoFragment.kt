@@ -1,9 +1,12 @@
 package com.example.android.politicalpreparedness.election
 
+import android.content.ActivityNotFoundException
+import android.content.ComponentName
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.android.politicalpreparedness.base.BaseFragment
@@ -14,6 +17,7 @@ import com.example.android.politicalpreparedness.data.network.CivicsApi
 import com.example.android.politicalpreparedness.data.network.models.Election
 import com.example.android.politicalpreparedness.databinding.FragmentVoterInfoBinding
 import com.example.android.politicalpreparedness.utils.setTitle
+
 
 class VoterInfoFragment : BaseFragment() {
 
@@ -35,17 +39,44 @@ class VoterInfoFragment : BaseFragment() {
                               savedInstanceState: Bundle?): View {
 
         val binding = FragmentVoterInfoBinding.inflate(inflater)
-
         binding.lifecycleOwner = viewLifecycleOwner
 
         election = args.argElection
 
+        binding.viewModel = _viewModel
+        binding.election = election
+
         _viewModel.voterInfo.observe(viewLifecycleOwner) { response ->
-            response?.let { it ->
-                it.state?.forEach { state ->
-                    Log.d(TAG, "Voting URL ${state.electionAdministrationBody.votingLocationFinderUrl}")
-                    Log.d(TAG, "Ballot URL ${state.electionAdministrationBody.ballotInfoUrl}")
+            response?.let { voterInfo ->
+                binding.address =
+                        voterInfo.state?.get(0)?.electionAdministrationBody?.correspondenceAddress
+
+                // not sure how it should be handled the case when more than one state on the list,
+                // I will use the first element
+                if (!voterInfo.state.isNullOrEmpty()) {
+                    val votingUrl = voterInfo.state[0].electionAdministrationBody.votingLocationFinderUrl
+                    val ballotUrl = voterInfo.state[0].electionAdministrationBody.ballotInfoUrl
+
+                    Log.d(TAG, "Voting URL $votingUrl")
+                    Log.d(TAG, "Ballot URL $ballotUrl")
+
+                    binding.voterUrl = votingUrl
+                    binding.ballotUrl = ballotUrl
                 }
+            }
+        }
+
+        _viewModel.openUrlEvent.observe(viewLifecycleOwner) {
+            try {
+                val intent = Intent("android.intent.action.MAIN")
+                intent.component = ComponentName.unflattenFromString("com.android.chrome/com.android.chrome.Main")
+                intent.addCategory("android.intent.category.LAUNCHER")
+                intent.data = Uri.parse(it)
+                startActivity(intent)
+            } catch (e: ActivityNotFoundException) {
+                // Chrome is not installed, try other
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
+                startActivity(intent)
             }
         }
 
@@ -62,18 +93,18 @@ class VoterInfoFragment : BaseFragment() {
 
     //TODO: Add ViewModel values and create ViewModel
 
-        //TODO: Add binding values
+    //TODO: Add binding values
 
-        //TODO: Populate voter info -- hide views without provided data.
-        /**
-        Hint: You will need to ensure proper data is provided from previous fragment.
-         */
+    //TODO: Populate voter info -- hide views without provided data.
+    /**
+    Hint: You will need to ensure proper data is provided from previous fragment.
+     */
 
 
-        //TODO: Handle loading of URLs
+    //TODO: Handle loading of URLs
 
-        //TODO: Handle save button UI state
-        //TODO: cont'd Handle save button clicks
+    //TODO: Handle save button UI state
+    //TODO: cont'd Handle save button clicks
 
     //TODO: Create method to load URL intents
 
