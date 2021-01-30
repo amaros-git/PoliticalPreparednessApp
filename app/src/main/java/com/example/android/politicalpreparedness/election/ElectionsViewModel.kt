@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 //TODO: Construct ViewModel and provide election datasource
 class ElectionsViewModel(private val repository: ApplicationRepository): BaseViewModel() {
 
-    //TODO: Create live data val for upcoming elections
     val upcomingElections: LiveData<List<Election>?> = repository.observeElections().map {
         if (it is Result.Success) {
             it.data

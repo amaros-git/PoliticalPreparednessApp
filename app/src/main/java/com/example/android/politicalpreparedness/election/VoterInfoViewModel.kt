@@ -1,11 +1,23 @@
 package com.example.android.politicalpreparedness.election
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.android.politicalpreparedness.data.ApplicationRepository
 import com.example.android.politicalpreparedness.data.database.ElectionDao
+import kotlinx.coroutines.launch
 
-class VoterInfoViewModel(private val dataSource: ElectionDao) : ViewModel() {
+class VoterInfoViewModel(private val repository: ApplicationRepository) : ViewModel() {
+
+
+
+    fun getVoterInfo(electionId: Long, address: String, officialOnly: Boolean = false) {
+        viewModelScope.launch {
+            repository.getVoterInfo(electionId, address, officialOnly)
+        }
+    }
 
     //TODO: Add live data to hold voter info
+
 
     //TODO: Add var and methods to populate voter info
 
