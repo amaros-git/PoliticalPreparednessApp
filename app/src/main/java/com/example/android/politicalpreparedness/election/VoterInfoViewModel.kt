@@ -33,7 +33,8 @@ class VoterInfoViewModel(private val repository: ApplicationRepository) : BaseVi
 
 
     fun getVoterInfo(electionId: Int, division: Division) {
-        //by default viewModelScope uses
+        //by default viewModelScope uses ainCoroutineDispatcher.immediate
+        //what slows down main thread. Move it to IO threads
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getVoterInfo(
                     electionId,
@@ -42,7 +43,7 @@ class VoterInfoViewModel(private val repository: ApplicationRepository) : BaseVi
             if (result is Result.Success) {
                 _voterInfo.postValue(result.data)
             } else {
-                Log.e("VoterInfoViewModel", "${(result as Result.Error).message}")
+                Log.e("VoterInfoViewModel", (result as Result.Error).message)
                 showErrorMessage.postValue(result.message)
             }
         }
