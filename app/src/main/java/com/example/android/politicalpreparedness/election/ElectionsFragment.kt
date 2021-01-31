@@ -97,3 +97,4 @@ class ElectionsFragment : Fragment() {
 }
 
 const val FOLLOWED_ELECTIONS_PREFERENCES = "followed"
+const val SHARED_REFERENCES_KEY = "key_shared_references"

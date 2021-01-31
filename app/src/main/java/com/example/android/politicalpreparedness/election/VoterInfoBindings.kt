@@ -3,6 +3,7 @@ package com.example.android.politicalpreparedness.election
 import android.opengl.Visibility
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.constraintlayout.widget.Group
 import androidx.databinding.BindingAdapter
@@ -27,6 +28,16 @@ fun showDate(textView: TextView, date: Date?) {
     date?.let {
         val dateString = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(it)
         textView.text = dateString
+    }
+}
+
+//TODO use resources
+@BindingAdapter("app:setText")
+fun setText(button: Button, isFollowed: Boolean) {
+    if (isFollowed) {
+        button.text = "UNFOLLOW ELECTION"
+    } else {
+        button.text = "FOLLOW ELECTION"
     }
 }
 

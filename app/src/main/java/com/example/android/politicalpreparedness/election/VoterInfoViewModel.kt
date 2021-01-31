@@ -1,23 +1,17 @@
 package com.example.android.politicalpreparedness.election
 
 import android.app.Application
-import android.content.ActivityNotFoundException
-import android.content.ComponentName
-import android.content.Intent
-import android.net.Uri
+import android.content.*
 import android.util.Log
-import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.base.BaseViewModel
 import com.example.android.politicalpreparedness.data.ApplicationRepository
-import com.example.android.politicalpreparedness.data.database.ElectionDao
 import com.example.android.politicalpreparedness.data.network.models.VoterInfoResponse
 import kotlinx.coroutines.launch
 import com.example.android.politicalpreparedness.data.Result
-import com.example.android.politicalpreparedness.data.network.models.Address
 import com.example.android.politicalpreparedness.data.network.models.Division
 import com.example.android.politicalpreparedness.utils.SingleLiveEvent
 import kotlinx.coroutines.Dispatchers
@@ -28,12 +22,49 @@ class VoterInfoViewModel(
 
     private val TAG = VoterInfoViewModel::class.java.simpleName
 
+    private val sharedPref = app.getSharedPreferences(SHARED_REFERENCES_KEY, Context.MODE_PRIVATE)
+
     private val _voterInfo = MutableLiveData<VoterInfoResponse>()
     val voterInfo: LiveData<VoterInfoResponse>
         get() = _voterInfo
 
     val openUrlEvent = SingleLiveEvent<String>()
 
+    private val _isFollowed = MutableLiveData<Boolean>()
+    val isFollowed: LiveData<Boolean>
+        get() = _isFollowed
+
+
+    fun checkFollowStatus(electionId: Int) {
+        val followed = sharedPref.getStringSet(FOLLOWED_ELECTIONS_PREFERENCES, emptySet())
+        _isFollowed.value = if (followed.isNullOrEmpty()) {
+            false
+        } else {
+            followed.contains(electionId.toString())
+        }
+    }
+
+    fun followElection(electionId: Int) {
+        //get current set
+        val currentFollowed = sharedPref.getStringSet(FOLLOWED_ELECTIONS_PREFERENCES, emptySet())
+        currentFollowed?.let {
+            //add new id to the list with current followed
+            val list = it.toMutableList()
+            list.add(electionId.toString())
+            //save new followed set
+            val newFollowed = list.toSet()
+            sharedPref.edit {
+                remove(FOLLOWED_ELECTIONS_PREFERENCES)
+                putStringSet(FOLLOWED_ELECTIONS_PREFERENCES, newFollowed)
+            }
+        }
+
+        _isFollowed.value = true
+    }
+
+    fun unfollowElection(electionId: Int) {
+        _isFollowed.value = false
+    }
 
     fun getVoterInfo(electionId: Int, division: Division) {
         //by default viewModelScope uses ainCoroutineDispatcher.immediate
@@ -57,9 +88,6 @@ class VoterInfoViewModel(
         url?.let {
             openUrlEvent.value = it
         }
-        /* url?.let {
-
-         }*/
     }
 
     //TODO: Add live data to hold voter info

@@ -86,7 +86,23 @@ class VoterInfoFragment : BaseFragment() {
             }
         }
 
+        setFollowButtonText(args.argElection.id)
+
+        binding.followButton.setOnClickListener {
+            _viewModel.isFollowed.value?.let { isFollowed ->
+                if (isFollowed) {
+                    _viewModel.unfollowElection(args.argElection.id)
+                } else {
+                    _viewModel.followElection(args.argElection.id)
+                }
+            }
+        }
+
         return binding.root
+    }
+
+    private fun setFollowButtonText(electionId: Int) {
+        _viewModel.checkFollowStatus(electionId)
     }
 
     private fun isElectionFollowed(electionId: Int): Boolean {
