@@ -1,5 +1,6 @@
 package com.example.android.politicalpreparedness.election
 
+import android.app.Application
 import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.base.BaseViewModel
 import com.example.android.politicalpreparedness.data.ApplicationRepository
@@ -10,7 +11,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 //TODO: Construct ViewModel and provide election datasource
-class ElectionsViewModel(private val repository: ApplicationRepository): BaseViewModel() {
+class ElectionsViewModel(
+        private val app: Application,
+        private val repository: ApplicationRepository): BaseViewModel(app) {
 
     val upcomingElections: LiveData<List<Election>?> = repository.observeElections().map {
         if (it is Result.Success) {

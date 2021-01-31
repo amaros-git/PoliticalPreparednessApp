@@ -1,5 +1,6 @@
 package com.example.android.politicalpreparedness.election
 
+import android.app.Application
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Intent
@@ -21,7 +22,9 @@ import com.example.android.politicalpreparedness.data.network.models.Division
 import com.example.android.politicalpreparedness.utils.SingleLiveEvent
 import kotlinx.coroutines.Dispatchers
 
-class VoterInfoViewModel(private val repository: ApplicationRepository) : BaseViewModel() {
+class VoterInfoViewModel(
+        private val app: Application,
+        private val repository: ApplicationRepository) : BaseViewModel(app) {
 
     private val TAG = VoterInfoViewModel::class.java.simpleName
 
@@ -54,9 +57,9 @@ class VoterInfoViewModel(private val repository: ApplicationRepository) : BaseVi
         url?.let {
             openUrlEvent.value = it
         }
-       /* url?.let {
+        /* url?.let {
 
-        }*/
+         }*/
     }
 
     //TODO: Add live data to hold voter info

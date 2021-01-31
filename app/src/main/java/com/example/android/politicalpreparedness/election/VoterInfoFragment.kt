@@ -2,6 +2,7 @@ package com.example.android.politicalpreparedness.election
 
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -24,9 +25,12 @@ class VoterInfoFragment : BaseFragment() {
     private val TAG = VoterInfoFragment::class.java.simpleName
 
     override val _viewModel by viewModels<VoterInfoViewModel> {
-        VoterInfoViewModelFactory(ApplicationRepository(
-                LocalDataSource(ElectionDatabase.getInstance(requireContext())),
-                CivicsApi)
+        VoterInfoViewModelFactory(
+                requireActivity().application,
+                ApplicationRepository(
+                        LocalDataSource(ElectionDatabase.getInstance(requireContext())),
+                        CivicsApi
+                )
         )
     }
 
@@ -42,6 +46,8 @@ class VoterInfoFragment : BaseFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         election = args.argElection
+
+        setTitle(election.name)
 
         binding.viewModel = _viewModel
         binding.election = election
@@ -66,25 +72,32 @@ class VoterInfoFragment : BaseFragment() {
             }
         }
 
-        _viewModel.openUrlEvent.observe(viewLifecycleOwner) {
+        _viewModel.openUrlEvent.observe(viewLifecycleOwner) { url ->
             try {
                 val intent = Intent("android.intent.action.MAIN")
                 intent.component = ComponentName.unflattenFromString("com.android.chrome/com.android.chrome.Main")
                 intent.addCategory("android.intent.category.LAUNCHER")
-                intent.data = Uri.parse(it)
+                intent.data = Uri.parse(url)
                 startActivity(intent)
             } catch (e: ActivityNotFoundException) {
                 // Chrome is not installed, try other
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(it))
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
                 startActivity(intent)
             }
         }
 
-        setTitle(election.name)
-
         return binding.root
     }
 
+    private fun isElectionFollowed(electionId: Int): Boolean {
+        val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        val followed = sharedPref.getStringSet(FOLLOWED_ELECTIONS_PREFERENCES, emptySet())
+        return if (followed.isNullOrEmpty()) {
+            false
+        } else {
+            followed.contains(id.toString())
+        }
+    }
 
     override fun onStart() {
         super.onStart()

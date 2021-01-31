@@ -141,6 +141,16 @@
             app:layout_constraintTop_toBottomOf="@+id/state_correspondence_header"
             tools:text="1500 11th Street, 5th Floor, Sacramento, California, 95814" />
 
+        <Button
+            android:id="@+id/follow_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_big"
+            tools:text="Follow election"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintStart_toStartOf="@+id/guideline" />
+
         <!-- TODO: Add button to save election to Room -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>

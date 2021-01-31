@@ -46,9 +46,12 @@ class ElectionsFragment : Fragment() {
     private lateinit var binding: FragmentElectionBinding
 
     private val viewModel by viewModels<ElectionsViewModel> {
-        ElectionsViewModelFactory(ApplicationRepository(
-                LocalDataSource(ElectionDatabase.getInstance(requireContext())),
-                CivicsApi)
+        ElectionsViewModelFactory(
+                requireActivity().application,
+                ApplicationRepository(
+                        LocalDataSource(ElectionDatabase.getInstance(requireContext())),
+                        CivicsApi
+                )
         )
     }
 
@@ -80,7 +83,6 @@ class ElectionsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         viewModel.refreshUpcomingElections()
     }
 
@@ -93,3 +95,5 @@ class ElectionsFragment : Fragment() {
     //TODO: Refresh adapters when fragment loads
 
 }
+
+const val FOLLOWED_ELECTIONS_PREFERENCES = "followed"
