@@ -30,7 +30,7 @@ class VoterInfoViewModel(
 
     val openUrlEvent = SingleLiveEvent<String>()
 
-    private val _isFollowed = MutableLiveData<Boolean>()
+    private val _isFollowed = MutableLiveData<Boolean>() //TODO rework to map and filter by id
     val isFollowed: LiveData<Boolean>
         get() = _isFollowed
 
@@ -46,10 +46,14 @@ class VoterInfoViewModel(
 
     fun follow(electionId: Int) {
         changeFollowingStatus(electionId, true)
+
+        _isFollowed.value = true
     }
 
     fun unfollow(electionId: Int) {
         changeFollowingStatus(electionId, false)
+
+        _isFollowed.value = false
     }
 
     private fun changeFollowingStatus(electionId: Int, shouldFollow: Boolean) {

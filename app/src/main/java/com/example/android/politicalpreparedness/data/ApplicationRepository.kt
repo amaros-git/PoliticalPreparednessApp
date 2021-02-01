@@ -28,6 +28,8 @@ class ApplicationRepository(
 
     fun observeElections(): LiveData<Result<List<Election>>> = localDataSource.observeElections()
 
+    fun observeFollowedElections(): LiveData<Result<List<Election>>> = localDataSource.observeElections()
+
     /**
      * @throws HttpException
      * @throws SocketTimeoutException

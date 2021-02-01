@@ -37,7 +37,6 @@ class LocalDataSource(private val database: ElectionDatabase) : DataSource {
         }
     }
 
-
     override suspend fun deleteAllElections() {
         TODO("Not yet implemented")
     }

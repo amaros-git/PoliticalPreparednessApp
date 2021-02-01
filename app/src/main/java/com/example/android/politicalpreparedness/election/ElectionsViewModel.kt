@@ -23,9 +23,17 @@ class ElectionsViewModel(
         }
     }
 
-    val savedElections: LiveData<List<Election>?> = repository.observeElections().map {
-        if (it is Result.Success) {
-            it.data
+    val savedElections: LiveData<List<Election>?> = repository.observeElections().map { result ->
+        if (result is Result.Success) {
+            val followed = mutableListOf<Election>()
+
+            result.data.forEach {
+                if (it.isFollowed) {
+                    followed.add(it)
+                }
+            }
+
+            followed
         } else {
             null
         }
