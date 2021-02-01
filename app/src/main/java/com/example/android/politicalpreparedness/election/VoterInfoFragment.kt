@@ -90,10 +90,10 @@ class VoterInfoFragment : BaseFragment() {
 
         binding.followButton.setOnClickListener {
             _viewModel.isFollowed.value?.let { isFollowed ->
-                if (isFollowed) {
-                    _viewModel.unfollowElection(args.argElection.id)
-                } else {
-                    _viewModel.followElection(args.argElection.id)
+                if (isFollowed) { //unfollow
+                    _viewModel.unfollow(args.argElection.id)
+                } else { //follow
+                    _viewModel.follow(args.argElection.id)
                 }
             }
         }

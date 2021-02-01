@@ -25,6 +25,7 @@ class ApplicationRepository(
 
     private val TAG = ApplicationRepository::class.java.simpleName
 
+
     fun observeElections(): LiveData<Result<List<Election>>> = localDataSource.observeElections()
 
     /**
@@ -65,7 +66,6 @@ class ApplicationRepository(
             localDataSource.insertOrUpdate(election)
         }
     }
-
 
     /**
      * at the moment Google Civics API returns only one election, but it doesn't have state
@@ -112,8 +112,17 @@ class ApplicationRepository(
                 is IOException -> {
                     Result.Error(e.localizedMessage)
                 }
-                else -> Result.Error("Unknown exception: ${e.localizedMessage}")
+                else -> {
+                    Result.Error("Unknown exception: ${e.localizedMessage}")
+                }
             }
         }
+    }
+
+    suspend fun changeFollowingStatus(
+            electionId: Int,
+            shouldFollow: Boolean
+    ) = withContext(ioDispatcher) {
+        localDataSource.changeFollowingStatus(electionId, shouldFollow)
     }
 }

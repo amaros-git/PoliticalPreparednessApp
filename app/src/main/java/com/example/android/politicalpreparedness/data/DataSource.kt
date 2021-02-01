@@ -12,4 +12,6 @@ interface DataSource {
     fun observeElections(): LiveData<Result<List<Election>>>
 
     suspend fun deleteAllElections()
+
+    suspend fun changeFollowingStatus(electionId: Int, shouldFollow: Boolean)
 }

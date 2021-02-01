@@ -42,4 +42,8 @@ class LocalDataSource(private val database: ElectionDatabase) : DataSource {
         TODO("Not yet implemented")
     }
 
+    override suspend fun changeFollowingStatus(electionId: Int, shouldFollow: Boolean) {
+        database.electionDao.changeFollowingStatus(electionId, shouldFollow)
+    }
+
 }

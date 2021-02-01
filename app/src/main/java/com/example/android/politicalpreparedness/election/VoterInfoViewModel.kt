@@ -44,7 +44,21 @@ class VoterInfoViewModel(
         }
     }
 
-    fun followElection(electionId: Int) {
+    fun follow(electionId: Int) {
+        changeFollowingStatus(electionId, true)
+    }
+
+    fun unfollow(electionId: Int) {
+        changeFollowingStatus(electionId, false)
+    }
+
+    private fun changeFollowingStatus(electionId: Int, shouldFollow: Boolean) {
+        viewModelScope.launch {
+            repository.changeFollowingStatus(electionId, shouldFollow)
+        }
+    }
+
+    /*fun followElection(electionId: Int) {
         //get current set
         val currentFollowed = sharedPref.getStringSet(FOLLOWED_ELECTIONS_PREFERENCES, emptySet())
         currentFollowed?.let {
@@ -76,12 +90,10 @@ class VoterInfoViewModel(
             }
         }
         _isFollowed.value = false
-    }
+    }*/
 
     fun getVoterInfo(electionId: Int, division: Division) {
-        //by default viewModelScope uses ainCoroutineDispatcher.immediate
-        //what slows down main thread. Move it to IO threads
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val result = repository.getVoterInfo(
                     electionId,
                     division.state + " " + division.country
