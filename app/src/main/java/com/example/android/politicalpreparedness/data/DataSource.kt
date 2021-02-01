@@ -14,4 +14,6 @@ interface DataSource {
     suspend fun deleteAllElections()
 
     suspend fun changeFollowingStatus(electionId: Int, shouldFollow: Boolean)
+
+    suspend fun getElection(electionId: Int): Result<Election>
 }

@@ -17,6 +17,7 @@ import com.example.android.politicalpreparedness.utils.SingleLiveEvent
 import kotlinx.coroutines.Dispatchers
 
 class VoterInfoViewModel(
+        private val electionId: Int,
         private val app: Application,
         private val repository: ApplicationRepository) : BaseViewModel(app) {
 
@@ -34,15 +35,30 @@ class VoterInfoViewModel(
     val isFollowed: LiveData<Boolean>
         get() = _isFollowed
 
+    init {
+        viewModelScope.launch {
+            val result = repository.getElection(electionId)
+            if (result is Result.Success) {
+                _isFollowed.value = result.data.isFollowed
+            } else {
+                _isFollowed.value = false
+            }
+        }
 
-    fun checkFollowStatus(electionId: Int) {
-        val followed = sharedPref.getStringSet(FOLLOWED_ELECTIONS_PREFERENCES, emptySet())
+    }
+
+
+   /* fun checkFollowStatus(electionId: Int) {
+        if
+        viewModelScope.launch {
+
+        }
         _isFollowed.value = if (followed.isNullOrEmpty()) {
             false
         } else {
             followed.contains(electionId.toString())
         }
-    }
+    }*/
 
     fun follow(electionId: Int) {
         changeFollowingStatus(electionId, true)

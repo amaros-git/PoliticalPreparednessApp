@@ -19,7 +19,6 @@ class LocalDataSource(private val database: ElectionDatabase) : DataSource {
         try {
             database.electionDao.insertElection(election)
         } catch (e: SQLiteConstraintException) { //already exists, update
-            Log.d("TEST", "Exists, updating")
             database.electionDao.updateElection(
                     ElectionUpdate(
                             election.id,
@@ -43,6 +42,15 @@ class LocalDataSource(private val database: ElectionDatabase) : DataSource {
 
     override suspend fun changeFollowingStatus(electionId: Int, shouldFollow: Boolean) {
         database.electionDao.changeFollowingStatus(electionId, shouldFollow)
+    }
+
+    override suspend fun getElection(electionId: Int): Result<Election> {
+        val election = database.electionDao.getElection(electionId)
+        return if (null != election) {
+            Result.Success(election)
+        } else {
+            Result.Error("Election with id $electionId doesn't exist")
+        }
     }
 
 }

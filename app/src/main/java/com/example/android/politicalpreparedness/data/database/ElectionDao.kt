@@ -33,6 +33,9 @@ interface ElectionDao {
     @Query("UPDATE election_table SET isFollowed = :shouldFollow WHERE id = :electionId")
     fun changeFollowingStatus(electionId: Int, shouldFollow: Boolean)
 
+    @Query("SELECT * FROM election_table WHERE id = :electionId")
+    fun getElection(electionId: Int): Election?
+
 
     //TODO: Add select all election query
 

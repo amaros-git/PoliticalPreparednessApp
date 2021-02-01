@@ -1,6 +1,7 @@
 package com.example.android.politicalpreparedness.election
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.base.BaseViewModel
 import com.example.android.politicalpreparedness.data.ApplicationRepository
@@ -23,16 +24,15 @@ class ElectionsViewModel(
         }
     }
 
+    //filter out elections with isFollowed == true
     val savedElections: LiveData<List<Election>?> = repository.observeElections().map { result ->
         if (result is Result.Success) {
             val followed = mutableListOf<Election>()
-
             result.data.forEach {
                 if (it.isFollowed) {
                     followed.add(it)
                 }
             }
-
             followed
         } else {
             null
@@ -40,28 +40,7 @@ class ElectionsViewModel(
     }
 
     val openVoterInfoEvent = SingleLiveEvent<Election>()
-
-
-    /*private fun filterSavedElections(result: Result<List<Election>>) =
-        if (result is Result.Success) {
-            val savedElections = getSavedElections()
-            savedE
-            if(result.data.contains())
-            savedElections
-        } else {
-            null
-        }*/
-
-    private fun getSavedElections(): List<Election> {
-        return mutableListOf()
-    }
-
-
-    //TODO: Create live data val for saved elections
-
-    //TODO: Create val and functions to populate live data for upcoming elections from the API and saved elections from local database
-
-    //TODO: Create functions to navigate to saved or upcoming election voter info
+    
 
     fun refreshUpcomingElections() {
         viewModelScope.launch(Dispatchers.IO) {

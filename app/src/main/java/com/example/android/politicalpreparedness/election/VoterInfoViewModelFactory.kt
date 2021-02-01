@@ -7,11 +7,12 @@ import com.example.android.politicalpreparedness.data.ApplicationRepository
 
 @Suppress("UNCHECKED_CAST")
 class VoterInfoViewModelFactory(
+        private val electionId: Int,
         private val app: Application,
         private val repository: ApplicationRepository
 ) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>) =
-            (VoterInfoViewModel(app, repository) as T)
+            (VoterInfoViewModel(electionId, app, repository) as T)
 
 }

@@ -48,14 +48,14 @@ class ApplicationRepository(
                 localDataSource.insertOrUpdate(it) //elections shall be observed
             }
 
-            insertMOARElections()
+            //insertMOARElections()
 
         } else {
             throw Exception("connection is OK, but no elections received")
         }
     }
 
-    //TODO FOR TEST ONLY
+    /*//TODO FOR TEST ONLY
     private suspend fun insertMOARElections() {
         for (i in 0..10) {
             Log.d("TEST", i.toString())
@@ -67,7 +67,7 @@ class ApplicationRepository(
             )
             localDataSource.insertOrUpdate(election)
         }
-    }
+    }*/
 
     /**
      * at the moment Google Civics API returns only one election, but it doesn't have state
@@ -126,5 +126,9 @@ class ApplicationRepository(
             shouldFollow: Boolean
     ) = withContext(ioDispatcher) {
         localDataSource.changeFollowingStatus(electionId, shouldFollow)
+    }
+
+    suspend fun getElection(electionId: Int): Result<Election> = withContext(ioDispatcher) {
+        localDataSource.getElection(electionId)
     }
 }

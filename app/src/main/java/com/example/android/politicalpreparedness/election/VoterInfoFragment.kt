@@ -26,6 +26,7 @@ class VoterInfoFragment : BaseFragment() {
 
     override val _viewModel by viewModels<VoterInfoViewModel> {
         VoterInfoViewModelFactory(
+                args.argElection.id,
                 requireActivity().application,
                 ApplicationRepository(
                         LocalDataSource(ElectionDatabase.getInstance(requireContext())),
@@ -86,7 +87,7 @@ class VoterInfoFragment : BaseFragment() {
             }
         }
 
-        setFollowButtonText(args.argElection.id)
+        //setFollowButtonText(args.argElection.id)
 
         binding.followButton.setOnClickListener {
             _viewModel.isFollowed.value?.let { isFollowed ->
@@ -101,11 +102,11 @@ class VoterInfoFragment : BaseFragment() {
         return binding.root
     }
 
-    private fun setFollowButtonText(electionId: Int) {
+   /* private fun setFollowButtonText(electionId: Int) {
         _viewModel.checkFollowStatus(electionId)
-    }
+    }*/
 
-    private fun isElectionFollowed(electionId: Int): Boolean {
+   /* private fun isElectionFollowed(electionId: Int): Boolean {
         val sharedPref = requireActivity().getPreferences(Context.MODE_PRIVATE)
         val followed = sharedPref.getStringSet(FOLLOWED_ELECTIONS_PREFERENCES, emptySet())
         return if (followed.isNullOrEmpty()) {
@@ -113,7 +114,7 @@ class VoterInfoFragment : BaseFragment() {
         } else {
             followed.contains(id.toString())
         }
-    }
+    }*/
 
     override fun onStart() {
         super.onStart()
