@@ -89,6 +89,7 @@ class ElectionsFragment : Fragment() {
     private fun setupListAdapter() {
         listAdapter = ElectionListAdapter(viewModel)
         binding.upcomingElections.adapter = listAdapter
+        binding.savedElections.adapter = listAdapter
     }
 
 

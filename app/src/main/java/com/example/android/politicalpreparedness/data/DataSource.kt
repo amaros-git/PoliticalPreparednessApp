@@ -7,7 +7,7 @@ interface DataSource {
 
     suspend fun getElections(): Result<List<Election>>
 
-    suspend fun saveElection(election: Election)
+    suspend fun insertOrUpdate(election: Election)
 
     fun observeElections(): LiveData<Result<List<Election>>>
 

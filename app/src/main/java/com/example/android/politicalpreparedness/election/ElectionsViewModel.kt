@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 //TODO: Construct ViewModel and provide election datasource
 class ElectionsViewModel(
         private val app: Application,
-        private val repository: ApplicationRepository): BaseViewModel(app) {
+        private val repository: ApplicationRepository) : BaseViewModel(app) {
 
     val upcomingElections: LiveData<List<Election>?> = repository.observeElections().map {
         if (it is Result.Success) {
@@ -23,7 +23,30 @@ class ElectionsViewModel(
         }
     }
 
+    val savedElections: LiveData<List<Election>?> = repository.observeElections().map {
+        if (it is Result.Success) {
+            it.data
+        } else {
+            null
+        }
+    }
+
     val openVoterInfoEvent = SingleLiveEvent<Election>()
+
+
+    /*private fun filterSavedElections(result: Result<List<Election>>) =
+        if (result is Result.Success) {
+            val savedElections = getSavedElections()
+            savedE
+            if(result.data.contains())
+            savedElections
+        } else {
+            null
+        }*/
+
+    private fun getSavedElections(): List<Election> {
+        return mutableListOf()
+    }
 
 
     //TODO: Create live data val for saved elections

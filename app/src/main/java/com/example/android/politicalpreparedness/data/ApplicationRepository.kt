@@ -2,9 +2,8 @@ package com.example.android.politicalpreparedness.data
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import com.example.android.politicalpreparedness.data.DataSource
-import com.example.android.politicalpreparedness.data.Result
 import com.example.android.politicalpreparedness.data.network.CivicsApi
+import com.example.android.politicalpreparedness.data.network.models.Division
 import com.example.android.politicalpreparedness.data.network.models.Election
 import com.example.android.politicalpreparedness.data.network.models.ElectionResponse
 import com.example.android.politicalpreparedness.data.network.models.VoterInfoResponse
@@ -15,6 +14,8 @@ import kotlinx.coroutines.withContext
 import kotlinx.io.IOException
 import retrofit2.HttpException
 import java.net.SocketTimeoutException
+import java.time.LocalDateTime
+import java.util.*
 
 class ApplicationRepository(
         private val localDataSource: DataSource,
@@ -29,24 +30,42 @@ class ApplicationRepository(
     /**
      * @throws HttpException
      * @throws SocketTimeoutException
-     * @throws Exception is no data received
+     * @throws Exception no data is received
      * @throws JsonDataException error parsing jaon
      * @throws IOException error reading json
      *
      */
-    suspend fun refreshElections() {
+    suspend fun refreshElections() = withContext(ioDispatcher) {
         val response = network.retrofitService.getElections()
         Log.d(TAG, "elections network response = $response")
 
         if ((null != response) && (response.elections.isNotEmpty())) {
             response.elections.forEach {
-                addDummyStateIfStateIsEmptyInDivision(it) //TODO REMOVE ONCE elections are fixed
-                localDataSource.saveElection(it) //elections shall be observed
+                addDummyStateIfIsEmptyInDivision(it) //TODO REMOVE ONCE elections are fixed
+                localDataSource.insertOrUpdate(it) //elections shall be observed
             }
+
+            insertMOARElections()
+
         } else {
             throw Exception("connection is OK, but no elections received")
         }
     }
+
+    //TODO FOR TEST ONLY
+    private suspend fun insertMOARElections() {
+        for (i in 0..10) {
+            Log.d("TEST", i.toString())
+            val election = Election(
+                    i,
+                    "Test name$i",
+                    Date(0),
+                    Division(i.toString(), "us", "ca")
+            )
+            localDataSource.insertOrUpdate(election)
+        }
+    }
+
 
     /**
      * at the moment Google Civics API returns only one election, but it doesn't have state
@@ -54,7 +73,7 @@ class ApplicationRepository(
      * In such case voteinfo returns some data
      */
     //TODO REMOVE ONCE elections are fixed
-    private fun addDummyStateIfStateIsEmptyInDivision(election: Election) {
+    private fun addDummyStateIfIsEmptyInDivision(election: Election) {
         if (election.division.state.isEmpty()) {
             election.division.state = "ca"
         }
@@ -69,8 +88,8 @@ class ApplicationRepository(
             electionId: Int,
             address: String,
             officialOnly: Boolean = false
-    ): Result<VoterInfoResponse> {
-        return try {
+    ): Result<VoterInfoResponse> = withContext(ioDispatcher) {
+        return@withContext try {
             val response = network.retrofitService.getVoterInfo(electionId, address, officialOnly)
             Log.d(TAG, "voterinfo network response = $response")
 

@@ -58,11 +58,23 @@ class VoterInfoViewModel(
                 putStringSet(FOLLOWED_ELECTIONS_PREFERENCES, newFollowed)
             }
         }
-
         _isFollowed.value = true
     }
 
     fun unfollowElection(electionId: Int) {
+        //get current set
+        val currentFollowed = sharedPref.getStringSet(FOLLOWED_ELECTIONS_PREFERENCES, emptySet())
+        currentFollowed?.let {
+            //remove election id from the list with current followed
+            val list = it.toMutableList()
+            list.remove(electionId.toString())
+            //save new followed set
+            val newFollowed = list.toSet()
+            sharedPref.edit {
+                remove(FOLLOWED_ELECTIONS_PREFERENCES)
+                putStringSet(FOLLOWED_ELECTIONS_PREFERENCES, newFollowed)
+            }
+        }
         _isFollowed.value = false
     }
 

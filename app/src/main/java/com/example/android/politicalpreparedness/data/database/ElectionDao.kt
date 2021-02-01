@@ -1,11 +1,9 @@
 package com.example.android.politicalpreparedness.data.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.example.android.politicalpreparedness.data.network.models.Election
+import com.example.android.politicalpreparedness.data.network.models.ElectionUpdate
 
 @Dao
 interface ElectionDao {
@@ -14,8 +12,10 @@ interface ElectionDao {
      * Insert a election in the database. If the election already exists, replace it.
      *
      * @param election the election to be inserted.
+     *
+     * @throws SQLiteConstraintException is there is election with the same id. Use update
      */
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertElection(election: Election)
 
     /**
@@ -25,6 +25,10 @@ interface ElectionDao {
     */
     @Query("SELECT * FROM election_table")
     fun observeElections(): LiveData<List<Election>>
+
+
+    @Update(entity = Election::class)
+    fun updateElection(electionUpdate: ElectionUpdate)
 
 
     //TODO: Add select all election query
