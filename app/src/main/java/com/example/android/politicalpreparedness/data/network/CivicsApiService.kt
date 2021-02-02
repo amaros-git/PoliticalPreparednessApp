@@ -4,8 +4,10 @@ import com.example.android.politicalpreparedness.data.network.jsonadapter.DateAd
 import com.example.android.politicalpreparedness.data.network.jsonadapter.ElectionAdapter
 import com.example.android.politicalpreparedness.data.network.models.Election
 import com.example.android.politicalpreparedness.data.network.models.ElectionResponse
+import com.example.android.politicalpreparedness.data.network.models.RepresentativeResponse
 import com.example.android.politicalpreparedness.data.network.models.VoterInfoResponse
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
@@ -13,6 +15,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
+import java.net.SocketTimeoutException
 
 private const val BASE_URL = "https://www.googleapis.com/civicinfo/v2/"
 
@@ -34,11 +37,16 @@ private val retrofit = Retrofit.Builder()
  *  Documentation for the Google Civics API Service can be found at https://developers.google.com/civic-information/docs/v2
  */
 
+/** All methods throws the following:
+ * @throws HttpException
+ * @throws SocketTimeoutException
+ * @throws Exception no data is received
+ * @throws JsonDataException error parsing jaon
+ * @throws IOException error reading json
+ *
+ */
 interface CivicsApiService {
-    /**
-     * @throws HttpException
-     * @throws SocketTimeoutException
-     */
+
     @GET("elections")
     suspend fun getElections(): ElectionResponse?
 
@@ -48,7 +56,10 @@ interface CivicsApiService {
             @Query("address") address: String, //address in format "state country".
             @Query("officialOnly") officialOnly: Boolean = false): VoterInfoResponse?
 
-    //TODO: Add representatives API Call
+    @GET("representatives")
+    suspend fun getRepresentatives(
+            @Query("address") address: String,
+            @Query("includeOffices") includeOffices: Boolean = true): RepresentativeResponse?
 
 }
 

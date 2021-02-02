@@ -13,5 +13,5 @@ data class Election(
         @ColumnInfo(name = "name")val name: String,
         @ColumnInfo(name = "electionDay")val electionDay: Date,
         @Embedded(prefix = "division_") @Json(name="ocdDivisionId") val division: Division,
-        @ColumnInfo(name= "isFollowed") var isFollowed: Boolean = false
+        @ColumnInfo(name= "isFollowed") var isFollowed: Boolean = false //is changed later TODO should be it val and set on false on creation ?
 ): Parcelable

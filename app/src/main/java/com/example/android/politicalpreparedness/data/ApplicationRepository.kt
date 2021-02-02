@@ -3,10 +3,8 @@ package com.example.android.politicalpreparedness.data
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.android.politicalpreparedness.data.network.CivicsApi
-import com.example.android.politicalpreparedness.data.network.models.Division
-import com.example.android.politicalpreparedness.data.network.models.Election
-import com.example.android.politicalpreparedness.data.network.models.ElectionResponse
-import com.example.android.politicalpreparedness.data.network.models.VoterInfoResponse
+import com.example.android.politicalpreparedness.data.network.models.*
+import com.example.android.politicalpreparedness.representative.model.Representative
 import com.squareup.moshi.JsonDataException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +12,6 @@ import kotlinx.coroutines.withContext
 import kotlinx.io.IOException
 import retrofit2.HttpException
 import java.net.SocketTimeoutException
-import java.time.LocalDateTime
 import java.util.*
 
 class ApplicationRepository(
@@ -28,9 +25,7 @@ class ApplicationRepository(
 
     fun observeElections(): LiveData<Result<List<Election>>> = localDataSource.observeElections()
 
-    fun observeFollowedElections(): LiveData<Result<List<Election>>> = localDataSource.observeElections()
-
-    /**
+    /** Throws the following
      * @throws HttpException
      * @throws SocketTimeoutException
      * @throws Exception no data is received
@@ -49,7 +44,6 @@ class ApplicationRepository(
             }
 
             //insertMOARElections()
-
         } else {
             throw Exception("connection is OK, but no elections received")
         }
@@ -101,30 +95,51 @@ class ApplicationRepository(
                 Result.Error("connection is OK, but no voterinfo received")
             }
         } catch (e: Exception) {
-            when (e) {
-                is HttpException -> {
-                    Result.Error(e.localizedMessage)
+            Result.Error("Exception: " + convertExceptionToString(e))
+        }
+    }
+
+    suspend fun getRepresentatives(
+            address: String
+    ): Result<List<Representative>> = withContext(ioDispatcher) {
+        return@withContext try {
+            val response = network.retrofitService.getRepresentatives(address)
+            if (null != response) {
+                Log.d(TAG, "response = $response")
+                val representatives = response.offices.flatMap { office -> office.getRepresentatives(response.officials) }
+                representatives.forEach {
+                    Log.d(TAG, "representative = $it")
                 }
-                is SocketTimeoutException -> {
-                    Result.Error(e.localizedMessage)
-                }
-                is JsonDataException -> {
-                    Result.Error(e.localizedMessage)
-                }
-                is IOException -> {
-                    Result.Error(e.localizedMessage)
-                }
-                else -> {
-                    Result.Error("Unknown exception: ${e.localizedMessage}")
-                }
+                Result.Success(representatives)
+            } else {
+                Result.Error("connection is OK, but no representatives received")
             }
+        } catch (e: Exception) {
+            Result.Error("Exception: " + convertExceptionToString(e))
+        }
+    }
+
+    private fun convertExceptionToString(e: Exception): String = when (e) {
+        is HttpException -> {
+            e.localizedMessage
+        }
+        is SocketTimeoutException -> {
+            e.localizedMessage
+        }
+        is JsonDataException -> {
+            e.localizedMessage
+        }
+        is IOException -> {
+            e.localizedMessage
+        }
+        else -> {
+            "Unknown exception: ${e.localizedMessage}"
         }
     }
 
     suspend fun changeFollowingStatus(
             electionId: Int,
-            shouldFollow: Boolean
-    ) = withContext(ioDispatcher) {
+            shouldFollow: Boolean) = withContext(ioDispatcher) {
         localDataSource.changeFollowingStatus(electionId, shouldFollow)
     }
 

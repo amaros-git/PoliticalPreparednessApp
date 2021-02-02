@@ -1,9 +1,35 @@
 package com.example.android.politicalpreparedness.representative
 
+import android.app.Application
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.android.politicalpreparedness.base.BaseViewModel
+import com.example.android.politicalpreparedness.data.ApplicationRepository
+import com.example.android.politicalpreparedness.data.Result
+import com.example.android.politicalpreparedness.data.network.models.VoterInfoResponse
+import com.example.android.politicalpreparedness.representative.model.Representative
+import kotlinx.coroutines.launch
 
-class RepresentativeViewModel: ViewModel() {
+class RepresentativeViewModel(
+        private val app: Application,
+        private val repository: ApplicationRepository): BaseViewModel(app) {
 
+    private val _representative = MutableLiveData<Representative>()
+    val representative: LiveData<Representative>
+        get() = _representative
+
+
+    fun getRepresentative() {
+        viewModelScope.launch {
+            val result = repository.getRepresentatives("us ca")
+            /*if (result is Result.Success) {
+                Log.d("TEST", result.data)
+            }*/
+        }
+    }
     //TODO: Establish live data for representatives and address
 
     //TODO: Create function to fetch representatives from API from a provided address

@@ -1,7 +1,6 @@
 package com.example.android.politicalpreparedness.election
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.base.BaseViewModel
 import com.example.android.politicalpreparedness.data.ApplicationRepository
@@ -11,7 +10,8 @@ import com.example.android.politicalpreparedness.utils.SingleLiveEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-//TODO: Construct ViewModel and provide election datasource
+
+
 class ElectionsViewModel(
         private val app: Application,
         private val repository: ApplicationRepository) : BaseViewModel(app) {
@@ -40,11 +40,15 @@ class ElectionsViewModel(
     }
 
     val openVoterInfoEvent = SingleLiveEvent<Election>()
-    
+
 
     fun refreshUpcomingElections() {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.refreshElections()
+            try {
+                repository.refreshElections()
+            } catch (e: Exception) {
+                //TODO
+            }
         }
     }
 

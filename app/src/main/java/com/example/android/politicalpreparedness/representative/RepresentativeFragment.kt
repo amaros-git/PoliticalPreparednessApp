@@ -12,16 +12,34 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import com.example.android.politicalpreparedness.base.BaseFragment
+import com.example.android.politicalpreparedness.data.ApplicationRepository
+import com.example.android.politicalpreparedness.data.database.ElectionDatabase
+import com.example.android.politicalpreparedness.data.database.LocalDataSource
+import com.example.android.politicalpreparedness.data.network.CivicsApi
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.data.network.models.Address
+import com.example.android.politicalpreparedness.election.VoterInfoViewModel
+import com.example.android.politicalpreparedness.election.VoterInfoViewModelFactory
 import java.util.Locale
 
-class RepresentativeFragment : Fragment() {
+class RepresentativeFragment : BaseFragment() {
 
     private val TAG = RepresentativeFragment::class.java.simpleName
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 0
+    }
+
+    override val _viewModel by viewModels<RepresentativeViewModel> {
+        RepresentativeViewModelFactory(
+                requireActivity().application,
+                ApplicationRepository(
+                        LocalDataSource(ElectionDatabase.getInstance(requireContext())),
+                        CivicsApi
+                )
+        )
     }
 
     private val startForPermissionResult = registerForActivityResult(
@@ -39,6 +57,8 @@ class RepresentativeFragment : Fragment() {
 
         val binding = FragmentRepresentativeBinding.inflate(inflater)
         binding.lifecycleOwner = this
+
+        _viewModel.getRepresentative()
 
         return binding.root
 
