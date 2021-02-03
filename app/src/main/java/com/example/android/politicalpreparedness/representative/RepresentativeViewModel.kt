@@ -18,22 +18,24 @@ class RepresentativeViewModel(
         private val app: Application,
         private val repository: ApplicationRepository): BaseViewModel(app) {
 
-    private val _representative = MutableLiveData<Representative>()
-    val representative: LiveData<Representative>
-        get() = _representative
+    private val _representatives = MutableLiveData<List<Representative>>()
+    val representatives: LiveData<List<Representative>>
+        get() = _representatives
 
     private val _currentAddress = MutableLiveData<Address?>()
     val currentAddress: LiveData<Address?>
         get() = _currentAddress
 
+
     fun getRepresentative(address: Address) {
         viewModelScope.launch {
-            //val result = repository.getRepresentatives(address.toFormattedString())
-            val result = repository.getRepresentatives("us ca")
+            val result = repository.getRepresentatives(address.toFormattedString())
+            //val result = repository.getRepresentatives("us ca")
             if (result is Result.Success) {
                 result.data.forEach {
                     Log.d("TEST", it.toString())
                 }
+                _representatives.value = result.data
             }
             else {
                 //TODO show toast ?

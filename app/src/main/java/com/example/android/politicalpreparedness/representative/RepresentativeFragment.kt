@@ -147,8 +147,8 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
     }
 
     private fun setupListAdapter() {
-        listAdapter = RepresentativeListAdapter(viewModel)
-        binding.upcomingElections.adapter = listAdapter
+        listAdapter = RepresentativeListAdapter(_viewModel)
+        binding.representatives.adapter = listAdapter
     }
 
 

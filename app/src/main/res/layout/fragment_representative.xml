@@ -108,6 +108,21 @@
             app:layout_constraintTop_toBottomOf="@id/button_search" />
 
         <!-- TODO: Add visual styling and content -->
+
+        <!-- TODO: Add Representatives RecyclerView -->
+
+        <!-- TODO: Add visual styling and content -->
+        <!-- <TextView
+             android:id="@+id/list_placeholder"
+             android:layout_width="match_parent"
+             android:layout_height="0dp"
+             android:gravity="center"
+             android:textAlignment="center"
+             android:visibility="gone"
+             app:layout_constraintBottom_toBottomOf="parent"
+             app:layout_constraintTop_toBottomOf="@id/representative_title"
+             motion:visibilityMode="ignore" />-->
+
         <TextView
             android:id="@+id/representative_title"
             android:layout_width="wrap_content"
@@ -116,16 +131,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/button_location" />
 
-        <!-- TODO: Add Representatives RecyclerView -->
-
-        <!-- TODO: Add visual styling and content -->
-        <TextView
-            android:id="@+id/list_placeholder"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/representatives"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:gravity="center"
-            android:textAlignment="center"
-            android:visibility="gone"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:representatives="@{viewModel.representatives}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/representative_title"
             motion:visibilityMode="ignore" />
