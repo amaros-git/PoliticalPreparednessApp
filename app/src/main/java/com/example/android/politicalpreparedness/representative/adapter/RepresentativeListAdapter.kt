@@ -13,9 +13,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.RepresantiveItemBinding
 import com.example.android.politicalpreparedness.data.network.models.Channel
+import com.example.android.politicalpreparedness.data.network.models.Election
+import com.example.android.politicalpreparedness.election.ElectionsViewModel
+import com.example.android.politicalpreparedness.election.adapter.ElectionDiffCallback
+import com.example.android.politicalpreparedness.election.adapter.ElectionViewHolder
+import com.example.android.politicalpreparedness.representative.RepresentativeViewModel
 import com.example.android.politicalpreparedness.representative.model.Representative
 
-class RepresentativeListAdapter: ListAdapter<Representative, RepresentativeViewHolder>(RepresentativeDiffCallback()){
+class RepresentativeListAdapter(private val viewModel: RepresentativeViewModel): ListAdapter<Representative, RepresentativeViewHolder>(RepresentativeDiffCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepresentativeViewHolder {
         return RepresentativeViewHolder.from(parent)
@@ -23,13 +28,14 @@ class RepresentativeListAdapter: ListAdapter<Representative, RepresentativeViewH
 
     override fun onBindViewHolder(holder: RepresentativeViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.bind(viewModel, item)
     }
 }
 
 class RepresentativeViewHolder(val binding: RepresantiveItemBinding): RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(item: Representative) {
+    fun bind(viewModel: RepresentativeViewModel, item: Representative) {
+        binding.viewModel = viewModel
         binding.representative = item
         binding.representativePhoto.setImageResource(R.drawable.ic_profile)
 
@@ -45,9 +51,7 @@ class RepresentativeViewHolder(val binding: RepresantiveItemBinding): RecyclerVi
                     LayoutInflater.from(parent.context),
                     parent,
                     false
-            ).apply {
-                this.lifecycleOwner = lifecycleOwner
-            }
+            )
             return RepresentativeViewHolder(binding)
         }
     }

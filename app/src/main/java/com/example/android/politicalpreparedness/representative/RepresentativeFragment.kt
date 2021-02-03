@@ -24,6 +24,8 @@ import com.example.android.politicalpreparedness.data.database.LocalDataSource
 import com.example.android.politicalpreparedness.data.network.CivicsApi
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.data.network.models.Address
+import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
+import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
 import java.util.Locale
 
 class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move location listener
@@ -36,6 +38,8 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
 
     private lateinit var stateSpinnerAdapter: ArrayAdapter<CharSequence>
 
+    private lateinit var listAdapter: RepresentativeListAdapter
+
     override val _viewModel by viewModels<RepresentativeViewModel> {
         RepresentativeViewModelFactory(
                 requireActivity().application,
@@ -47,8 +51,7 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
     }
 
     private val startForPermissionResult = registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-    ) { result ->
+            ActivityResultContracts.RequestPermission()) { result ->
         Log.d(TAG, "permission result = $result") //TODO if false show snack bar with settings
     }
 
@@ -85,6 +88,8 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
 
         initStateSpinner()
 
+        setupListAdapter()
+
 
         return binding.root
 
@@ -97,6 +102,22 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
         //TODO: Establish button listeners for field and location search
 
     }
+
+    override fun onStart() {
+        super.onStart()
+
+        checkLocationPermission()
+
+        locationManager =
+                requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        //remove location listener
+        locationManager.removeUpdates(this)
+    }
+
 
     private fun getAddressFromFields() =
             Address(
@@ -125,21 +146,11 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
         binding.state.setSelection(stateSpinnerAdapter.getPosition(state))
     }
 
-    override fun onStart() {
-        super.onStart()
-
-
-        checkLocationPermission()
-
-        locationManager =
-                requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    private fun setupListAdapter() {
+        listAdapter = RepresentativeListAdapter(viewModel)
+        binding.upcomingElections.adapter = listAdapter
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        //remove location listener
-        locationManager.removeUpdates(this)
-    }
 
     @SuppressLint("MissingPermission")
     private fun registerLocationListener() {
