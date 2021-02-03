@@ -15,7 +15,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.base.BaseFragment
@@ -25,11 +24,9 @@ import com.example.android.politicalpreparedness.data.database.LocalDataSource
 import com.example.android.politicalpreparedness.data.network.CivicsApi
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.data.network.models.Address
-import com.example.android.politicalpreparedness.election.VoterInfoViewModel
-import com.example.android.politicalpreparedness.election.VoterInfoViewModelFactory
 import java.util.Locale
 
-class RepresentativeFragment : BaseFragment(), LocationListener {
+class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move location listener
 
     private val TAG = RepresentativeFragment::class.java.simpleName
 
@@ -66,10 +63,17 @@ class RepresentativeFragment : BaseFragment(), LocationListener {
         binding.lifecycleOwner = this
         binding.viewModel = _viewModel
 
-        _viewModel.getRepresentative()
-
         binding.buttonLocation.setOnClickListener {
             registerLocationListener()
+        }
+
+        binding.buttonSearch.setOnClickListener {
+            val address = getAddressFromFields()
+            if (isAddressValid(address)) {
+                findRepresentatives(address)
+            } else {
+                //TODO show toast
+            }
         }
 
         stateSpinnerAdapter = ArrayAdapter.createFromResource(
@@ -92,6 +96,24 @@ class RepresentativeFragment : BaseFragment(), LocationListener {
 
         //TODO: Establish button listeners for field and location search
 
+    }
+
+    private fun getAddressFromFields() =
+            Address(
+                    binding.addressLine1.text.toString(),
+                    binding.addressLine2.text.toString(),
+                    binding.city.text.toString(),
+                    binding.state.selectedItem.toString(),
+                    binding.zip.text.toString()
+            )
+
+    private fun isAddressValid(address: Address): Boolean {
+        Log.d(TAG, "address = $address")
+        return true
+    }
+
+    private fun findRepresentatives(address: Address) {
+        _viewModel.getRepresentative(address)
     }
 
     private fun initStateSpinner() {

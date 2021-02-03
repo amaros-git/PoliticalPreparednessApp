@@ -1,8 +1,8 @@
 package com.example.android.politicalpreparedness.data.network.models
 
 data class Address (
-        val line1: String,
-        val line2: String? = null,
+        val line1: String?, // nullable, because, e.g. we are in the wood :) The same for zip
+        val line2: String? = null, //optional
         val city: String,
         val state: String,
         val zip: String?

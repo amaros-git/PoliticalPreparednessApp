@@ -26,12 +26,18 @@ class RepresentativeViewModel(
     val currentAddress: LiveData<Address?>
         get() = _currentAddress
 
-    fun getRepresentative() {
+    fun getRepresentative(address: Address) {
         viewModelScope.launch {
+            //val result = repository.getRepresentatives(address.toFormattedString())
             val result = repository.getRepresentatives("us ca")
-            /*if (result is Result.Success) {
-                Log.d("TEST", result.data)
-            }*/
+            if (result is Result.Success) {
+                result.data.forEach {
+                    Log.d("TEST", it.toString())
+                }
+            }
+            else {
+                //TODO show toast ?
+            }
         }
     }
 

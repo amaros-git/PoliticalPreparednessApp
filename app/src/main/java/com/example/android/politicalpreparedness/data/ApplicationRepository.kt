@@ -105,11 +105,11 @@ class ApplicationRepository(
         return@withContext try {
             val response = network.retrofitService.getRepresentatives(address)
             if (null != response) {
-                Log.d(TAG, "response = $response")
+                //Log.d(TAG, "response = $response")
                 val representatives = response.offices.flatMap { office -> office.getRepresentatives(response.officials) }
-                representatives.forEach {
+                /*representatives.forEach {
                     Log.d(TAG, "representative = $it")
-                }
+                }*/
                 Result.Success(representatives)
             } else {
                 Result.Error("connection is OK, but no representatives received")
