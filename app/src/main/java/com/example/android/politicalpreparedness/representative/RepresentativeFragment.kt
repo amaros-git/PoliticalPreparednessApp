@@ -1,18 +1,23 @@
 package com.example.android.politicalpreparedness.representative
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.base.BaseFragment
 import com.example.android.politicalpreparedness.data.ApplicationRepository
 import com.example.android.politicalpreparedness.data.database.ElectionDatabase
@@ -24,13 +29,15 @@ import com.example.android.politicalpreparedness.election.VoterInfoViewModel
 import com.example.android.politicalpreparedness.election.VoterInfoViewModelFactory
 import java.util.Locale
 
-class RepresentativeFragment : BaseFragment() {
+class RepresentativeFragment : BaseFragment(), LocationListener {
 
     private val TAG = RepresentativeFragment::class.java.simpleName
 
-    companion object {
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 0
-    }
+    private lateinit var locationManager: LocationManager
+
+    private lateinit var binding: FragmentRepresentativeBinding
+
+    private lateinit var stateSpinnerAdapter: ArrayAdapter<CharSequence>
 
     override val _viewModel by viewModels<RepresentativeViewModel> {
         RepresentativeViewModelFactory(
@@ -55,10 +62,25 @@ class RepresentativeFragment : BaseFragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
-        val binding = FragmentRepresentativeBinding.inflate(inflater)
+        binding = FragmentRepresentativeBinding.inflate(inflater)
         binding.lifecycleOwner = this
+        binding.viewModel = _viewModel
 
         _viewModel.getRepresentative()
+
+        binding.buttonLocation.setOnClickListener {
+            registerLocationListener()
+        }
+
+        stateSpinnerAdapter = ArrayAdapter.createFromResource(
+                requireContext(),
+                R.array.states,
+                R.layout.spinner_item
+        )
+
+
+        initStateSpinner()
+
 
         return binding.root
 
@@ -72,9 +94,38 @@ class RepresentativeFragment : BaseFragment() {
 
     }
 
+    private fun initStateSpinner() {
+        stateSpinnerAdapter.setDropDownViewResource(R.layout.spinner_item)
+        binding.state.adapter = stateSpinnerAdapter
+    }
+
+    private fun setStateSpinnerValue(state: String) {
+        binding.state.setSelection(stateSpinnerAdapter.getPosition(state))
+    }
+
     override fun onStart() {
         super.onStart()
+
+
         checkLocationPermission()
+
+        locationManager =
+                requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        //remove location listener
+        locationManager.removeUpdates(this)
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun registerLocationListener() {
+        if (isLocationPermissionGranted()) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 1f, this)
+        } else {
+            requestLocationPermission()
+        }
     }
 
     /* override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -116,6 +167,21 @@ class RepresentativeFragment : BaseFragment() {
     private fun hideKeyboard() {
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
+    }
+
+    override fun onLocationChanged(location: Location) {
+        Log.d(TAG, "onLocationChanged called")
+
+        Log.d(TAG, "Current location: ${location.latitude}, ${location.longitude}")
+
+        val address = geoCodeLocation(location)
+        Log.d(TAG, "address = $address")
+
+        _viewModel.setAddress(address)
+        setStateSpinnerValue(address.state)
+
+        //we need location only once
+        locationManager.removeUpdates(this)
     }
 
 }

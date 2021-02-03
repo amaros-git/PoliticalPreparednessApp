@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.base.BaseViewModel
 import com.example.android.politicalpreparedness.data.ApplicationRepository
 import com.example.android.politicalpreparedness.data.Result
+import com.example.android.politicalpreparedness.data.network.models.Address
 import com.example.android.politicalpreparedness.data.network.models.VoterInfoResponse
 import com.example.android.politicalpreparedness.representative.model.Representative
 import kotlinx.coroutines.launch
@@ -21,6 +22,9 @@ class RepresentativeViewModel(
     val representative: LiveData<Representative>
         get() = _representative
 
+    private val _currentAddress = MutableLiveData<Address?>()
+    val currentAddress: LiveData<Address?>
+        get() = _currentAddress
 
     fun getRepresentative() {
         viewModelScope.launch {
@@ -29,6 +33,10 @@ class RepresentativeViewModel(
                 Log.d("TEST", result.data)
             }*/
         }
+    }
+
+    fun setAddress(address: Address) {
+        _currentAddress.value = address
     }
     //TODO: Establish live data for representatives and address
 
