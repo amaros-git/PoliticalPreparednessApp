@@ -71,8 +71,8 @@ dependencies {
     implementation "com.squareup.moshi:moshi-kotlin:$version_moshi"
     implementation "com.squareup.moshi:moshi-adapters:$version_moshi"
 
-    // Glide
-    //TODO: Add Glide Implementation
+    //Picasso for images
+    implementation 'com.squareup.picasso:picasso:2.5.2'
 
     //Room
     implementation "androidx.room:room-runtime:$version_room"

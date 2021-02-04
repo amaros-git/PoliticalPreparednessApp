@@ -6,9 +6,10 @@
 
 
     <data>
+
         <variable
             name="viewModel"
-            type="com.example.android.politicalpreparedness.representative.RepresentativeViewModel"/>
+            type="com.example.android.politicalpreparedness.representative.RepresentativeViewModel" />
 
         <variable
             name="representative"
@@ -25,7 +26,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/ic_facebook" />
+            app:srcCompat="@drawable/ic_facebook" />
 
         <ImageView
             android:id="@+id/twitterIcon"
@@ -35,7 +36,7 @@
             android:layout_marginEnd="100dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/ic_twitter" />
+            app:srcCompat="@drawable/ic_twitter" />
 
         <ImageView
             android:id="@+id/wwwIcon"
@@ -45,17 +46,28 @@
             android:layout_marginEnd="188dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/ic_www" />
+            app:srcCompat="@drawable/ic_www" />
 
-        <ImageView
+        <androidx.cardview.widget.CardView
             android:id="@+id/representativePhoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="@dimen/margin_big"
+            android:layout_marginTop="@dimen/margin_big"
+            android:elevation="0dp"
+            app:cardCornerRadius="40dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_profile" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:scaleType="centerCrop"
+                app:imageUrl="@{representative.official.photoUrl}" />
+        </androidx.cardview.widget.CardView>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
