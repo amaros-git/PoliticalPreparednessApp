@@ -15,10 +15,7 @@
             android:id="@+id/representative_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/representatives"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/button_location"
-            app:layout_constraintVertical_bias="0.0"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp" />
     </ConstraintSet>
