@@ -31,10 +31,19 @@
                 app:layoutDescription="@xml/fragment_representative_scene"
                 app:motionDebug="SHOW_PATH"
                 android:minHeight="0dp"
-                app:layout_scrollFlags="scroll|enterAlways|snap|exitUntilCollapsed">
-                <!-- TODO: Add visual styling and content -->
+                app:layout_scrollFlags="scroll|snap">
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/form_group"
+                    android:layout_width="wrap_content"
+                    android:alpha="0.5"
+                    android:visibility="invisible"
+                    android:layout_height="wrap_content"
+                    app:constraint_referenced_ids="search_title, address_line_1, address_line_2, button_location"/>
+
                 <TextView
                     android:id="@+id/search_title"
+                    android:text="@string/representative_search"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
@@ -80,6 +89,9 @@
                 <!-- TODO: Add default values from provided resources  -->
                 <!-- TODO: Add data binding value -->
                 <!-- TODO: Add visual styling and content -->
+
+                <!-- TODO: Add data binding value -->
+                <!-- TODO: Add visual styling and content -->
                 <Spinner
                     android:id="@+id/state"
                     android:layout_width="0dp"
@@ -91,8 +103,6 @@
                     app:layout_constraintStart_toEndOf="@id/city"
                     app:layout_constraintTop_toTopOf="@id/city" />
 
-                <!-- TODO: Add data binding value -->
-                <!-- TODO: Add visual styling and content -->
                 <EditText
                     android:id="@+id/zip"
                     android:layout_width="0dp"
@@ -126,26 +136,16 @@
                 <!-- TODO: Add Representatives RecyclerView -->
 
                 <!-- TODO: Add visual styling and content -->
-                <!-- <TextView
-                     android:id="@+id/list_placeholder"
-                     android:layout_width="match_parent"
-                     android:layout_height="0dp"
-                     android:gravity="center"
-                     android:textAlignment="center"
-                     android:visibility="gone"
-                     app:layout_constraintBottom_toBottomOf="parent"
-                     app:layout_constraintTop_toBottomOf="@id/representative_title"
-                     motion:visibilityMode="ignore" />-->
             </androidx.constraintlayout.motion.widget.MotionLayout>
 
 
         </com.google.android.material.appbar.AppBarLayout>
-
+<!--
         <TextView
             android:id="@+id/representative_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="My Representatives" />
+            android:text="My Representatives" />-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/representatives"

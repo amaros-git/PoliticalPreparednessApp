@@ -8,6 +8,7 @@ import android.location.Geocoder
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -124,19 +125,30 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
 
     private fun coordinateMotion() {
         val appBarLayout: AppBarLayout = binding.appbarLayout
-        val motionLayout: MotionLayout = binding.motionLayout
-
+        //val motionLayout: MotionLayout = binding.motionLayout
         val listener = AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
             val seekPosition = -verticalOffset / appBarLayout.totalScrollRange.toFloat()
-
-            //fade Out when scroll down and fade in when scroll up
-            //
-            binding.buttonLocation.alpha = 1.0f - (seekPosition * 1.1f)
             Log.d(TAG, "seekPosition = $seekPosition")
-            motionLayout.progress = seekPosition
+
+            setAlphaOfRepresentativeForm(seekPosition)
+            //motionLayout.progress = seekPosition
         }
 
         appBarLayout.addOnOffsetChangedListener(listener)
+    }
+
+    private fun setAlphaOfRepresentativeForm(seekPosition: Float) {
+        val alpha = 1.0f - (seekPosition * 1.1f)
+        binding.searchTitle.alpha = alpha
+        binding.addressLine1.alpha = alpha
+        binding.addressLine2.alpha = alpha
+
+        binding.city.alpha = alpha
+        binding.state.alpha = alpha
+        binding.zip.alpha = alpha
+
+        binding.buttonLocation.alpha = alpha
+        binding.buttonSearch.alpha = alpha
     }
 
 
