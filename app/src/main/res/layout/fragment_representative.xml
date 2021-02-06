@@ -10,7 +10,6 @@
             type="com.example.android.politicalpreparedness.representative.RepresentativeViewModel" />
 
     </data>
-    <!-- TODO: Add data binding node -->
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -22,14 +21,11 @@
             android:layout_height="wrap_content"
             android:background="@color/white">
 
-
-            <!-- TODO: Add motion scene to hide form on vertical scroll. -->
             <androidx.constraintlayout.motion.widget.MotionLayout
                 android:id="@+id/motion_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layoutDescription="@xml/fragment_representative_scene"
-                app:motionDebug="SHOW_PATH"
                 android:minHeight="0dp"
                 app:layout_scrollFlags="scroll|snap">
 
@@ -39,10 +35,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
-                <!-- TODO: Add data binding value -->
-                <!-- TODO: Add visual styling and content -->
                 <EditText
                     android:id="@+id/address_line_1"
+                    android:hint="@string/enter_address_line_1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:autofillHints="streetAddress"
@@ -51,8 +46,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/search_title" />
 
-                <!-- TODO: Add data binding value -->
-                <!-- TODO: Add visual styling and content -->
                 <EditText
                     android:id="@+id/address_line_2"
                     android:hint="@string/enter_address_line_2"
@@ -64,17 +57,9 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/address_line_1" />
 
-                <!-- TODO: Add data binding value -->
-                <!-- TODO: Add visual styling and content -->
-
-                <!-- TODO: Add default values from provided resources  -->
-                <!-- TODO: Add data binding value -->
-                <!-- TODO: Add visual styling and content -->
-
-                <!-- TODO: Add data binding value -->
-                <!-- TODO: Add visual styling and content -->
                 <EditText
                     android:id="@+id/city"
+                    android:hint="@string/enter_city"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:autofillHints="addressLocality"
@@ -98,6 +83,7 @@
 
                 <EditText
                     android:id="@+id/zip"
+                    android:hint="@string/enter_zip_code"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:autofillHints="postalCode"
@@ -107,8 +93,7 @@
                     app:layout_constraintEnd_toEndOf="@id/city"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/city" />
-
-                <!-- TODO: Add visual styling and label -->
+                
                 <Button
                     android:id="@+id/button_search"
                     android:layout_width="match_parent"
@@ -116,19 +101,12 @@
                     android:text="@string/find_my_representatives"
                     app:layout_constraintTop_toBottomOf="@id/zip" />
 
-                <!-- TODO: Add visual styling and content -->
                 <Button
                     android:id="@+id/button_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/use_my_location"
                     app:layout_constraintTop_toBottomOf="@id/button_search" />
-
-                <!-- TODO: Add visual styling and content -->
-
-                <!-- TODO: Add Representatives RecyclerView -->
-
-                <!-- TODO: Add visual styling and content -->
             </androidx.constraintlayout.motion.widget.MotionLayout>
 
 

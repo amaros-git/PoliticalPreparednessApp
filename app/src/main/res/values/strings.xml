@@ -14,6 +14,9 @@
     <string name="description_profile_photo">Profile photo of the representative</string>
     <string name="representative_search">Representative Search</string>
     <string name="enter_address_line_2">Enter address line 2</string>
+    <string name="enter_address_line_1">Enter address line 1</string>
+    <string name="enter_city">Enter city</string>
+    <string name="enter_zip_code">Enter zip code</string>
 
     <!-- TODO: Add necessary string values -->
 
