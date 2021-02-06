@@ -14,6 +14,7 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.example.android.politicalpreparedness.R
@@ -26,6 +27,7 @@ import com.example.android.politicalpreparedness.databinding.FragmentRepresentat
 import com.example.android.politicalpreparedness.data.network.models.Address
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
 import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
+import com.google.android.material.appbar.AppBarLayout
 import java.util.Locale
 
 class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move location listener
@@ -106,6 +108,8 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
     override fun onStart() {
         super.onStart()
 
+        coordinateMotion()
+
         checkLocationPermission()
 
         locationManager =
@@ -116,6 +120,23 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
         super.onDestroy()
         //remove location listener
         locationManager.removeUpdates(this)
+    }
+
+    private fun coordinateMotion() {
+        val appBarLayout: AppBarLayout = binding.appbarLayout
+        val motionLayout: MotionLayout = binding.motionLayout
+
+        val listener = AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+            val seekPosition = -verticalOffset / appBarLayout.totalScrollRange.toFloat()
+
+            //fade Out when scroll down and fade in when scroll up
+            //
+            binding.buttonLocation.alpha = 1.0f - (seekPosition * 1.1f)
+            Log.d(TAG, "seekPosition = $seekPosition")
+            motionLayout.progress = seekPosition
+        }
+
+        appBarLayout.addOnOffsetChangedListener(listener)
     }
 
 

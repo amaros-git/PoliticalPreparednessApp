@@ -20,7 +20,8 @@ import com.example.android.politicalpreparedness.election.adapter.ElectionViewHo
 import com.example.android.politicalpreparedness.representative.RepresentativeViewModel
 import com.example.android.politicalpreparedness.representative.model.Representative
 
-class RepresentativeListAdapter(private val viewModel: RepresentativeViewModel) : ListAdapter<Representative, RepresentativeViewHolder>(RepresentativeDiffCallback()) {
+class RepresentativeListAdapter(private val viewModel: RepresentativeViewModel) :
+        ListAdapter<Representative, RepresentativeViewHolder>(RepresentativeDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepresentativeViewHolder {
         return RepresentativeViewHolder.from(parent)
@@ -32,7 +33,8 @@ class RepresentativeListAdapter(private val viewModel: RepresentativeViewModel) 
     }
 }
 
-class RepresentativeViewHolder(val binding: RepresantiveItemBinding) : RecyclerView.ViewHolder(binding.root) {
+class RepresentativeViewHolder(val binding: RepresantiveItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
     fun bind(viewModel: RepresentativeViewModel, item: Representative) {
         binding.viewModel = viewModel
@@ -106,7 +108,3 @@ class RepresentativeDiffCallback : DiffUtil.ItemCallback<Representative>() {
     }
 
 }
-
-//TODO: Create RepresentativeDiffCallback
-
-//TODO: Create RepresentativeListener
