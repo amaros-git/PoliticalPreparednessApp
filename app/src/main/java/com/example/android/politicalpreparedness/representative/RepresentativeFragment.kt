@@ -118,13 +118,13 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
 
     private fun coordinateMotion() {
         val appBarLayout: AppBarLayout = binding.appbarLayout
-        //val motionLayout: MotionLayout = binding.motionLayout
+        val motionLayout: MotionLayout = binding.motionLayout
         val listener = AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
             val seekPosition = -verticalOffset / appBarLayout.totalScrollRange.toFloat()
             Log.d(TAG, "seekPosition = $seekPosition")
 
-            setAlphaOfRepresentativeForm(seekPosition)
-            //motionLayout.progress = seekPosition
+            //setAlphaOfRepresentativeForm(seekPosition)
+            motionLayout.progress = seekPosition
         }
 
         appBarLayout.addOnOffsetChangedListener(listener)
