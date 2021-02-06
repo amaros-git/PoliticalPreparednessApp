@@ -33,14 +33,6 @@
                 android:minHeight="0dp"
                 app:layout_scrollFlags="scroll|snap">
 
-                <androidx.constraintlayout.widget.Group
-                    android:id="@+id/form_group"
-                    android:layout_width="wrap_content"
-                    android:alpha="0.5"
-                    android:visibility="invisible"
-                    android:layout_height="wrap_content"
-                    app:constraint_referenced_ids="search_title, address_line_1, address_line_2, button_location"/>
-
                 <TextView
                     android:id="@+id/search_title"
                     android:text="@string/representative_search"
@@ -74,6 +66,13 @@
 
                 <!-- TODO: Add data binding value -->
                 <!-- TODO: Add visual styling and content -->
+
+                <!-- TODO: Add default values from provided resources  -->
+                <!-- TODO: Add data binding value -->
+                <!-- TODO: Add visual styling and content -->
+
+                <!-- TODO: Add data binding value -->
+                <!-- TODO: Add visual styling and content -->
                 <EditText
                     android:id="@+id/city"
                     android:layout_width="0dp"
@@ -85,12 +84,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/address_line_2" />
 
-                <!-- TODO: Add default values from provided resources  -->
-                <!-- TODO: Add data binding value -->
-                <!-- TODO: Add visual styling and content -->
-
-                <!-- TODO: Add data binding value -->
-                <!-- TODO: Add visual styling and content -->
                 <Spinner
                     android:id="@+id/state"
                     android:textAlignment="center"
