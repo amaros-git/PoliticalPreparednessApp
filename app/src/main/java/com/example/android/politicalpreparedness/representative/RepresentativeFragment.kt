@@ -96,13 +96,6 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
 
         return binding.root
 
-        //TODO: Establish bindings
-
-        //TODO: Define and assign Representative adapter
-
-        //TODO: Populate Representative adapter
-
-        //TODO: Establish button listeners for field and location search
 
     }
 
@@ -215,12 +208,6 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
         startForPermissionResult.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
-
-    private fun getLocation() {
-        //TODO: Get location from LocationServices
-        //TODO: The geoCodeLocation method is a helper function to change the lat/long location to a human readable street address
-    }
-
     private fun geoCodeLocation(location: Location): Address {
         val geocoder = Geocoder(context, Locale.getDefault())
         return geocoder.getFromLocation(location.latitude, location.longitude, 1)
@@ -236,12 +223,7 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
     }
 
     override fun onLocationChanged(location: Location) {
-        Log.d(TAG, "onLocationChanged called")
-
-        Log.d(TAG, "Current location: ${location.latitude}, ${location.longitude}")
-
         val address = geoCodeLocation(location)
-        Log.d(TAG, "address = $address")
 
         _viewModel.setAddress(address)
         setStateSpinnerValue(address.state)
