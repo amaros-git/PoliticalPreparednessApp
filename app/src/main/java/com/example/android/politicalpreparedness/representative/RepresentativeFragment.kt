@@ -8,10 +8,11 @@ import android.location.Geocoder
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
@@ -24,14 +25,22 @@ import com.example.android.politicalpreparedness.data.ApplicationRepository
 import com.example.android.politicalpreparedness.data.database.ElectionDatabase
 import com.example.android.politicalpreparedness.data.database.LocalDataSource
 import com.example.android.politicalpreparedness.data.network.CivicsApi
-import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.data.network.models.Address
-import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
+import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
 import com.google.android.material.appbar.AppBarLayout
-import java.util.Locale
+import java.util.*
 
 class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move location listener
+
+    companion object {
+        private const val Extra_address_line1 = "Extra_address_line1"
+        private const val Extra_address_line2 = "Extra_address_line2"
+        private const val Extra_address_city = "Extra_address_city"
+        private const val Extra_address_state = "Extra_address_state"
+        private const val Extra_address_zip = "Extra_address_zip"
+
+    }
 
     private val TAG = RepresentativeFragment::class.java.simpleName
 
@@ -67,11 +76,21 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
         binding.lifecycleOwner = this
         binding.viewModel = _viewModel
 
+        stateSpinnerAdapter = ArrayAdapter.createFromResource(
+                requireContext(),
+                R.array.states,
+                R.layout.spinner_item
+        )
+        initStateSpinner()
+
+        restoreFieldsIfNeeded(savedInstanceState)
+
         binding.buttonLocation.setOnClickListener {
+            hideKeyboard()
             registerLocationListener()
         }
-
         binding.buttonSearch.setOnClickListener {
+            hideKeyboard()
             val address = getAddressFromFields()
             if (isAddressValid(address)) {
                 findRepresentatives(address)
@@ -79,15 +98,6 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
                 _viewModel.showErrorMessage.value = getString(R.string.address_check_error)
             }
         }
-
-        stateSpinnerAdapter = ArrayAdapter.createFromResource(
-                requireContext(),
-                R.array.states,
-                R.layout.spinner_item
-        )
-
-
-        initStateSpinner()
 
         setupListAdapter()
 
@@ -110,6 +120,32 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
         //remove location listener
         locationManager.removeUpdates(this)
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        val address = getAddressFromFields()
+        _viewModel.setAddress(address)
+        outState.apply {
+            putString(Extra_address_line1, address.line1)
+            putString(Extra_address_line2, address.line2)
+            putString(Extra_address_city, address.city)
+            putString(Extra_address_state, address.state)
+            putString(Extra_address_zip, address.zip)
+
+        }
+    }
+
+    private fun restoreFieldsIfNeeded(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            val line1 = (it.getString(Extra_address_line1)) ?: ""
+            val line2 = (it.getString(Extra_address_line2)) ?: ""
+            val city = (it.getString(Extra_address_city)) ?: ""
+            val state = (it.getString(Extra_address_state)) ?: ""
+            val zip = (it.getString(Extra_address_zip)) ?: ""
+
+            saveAddress(Address(line1, line2, city, state, zip))
+        }
+    }
+
 
     private fun coordinateMotion() {
         val appBarLayout: AppBarLayout = binding.appbarLayout
@@ -193,11 +229,15 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
 
+    private fun saveAddress(address: Address) {
+        _viewModel.setAddress(address)
+        setStateSpinnerValue(address.state)
+    }
+
     override fun onLocationChanged(location: Location) {
         val address = geoCodeLocation(location)
 
-        _viewModel.setAddress(address)
-        setStateSpinnerValue(address.state)
+        saveAddress(address)
 
         //we need location only once
         locationManager.removeUpdates(this)
