@@ -28,9 +28,10 @@ class RepresentativeViewModel(
 
 
     fun getRepresentative(address: Address) {
+        showLoading.value = true
         viewModelScope.launch {
             val result = repository.getRepresentatives(address.toFormattedString())
-            //val result = repository.getRepresentatives("us ca")
+            showLoading.value = false
             if (result is Result.Success) {
                 result.data.forEach {
                     Log.d("TEST", it.toString())
@@ -38,7 +39,7 @@ class RepresentativeViewModel(
                 _representatives.value = result.data
             }
             else {
-                //TODO show toast ?
+                showErrorMessage.value = (result as Result.Error).message
             }
         }
     }

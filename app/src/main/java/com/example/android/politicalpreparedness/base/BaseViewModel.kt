@@ -13,6 +13,7 @@ abstract class BaseViewModel(private val app: Application) : AndroidViewModel(ap
 
     val navigationCommand: SingleLiveEvent<NavigationCommand> = SingleLiveEvent()
     val showErrorMessage: SingleLiveEvent<String> = SingleLiveEvent()
+    val showLoading: SingleLiveEvent<Boolean> = SingleLiveEvent()
 /*    val showSnackBar: SingleLiveEvent<String> = SingleLiveEvent()
     val showSnackBarInt: SingleLiveEvent<Int> = SingleLiveEvent()
     val showToast: SingleLiveEvent<String> = SingleLiveEvent()
