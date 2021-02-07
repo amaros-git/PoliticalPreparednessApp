@@ -12,7 +12,7 @@
     <style name="CustomHeadline5" parent="TextAppearance.MaterialComponents.Headline5">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">22sp</item>
-        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorAccent</item>
     </style>
 
 </resources>

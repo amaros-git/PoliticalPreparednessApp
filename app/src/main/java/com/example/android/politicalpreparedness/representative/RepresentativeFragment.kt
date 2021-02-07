@@ -59,8 +59,6 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
     }
 
 
-    //TODO: Declare ViewModel
-
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -78,7 +76,7 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
             if (isAddressValid(address)) {
                 findRepresentatives(address)
             } else {
-                //TODO show toast
+                _viewModel.showErrorMessage.value = getString(R.string.address_check_error)
             }
         }
 
@@ -93,10 +91,7 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
 
         setupListAdapter()
 
-
         return binding.root
-
-
     }
 
     override fun onStart() {
@@ -121,29 +116,11 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
         val motionLayout: MotionLayout = binding.motionLayout
         val listener = AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
             val seekPosition = -verticalOffset / appBarLayout.totalScrollRange.toFloat()
-            Log.d(TAG, "seekPosition = $seekPosition")
-
-            //setAlphaOfRepresentativeForm(seekPosition)
             motionLayout.progress = seekPosition
         }
 
         appBarLayout.addOnOffsetChangedListener(listener)
     }
-
-    private fun setAlphaOfRepresentativeForm(seekPosition: Float) {
-        val alpha = 1.0f - (seekPosition * 1.1f)
-        binding.searchTitle.alpha = alpha
-        binding.addressLine1.alpha = alpha
-        binding.addressLine2.alpha = alpha
-
-        binding.city.alpha = alpha
-        binding.state.alpha = alpha
-        binding.zip.alpha = alpha
-
-        binding.buttonLocation.alpha = alpha
-        binding.buttonSearch.alpha = alpha
-    }
-
 
     private fun getAddressFromFields() =
             Address(
@@ -155,8 +132,7 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
             )
 
     private fun isAddressValid(address: Address): Boolean {
-        Log.d(TAG, "address = $address")
-        return true
+            return (address.city.isNotEmpty()) || (address.state.isNotEmpty())
     }
 
     private fun findRepresentatives(address: Address) {
@@ -186,11 +162,6 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
             requestLocationPermission()
         }
     }
-
-    /* override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-         //TODO: Handle location permission result to get location on permission granted
-     }*/
 
     private fun checkLocationPermission() {
         if (!isLocationPermissionGranted()) {

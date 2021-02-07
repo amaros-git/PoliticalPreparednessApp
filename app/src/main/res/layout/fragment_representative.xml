@@ -111,15 +111,22 @@
             </androidx.constraintlayout.motion.widget.MotionLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
+            android:gravity="center" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/representatives"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_location"
             app:representatives="@{viewModel.representatives}"
             motion:visibilityMode="ignore" />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
