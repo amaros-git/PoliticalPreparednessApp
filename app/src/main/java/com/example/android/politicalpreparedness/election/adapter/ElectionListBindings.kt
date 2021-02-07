@@ -9,13 +9,12 @@ import com.example.android.politicalpreparedness.representative.model.Representa
 
 /**
  * [BindingAdapter]s for the [Election]s list.
- */
 @BindingAdapter("app:items")
 fun setItems(listView: RecyclerView, items: List<Election>?) {
     items?.let {
         (listView.adapter as ElectionListAdapter).submitList(items)
     }
-}
+}*/
 
 /**
  * [BindingAdapter]s for the [Representatives]s list.

@@ -23,8 +23,6 @@ class VoterInfoViewModel(
 
     private val TAG = VoterInfoViewModel::class.java.simpleName
 
-    private val sharedPref = app.getSharedPreferences(SHARED_REFERENCES_KEY, Context.MODE_PRIVATE)
-
     private val _voterInfo = MutableLiveData<VoterInfoResponse>()
     val voterInfo: LiveData<VoterInfoResponse>
         get() = _voterInfo
