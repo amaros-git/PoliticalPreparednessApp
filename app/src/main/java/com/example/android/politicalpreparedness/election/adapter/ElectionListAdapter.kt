@@ -40,6 +40,10 @@ class ElectionListAdapter(
                 val electionItem = getItem(position) as ElectionDataItem.ElectionItem
                 holder.bind(viewModel, electionItem.election)
             }
+            is Header -> {
+                val headerItem = getItem(position) as ElectionDataItem.Header
+                holder.bind(headerItem.headerText)
+            }
         }
     }
 
@@ -54,7 +58,7 @@ class ElectionListAdapter(
         list?.let {
             adapterScope.launch {
                 val items = if (null != headerText) {
-                    listOf(ElectionDataItem.Header) + list.map {
+                    listOf(ElectionDataItem.Header(headerText)) + list.map {
                         ElectionDataItem.ElectionItem(it)
                     }
                 } else {
@@ -70,7 +74,8 @@ class ElectionListAdapter(
 
 }
 
-class ElectionViewHolder(private val binding: ElectionItemBinding) : RecyclerView.ViewHolder(binding.root) {
+class ElectionViewHolder(
+        private val binding: ElectionItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(viewMode: ElectionsViewModel, item: Election) {
         binding.viewModel = viewMode
@@ -91,8 +96,8 @@ class ElectionViewHolder(private val binding: ElectionItemBinding) : RecyclerVie
     }
 }
 
-class Header private constructor(private val binding: HeaderBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+class Header private constructor(
+        private val binding: HeaderBinding) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(text: String) {
         binding.headerText = text
@@ -113,11 +118,17 @@ class Header private constructor(private val binding: HeaderBinding) :
 }
 
 class ElectionDiffCallback : DiffUtil.ItemCallback<ElectionDataItem>() {
-    override fun areItemsTheSame(oldItem: ElectionDataItem, newItem: ElectionDataItem): Boolean {
+    override fun areItemsTheSame(
+            oldItem: ElectionDataItem,
+            newItem: ElectionDataItem
+    ): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: ElectionDataItem, newItem: ElectionDataItem): Boolean {
+    override fun areContentsTheSame(
+            oldItem: ElectionDataItem,
+            newItem: ElectionDataItem
+    ): Boolean {
         return oldItem == newItem
     }
 }
@@ -127,7 +138,7 @@ sealed class ElectionDataItem {
         override val id = election.id.toLong()
     }
 
-    object Header(val ) : ElectionDataItem() {
+    data class Header(val headerText: String) : ElectionDataItem() {
         override val id = Long.MAX_VALUE
     }
 

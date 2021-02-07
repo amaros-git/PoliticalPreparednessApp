@@ -39,9 +39,12 @@ class ElectionsFragment : Fragment() {
 
     private val TAG = ElectionsFragment::class.java.simpleName
 
+    private lateinit var binding: FragmentElectionBinding
+
     private lateinit var upcomingListAdapter: ElectionListAdapter
 
-    private lateinit var binding: FragmentElectionBinding
+    private lateinit var savedListAdapter: ElectionListAdapter
+
 
     private val viewModel by viewModels<ElectionsViewModel> {
         ElectionsViewModelFactory(
@@ -62,10 +65,21 @@ class ElectionsFragment : Fragment() {
         binding.lifecycleOwner = this.viewLifecycleOwner
 
         viewModel.openVoterInfoEvent.observe(viewLifecycleOwner) { election ->
-            findNavController().navigate(ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(election))
+            findNavController().navigate(
+                    ElectionsFragmentDirections
+                            .actionElectionsFragmentToVoterInfoFragment(election)
+            )
         }
 
         setupListAdapter()
+
+        viewModel.upcomingElections.observe(viewLifecycleOwner) { elections ->
+            upcomingListAdapter.submitMyList(elections, "Upcoming elections")
+        }
+
+        viewModel.savedElections.observe(viewLifecycleOwner) { elections ->
+            savedListAdapter.submitMyList(elections, "Saved elections")
+        }
 
         return binding.root
     }
@@ -80,8 +94,7 @@ class ElectionsFragment : Fragment() {
         upcomingListAdapter = ElectionListAdapter(viewModel)
         binding.upcomingElections.adapter = upcomingListAdapter
 
-        val savedListAdapter = ElectionListAdapter(viewModel)
-
+        savedListAdapter = ElectionListAdapter(viewModel)
         binding.savedElections.adapter = savedListAdapter
     }
 
