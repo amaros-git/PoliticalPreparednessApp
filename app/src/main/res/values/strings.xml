@@ -18,6 +18,7 @@
     <string name="enter_city">Enter city</string>
     <string name="enter_zip_code">Enter zip code</string>
     <string name="address_check_error">Please check fields, state and city are mandatory</string>
+    <string name="my_representatives">My Representatives</string>
 
     <!-- TODO: Add necessary string values -->
 

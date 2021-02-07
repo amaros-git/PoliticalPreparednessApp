@@ -101,6 +101,10 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
 
         setupListAdapter()
 
+        _viewModel.representatives.observe(viewLifecycleOwner) {
+            listAdapter.submitMyList(it, getString(R.string.my_representatives))
+        }
+
         return binding.root
     }
 

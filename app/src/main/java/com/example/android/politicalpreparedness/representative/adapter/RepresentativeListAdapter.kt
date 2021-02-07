@@ -13,23 +13,68 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.databinding.RepresantiveItemBinding
 import com.example.android.politicalpreparedness.data.network.models.Channel
-import com.example.android.politicalpreparedness.data.network.models.Election
-import com.example.android.politicalpreparedness.election.ElectionsViewModel
-import com.example.android.politicalpreparedness.election.adapter.ElectionDiffCallback
-import com.example.android.politicalpreparedness.election.adapter.ElectionViewHolder
+import com.example.android.politicalpreparedness.databinding.HeaderBinding
 import com.example.android.politicalpreparedness.representative.RepresentativeViewModel
 import com.example.android.politicalpreparedness.representative.model.Representative
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RepresentativeListAdapter(private val viewModel: RepresentativeViewModel) :
-        ListAdapter<Representative, RepresentativeViewHolder>(RepresentativeDiffCallback()) {
+        ListAdapter<RepresentativeDataItem, RecyclerView.ViewHolder>(RepresentativeDiffCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepresentativeViewHolder {
-        return RepresentativeViewHolder.from(parent)
+    companion object {
+        private const val ITEM_VIEW_TYPE_HEADER = 0
+        private const val ITEM_VIEW_TYPE_ITEM = 1
     }
 
-    override fun onBindViewHolder(holder: RepresentativeViewHolder, position: Int) {
-        val item = getItem(position)
-        holder.bind(viewModel, item)
+    private val adapterScope = CoroutineScope(Dispatchers.Default)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            ITEM_VIEW_TYPE_HEADER -> Header.from(parent)
+            ITEM_VIEW_TYPE_ITEM -> RepresentativeViewHolder.from(parent)
+             else -> throw ClassCastException("Unknown viewType $viewType")
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is RepresentativeViewHolder -> {
+                val representativeItem = getItem(position) as RepresentativeDataItem.RepresentativeItem
+                holder.bind(viewModel, representativeItem.representative)
+            }
+            is Header -> {
+                val headerItem = getItem(position) as RepresentativeDataItem.Header
+                holder.bind(headerItem.headerText)
+            }
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (getItem(position)) {
+            is RepresentativeDataItem.Header -> ITEM_VIEW_TYPE_HEADER
+            is RepresentativeDataItem.RepresentativeItem -> ITEM_VIEW_TYPE_ITEM
+        }
+    }
+
+    fun submitMyList(list: List<Representative>?, headerText: String? = null) {
+        list?.let {
+            adapterScope.launch {
+                val items = if (null != headerText) {
+                    listOf(RepresentativeDataItem.Header(headerText)) + list.map {
+                        RepresentativeDataItem.RepresentativeItem(it)
+                    }
+                } else {
+                    list.map { RepresentativeDataItem.RepresentativeItem(it) }
+                }
+
+                withContext(Dispatchers.Main) {
+                    submitList(items)
+                }
+            }
+        }
     }
 }
 
@@ -95,16 +140,48 @@ class RepresentativeViewHolder(val binding: RepresantiveItemBinding) :
         val intent = Intent(ACTION_VIEW, uri)
         itemView.context.startActivity(intent)
     }
-
 }
 
-class RepresentativeDiffCallback : DiffUtil.ItemCallback<Representative>() {
-    override fun areItemsTheSame(oldItem: Representative, newItem: Representative): Boolean {
-        return ((oldItem.office == newItem.office) && (oldItem.office == newItem.office))
+class Header private constructor(
+        private val binding: HeaderBinding) : RecyclerView.ViewHolder(binding.root) {
+
+    fun bind(text: String) {
+        binding.headerText = text
+        binding.executePendingBindings()
+
     }
 
-    override fun areContentsTheSame(oldItem: Representative, newItem: Representative): Boolean {
+    companion object {
+        fun from(parent: ViewGroup): Header {
+            val binding = HeaderBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+            )
+            return Header(binding)
+        }
+    }
+}
+
+class RepresentativeDiffCallback : DiffUtil.ItemCallback<RepresentativeDataItem>() {
+    override fun areItemsTheSame(oldItem: RepresentativeDataItem, newItem: RepresentativeDataItem): Boolean {
+        return ((oldItem._representative?.office == newItem._representative?.office) &&
+                (oldItem._representative?.official == newItem._representative?.official))
+    }
+
+    override fun areContentsTheSame(oldItem: RepresentativeDataItem, newItem: RepresentativeDataItem): Boolean {
         return oldItem == newItem
     }
+}
 
+sealed class RepresentativeDataItem {
+    data class RepresentativeItem(val representative : Representative) : RepresentativeDataItem() {
+        override val _representative: Representative = representative
+    }
+
+    data class Header(val headerText: String) : RepresentativeDataItem() {
+        override val _representative: Representative? = null
+    }
+
+    abstract val _representative : Representative?
 }
