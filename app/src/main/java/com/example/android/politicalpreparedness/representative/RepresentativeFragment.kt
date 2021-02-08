@@ -31,7 +31,7 @@ import com.example.android.politicalpreparedness.representative.adapter.Represen
 import com.google.android.material.appbar.AppBarLayout
 import java.util.*
 
-class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move location listener
+class RepresentativeFragment : BaseFragment() { //TODO move location listener
 
     companion object {
         private const val Extra_address_line1 = "Extra_address_line1"
@@ -44,7 +44,7 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
 
     private val TAG = RepresentativeFragment::class.java.simpleName
 
-    private lateinit var locationManager: LocationManager
+
 
     private lateinit var binding: FragmentRepresentativeBinding
 
@@ -85,24 +85,14 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
 
         restoreFieldsIfNeeded(savedInstanceState)
 
-        binding.buttonLocation.setOnClickListener {
-            hideKeyboard()
-            registerLocationListener()
-        }
-        binding.buttonSearch.setOnClickListener {
-            hideKeyboard()
-            val address = getAddressFromFields()
-            if (isAddressValid(address)) {
-                findRepresentatives(address)
-            } else {
-                _viewModel.showErrorMessage.value = getString(R.string.address_check_error)
-            }
-        }
-
         setupListAdapter()
 
         _viewModel.representatives.observe(viewLifecycleOwner) {
             listAdapter.submitMyList(it, getString(R.string.my_representatives))
+        }
+
+        _viewModel.locationAddress.observe(viewLifecycleOwner) {
+            it?.let { setAddressToFields(it) }
         }
 
         return binding.root
@@ -111,18 +101,18 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
     override fun onStart() {
         super.onStart()
 
+        binding.buttonLocation.setOnClickListener {
+            hideKeyboard()
+            _viewModel.startAddressLocation()
+        }
+        binding.buttonSearch.setOnClickListener {
+            val address = getAddressFromFields()
+            findRepresentatives(address)
+        }
+
         coordinateMotion()
 
         checkLocationPermission()
-
-        locationManager =
-                requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        //remove location listener
-        locationManager.removeUpdates(this)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -148,7 +138,6 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
             setAddressToFields(Address(line1, line2, city, state, zip))
         }
     }
-
 
     private fun coordinateMotion() {
         val appBarLayout: AppBarLayout = binding.appbarLayout
@@ -183,7 +172,12 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
     }
 
     private fun findRepresentatives(address: Address) {
-        _viewModel.getRepresentative(address)
+        hideKeyboard()
+        if (isAddressValid(address)) {
+            _viewModel.getRepresentative(address)
+        } else {
+            _viewModel.showErrorMessage.value = getString(R.string.address_check_error)
+        }
     }
 
     private fun initStateSpinner() {
@@ -201,15 +195,6 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
     }
 
 
-    @SuppressLint("MissingPermission")
-    private fun registerLocationListener() {
-        if (isLocationPermissionGranted()) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 1f, this)
-        } else {
-            requestLocationPermission()
-        }
-    }
-
     private fun checkLocationPermission() {
         if (!isLocationPermissionGranted()) {
             requestLocationPermission()
@@ -226,27 +211,9 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
         startForPermissionResult.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
-    private fun geoCodeLocation(location: Location): Address {
-        val geocoder = Geocoder(context, Locale.getDefault())
-        return geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                .map { address ->
-                    Address(address.thoroughfare, address.subThoroughfare, address.locality, address.adminArea, address.postalCode)
-                }
-                .first()
-    }
 
     private fun hideKeyboard() {
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
-
-    override fun onLocationChanged(location: Location) {
-        val address = geoCodeLocation(location)
-
-        setAddressToFields(address)
-
-        //we need location only once
-        locationManager.removeUpdates(this)
-    }
-
 }
