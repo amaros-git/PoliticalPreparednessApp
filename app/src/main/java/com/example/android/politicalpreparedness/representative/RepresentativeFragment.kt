@@ -127,7 +127,6 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
 
     override fun onSaveInstanceState(outState: Bundle) {
         val address = getAddressFromFields()
-        _viewModel.setAddress(address)
         outState.apply {
             putString(Extra_address_line1, address.line1)
             putString(Extra_address_line2, address.line2)
@@ -146,7 +145,7 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
             val state = (it.getString(Extra_address_state)) ?: ""
             val zip = (it.getString(Extra_address_zip)) ?: ""
 
-            saveAddress(Address(line1, line2, city, state, zip))
+            setAddressToFields(Address(line1, line2, city, state, zip))
         }
     }
 
@@ -170,6 +169,14 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
                     binding.state.selectedItem.toString(),
                     binding.zip.text.toString()
             )
+
+    private fun setAddressToFields(address: Address) {
+        binding.addressLine1.setText(address.line1)
+        binding.addressLine2.setText(address.line2)
+        binding.city.setText(address.city)
+        setStateSpinnerValue(address.state)
+        binding.zip.setText(address.zip)
+    }
 
     private fun isAddressValid(address: Address): Boolean {
             return (address.city.isNotEmpty()) || (address.state.isNotEmpty())
@@ -233,15 +240,10 @@ class RepresentativeFragment : BaseFragment(), LocationListener { //TODO move lo
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
 
-    private fun saveAddress(address: Address) {
-        _viewModel.setAddress(address)
-        setStateSpinnerValue(address.state)
-    }
-
     override fun onLocationChanged(location: Location) {
         val address = geoCodeLocation(location)
 
-        saveAddress(address)
+        setAddressToFields(address)
 
         //we need location only once
         locationManager.removeUpdates(this)

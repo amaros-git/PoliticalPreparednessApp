@@ -22,9 +22,9 @@ class RepresentativeViewModel(
     val representatives: LiveData<List<Representative>>
         get() = _representatives
 
-    private val _currentAddress = MutableLiveData<Address?>()
+  /*  private val _currentAddress = MutableLiveData<Address?>()
     val currentAddress: LiveData<Address?>
-        get() = _currentAddress
+        get() = _currentAddress*/
 
 
     fun getRepresentative(address: Address) {
@@ -33,9 +33,6 @@ class RepresentativeViewModel(
             val result = repository.getRepresentatives(address.toFormattedString())
             showLoading.value = false
             if (result is Result.Success) {
-                result.data.forEach {
-                    Log.d("TEST", it.toString())
-                }
                 _representatives.value = result.data
             }
             else {
@@ -43,10 +40,10 @@ class RepresentativeViewModel(
             }
         }
     }
-
+/*
     fun setAddress(address: Address) {
         _currentAddress.value = address
-    }
+    }*/
     //TODO: Establish live data for representatives and address
 
     //TODO: Create function to fetch representatives from API from a provided address

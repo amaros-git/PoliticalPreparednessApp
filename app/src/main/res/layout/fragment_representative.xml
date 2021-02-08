@@ -30,6 +30,7 @@
                 app:layout_scrollFlags="scroll|snap">
 
                 <TextView
+                    style="@style/CustomHeadline5"
                     android:id="@+id/search_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -42,7 +43,6 @@
                     android:autofillHints="streetAddress"
                     android:hint="@string/enter_address_line_1"
                     android:inputType="textPostalAddress"
-                    android:text="@{viewModel.currentAddress.line1}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/search_title" />
 
@@ -53,7 +53,6 @@
                     android:autofillHints="streetAddress"
                     android:hint="@string/enter_address_line_2"
                     android:inputType="textPostalAddress"
-                    android:text="@{viewModel.currentAddress.line2}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/address_line_1" />
 
@@ -64,7 +63,6 @@
                     android:autofillHints="addressLocality"
                     android:hint="@string/enter_city"
                     android:inputType="textPostalAddress"
-                    android:text="@{viewModel.currentAddress.city}"
                     app:layout_constraintEnd_toStartOf="@id/state"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/address_line_2" />
@@ -89,7 +87,6 @@
                     android:hint="@string/enter_zip_code"
                     android:inputType="number"
                     android:maxLength="5"
-                    android:text="@{viewModel.currentAddress.zip}"
                     app:layout_constraintEnd_toEndOf="@id/city"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/city" />
