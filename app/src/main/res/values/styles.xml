@@ -16,15 +16,22 @@
     </style>
 
     <style name="RegularTextStyle" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/cuprum</item>
+        <item name="android:textStyle">normal</item>
         <item name="android:textSize">@dimen/text_size_normal</item>
         <item name="android:textColor">@color/colorText</item>
     </style>
 
     <style name="LightTextStyle" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textStyle">bold</item>
+        <item name="android:textStyle">normal</item>
         <item name="android:textSize">@dimen/text_size_small</item>
         <item name="android:textColor">@color/colorTextLight</item>
+    </style>
+
+    <style name="ButtonStyle" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColor">@color/white</item>
+
     </style>
 
 </resources>

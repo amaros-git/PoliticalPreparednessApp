@@ -5,7 +5,7 @@ data class Address (
         val line2: String?,
         val city: String,
         val state: String,
-        val zip: String
+        val zip: String?
 ) {
     fun toFormattedString(): String {
         var output = line1.plus("\n")

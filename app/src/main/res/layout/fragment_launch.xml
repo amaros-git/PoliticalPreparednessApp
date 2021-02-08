@@ -16,26 +16,27 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:scaleType="fitXY"
-            android:adjustViewBounds="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_logo_description"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ballot_logo"
-            android:contentDescription="@string/app_logo_description" />
-
+            app:srcCompat="@drawable/ballot_logo" />
 
 
         <Button
             android:id="@+id/upcomingElectionsButton"
+            style="@style/ButtonStyle"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_big_double"
-            android:layout_marginEnd="@dimen/margin_big_double"
-            android:layout_marginBottom="@dimen/margin_normal"
+            android:layout_height="@dimen/button_height"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_big"
             android:text="@string/upcoming_elections"
             app:layout_constraintBottom_toTopOf="@+id/findRepresentativeButton"
             app:layout_constraintEnd_toEndOf="parent"
@@ -43,10 +44,12 @@
 
         <Button
             android:id="@+id/findRepresentativeButton"
+            style="@style/ButtonStyle"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_big_double"
-            android:layout_marginEnd="@dimen/margin_big_double"
+            android:layout_height="@dimen/button_height"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_big"
+            android:layout_marginEnd="@dimen/margin_small"
             android:layout_marginBottom="@dimen/margin_big_double"
             android:text="@string/find_my_representatives"
             app:layout_constraintBottom_toBottomOf="parent"
