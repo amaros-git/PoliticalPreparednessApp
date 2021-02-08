@@ -9,10 +9,22 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="CustomHeadline5" parent="TextAppearance.MaterialComponents.Headline5">
+    <style name="TitleTextStyle" parent="TextAppearance.MaterialComponents.Headline5">
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">22sp</item>
-        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">@dimen/text_size_big</item>
+        <item name="android:textColor">@color/colorTextLight</item>
+    </style>
+
+    <style name="RegularTextStyle" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/text_size_normal</item>
+        <item name="android:textColor">@color/colorText</item>
+    </style>
+
+    <style name="LightTextStyle" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textColor">@color/colorTextLight</item>
     </style>
 
 </resources>

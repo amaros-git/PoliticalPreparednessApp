@@ -5,6 +5,8 @@
     <dimen name="margin_big_double">32dp</dimen>
     <dimen name="margin_normal">8dp</dimen>
 
-    <!-- TODO: Add necessary dimension values -->s
+    <dimen name="text_size_small">16dp</dimen>
+    <dimen name="text_size_normal">18dp</dimen>
+    <dimen name="text_size_big">20dp</dimen>
 
 </resources>

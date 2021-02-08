@@ -121,16 +121,16 @@ class ApplicationRepository(
 
     private fun convertExceptionToString(e: Exception): String = when (e) {
         is HttpException -> {
-            e.localizedMessage
+            e.localizedMessage ?: "http exception"
         }
         is SocketTimeoutException -> {
-            e.localizedMessage
+            e.localizedMessage ?: "socket timeout exception"
         }
         is JsonDataException -> {
-            e.localizedMessage
+            e.localizedMessage ?: "json data exception"
         }
         is IOException -> {
-            e.localizedMessage
+            e.localizedMessage ?: "IO exception"
         }
         else -> {
             "Unknown exception: ${e.localizedMessage}"
