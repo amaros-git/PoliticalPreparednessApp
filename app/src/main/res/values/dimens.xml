@@ -10,5 +10,6 @@
     <dimen name="text_size_big">20dp</dimen>
     <dimen name="margin_small">4dp</dimen>
     <dimen name="button_height">32dp</dimen>
+    <dimen name="link_icon_width_height">24dp</dimen>
 
 </resources>
