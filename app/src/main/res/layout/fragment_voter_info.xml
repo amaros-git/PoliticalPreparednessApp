@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.android.politicalpreparedness.election.VoterInfoViewModel" />
@@ -35,76 +36,72 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="@dimen/margin_big" />
+            app:layout_constraintGuide_begin="@dimen/margin_normal" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="@dimen/margin_big" />
+            app:layout_constraintGuide_end="@dimen/margin_normal" />
 
-        <androidx.appcompat.widget.Toolbar
+        <!--<androidx.appcompat.widget.Toolbar
             android:id="@+id/election_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/padding_normal"
             android:singleLine="true"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!-- TODO: Add visual styling -->
-
-        <!-- TODO: Add visual styling and content -->
-
-        <!-- TODO: Add click binding to open web URL -->
-        <!-- TODO: Add visual styling and content -->
-
-        <!-- TODO: Add click binding to open web URL -->
-        <!-- TODO: Add visual styling and content -->
+            app:layout_constraintTop_toTopOf="parent" />-->
 
         <TextView
             android:id="@+id/election_date"
+            style="@style/RegularTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@id/election_name"
+            app:layout_constraintTop_toTopOf="parent"
             app:showDate="@{election.electionDay}"
             tools:text="12 November 2055" />
 
         <TextView
             android:id="@+id/election_header"
+            style="@style/TitleTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_big_double"
             android:text="@string/election_information"
+            android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/election_date" />
 
         <TextView
             android:id="@+id/voting_locations"
+            style="@style/LightTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_big"
-            android:text="@string/voting_locations"
             android:onClick="@{() -> viewModel.openUrl(voterUrl)}"
+            android:text="@string/voting_locations"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/election_header" />
 
         <TextView
             android:id="@+id/ballot_information"
+
+            style="@style/LightTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_big"
-            android:text="@string/ballot_information"
             android:onClick="@{() -> viewModel.openUrl(ballotUrl)}"
+            android:text="@string/ballot_information"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/voting_locations"/>
+            app:layout_constraintTop_toBottomOf="@+id/voting_locations" />
 
 
         <androidx.constraintlayout.widget.Group
@@ -121,6 +118,7 @@
 
         <TextView
             android:id="@+id/state_correspondence_header"
+            style="@style/TitleTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_big_double"
@@ -132,25 +130,28 @@
 
         <TextView
             android:id="@+id/address_text"
+            style="@style/LightTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@{address.toFormattedString()}"
             android:layout_marginTop="@dimen/margin_big"
+            android:text="@{address.toFormattedString()}"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/state_correspondence_header"
             tools:text="1500 11th Street, 5th Floor, Sacramento, California, 95814" />
 
         <Button
             android:id="@+id/follow_button"
+            style="@style/ButtonStyle"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_big"
-            app:setText="@{viewModel.isFollowed().booleanValue()}"
-            tools:text="Follow election"
+            android:layout_height="@dimen/button_height"
+            android:layout_marginBottom="@dimen/margin_big_double"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintStart_toStartOf="@+id/guideline" />
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:setText="@{viewModel.isFollowed().booleanValue()}"
+            tools:text="Follow election" />
 
         <!-- TODO: Add button to save election to Room -->
 

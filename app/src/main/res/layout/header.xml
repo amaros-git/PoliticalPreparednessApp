@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:textAlignment="textStart"
         android:text="@{headerText}"
+        android:padding="@dimen/margin_normal"
         android:textAppearance="?android:attr/textAppearanceLarge"
         tools:text="Header" />
 </layout>

@@ -23,5 +23,7 @@
     <string name="picture_with_twitter_icon">Picture with twitter icon</string>
     <string name="picture_with_www_icon">Picture with www icon</string>
     <string name="profile_photo_of_representative">Profile photo of representative</string>
+    <string name="unfollow_election">UNFOLLOW ELECTION</string>
+    <string name="follow_election">FOLLOW ELECTION</string>
 
 </resources>

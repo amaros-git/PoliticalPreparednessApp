@@ -106,13 +106,11 @@ class RepresentativeViewHolder(val binding: RepresantiveItemBinding) :
     private fun showSocialLinks(channels: List<Channel>) {
         val facebookUrl = getFacebookUrl(channels)
         if (!facebookUrl.isNullOrBlank()) {
-            Log.d("TEST", "facebookUrl= $facebookUrl")
             enableLink(binding.facebookIcon, facebookUrl)
         }
 
         val twitterUrl = getTwitterUrl(channels)
         if (!twitterUrl.isNullOrBlank()) {
-            Log.d("TEST", "twitterUrl= $twitterUrl")
             enableLink(binding.twitterIcon, twitterUrl)
         }
     }

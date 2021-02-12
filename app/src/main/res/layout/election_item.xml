@@ -21,15 +21,35 @@
 
 
         <TextView
-            android:textSize="20sp"
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
+            android:id="@+id/name"
+            style="@style/RegularTextStyle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_small"
             android:onClick="@{() -> viewModel.openVoterInfo(election)}"
             android:text="@{election.name}"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Text" />
+            tools:text="VIP Test Election" />
+
+        <TextView
+            android:id="@+id/date"
+            style="@style/LightTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:onClick="@{() -> viewModel.openVoterInfo(election)}"
+            android:text="@{election.electionDay.toString()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/name"
+
+            app:layout_constraintStart_toStartOf="@+id/name"
+            app:layout_constraintTop_toBottomOf="@+id/name"
+            tools:text="Sun Jun 06 00:00:00 EDT 2021" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
