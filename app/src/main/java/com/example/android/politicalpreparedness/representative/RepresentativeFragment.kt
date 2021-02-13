@@ -28,6 +28,8 @@ import com.example.android.politicalpreparedness.data.network.CivicsApi
 import com.example.android.politicalpreparedness.data.network.models.Address
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
+import com.example.android.politicalpreparedness.utils.setDisplayHomeAsUpEnabled
+import com.example.android.politicalpreparedness.utils.setTitle
 import com.google.android.material.appbar.AppBarLayout
 import java.util.*
 
@@ -75,6 +77,9 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
         binding = FragmentRepresentativeBinding.inflate(inflater)
         binding.lifecycleOwner = this
         binding.viewModel = _viewModel
+
+        setTitle(getString(R.string.representative_title))
+        setDisplayHomeAsUpEnabled(true)
 
         stateSpinnerAdapter = ArrayAdapter.createFromResource(
                 requireContext(),

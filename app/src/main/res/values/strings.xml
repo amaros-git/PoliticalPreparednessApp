@@ -25,5 +25,8 @@
     <string name="profile_photo_of_representative">Profile photo of representative</string>
     <string name="unfollow_election">UNFOLLOW ELECTION</string>
     <string name="follow_election">FOLLOW ELECTION</string>
+    <string name="representative_title">Representatives Search</string>
+    <string name="elections_title">Elections</string>
+    <string name="launch_title">Political Preparedness app</string>
 
 </resources>

@@ -7,12 +7,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.data.ApplicationRepository
 import com.example.android.politicalpreparedness.data.database.ElectionDatabase
 import com.example.android.politicalpreparedness.data.database.LocalDataSource
 import com.example.android.politicalpreparedness.data.network.CivicsApi
 import com.example.android.politicalpreparedness.databinding.FragmentElectionBinding
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
+import com.example.android.politicalpreparedness.utils.setDisplayHomeAsUpEnabled
+import com.example.android.politicalpreparedness.utils.setTitle
 
 /*viewModel.upcomingElections.observe(viewLifecycleOwner) { result ->
             Log.d(TAG, "Observed elections: ")
@@ -63,6 +66,9 @@ class ElectionsFragment : Fragment() {
         binding = FragmentElectionBinding.inflate(inflater)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this.viewLifecycleOwner
+
+        setTitle(getString(R.string.elections_title))
+        setDisplayHomeAsUpEnabled(true)
 
         viewModel.openVoterInfoEvent.observe(viewLifecycleOwner) { election ->
             findNavController().navigate(

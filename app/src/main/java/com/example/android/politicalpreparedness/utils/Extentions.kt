@@ -15,6 +15,15 @@ fun Fragment.setTitle(title: String) {
     }
 }
 
+
+fun Fragment.setDisplayHomeAsUpEnabled(bool: Boolean) {
+    if (activity is AppCompatActivity) {
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(
+                bool
+        )
+    }
+}
+
 //animate changing the view visibility
 fun View.fadeIn() {
     this.visibility = View.VISIBLE
