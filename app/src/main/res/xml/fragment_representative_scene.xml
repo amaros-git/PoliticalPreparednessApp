@@ -50,55 +50,6 @@
                 android:alpha="0.0"
                 app:framePosition="100"
                 app:motionTarget="@id/button_location" />
-
-
-            <!-- <KeyPosition
-                 app:percentX="0.5"
-                 app:framePosition="90"
-                 app:keyPositionType="parentRelative"
-                 app:motionTarget="@id/address_line_2" />
-
-             <KeyPosition
-                 app:percentX="0.5"
-                 app:framePosition="90"
-                 app:keyPositionType="parentRelative"
-                 app:motionTarget="@id/zip" />
-
-             <KeyPosition
-                 app:percentX="1.0"
-                 app:framePosition="90"
-                 app:keyPositionType="parentRelative"
-                 app:motionTarget="@id/state" />-->
-
-            <!-- <KeyAttribute
-                 android:rotation="0"
-                 app:framePosition="0"
-                 app:motionTarget="@id/state" />
-
-             <KeyAttribute
-                 android:rotation="180"
-                 app:framePosition="75"
-                 app:motionTarget="@id/state" />
-
-             <KeyAttribute
-                 android:rotation="0"
-                 app:framePosition="0"
-                 app:motionTarget="@id/address_line_2" />
-
-             <KeyAttribute
-                 android:rotation="180"
-                 app:framePosition="75"
-                 app:motionTarget="@id/address_line_2" />-->
-
-
-            <!--<KeyAttribute
-                app:framePosition="0"
-                android:alpha="1.0"
-                app:motionTarget="@id/address_line_2" />
-            <KeyAttribute
-                app:framePosition="100"
-                android:alpha="0.0"
-                app:motionTarget="@id/address_line_2" />-->
         </KeyFrameSet>
     </Transition>
 </MotionScene>

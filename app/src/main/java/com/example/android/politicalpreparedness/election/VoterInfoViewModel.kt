@@ -25,8 +25,6 @@ class VoterInfoViewModel(
     val voterInfo: LiveData<VoterInfoResponse>
         get() = _voterInfo
 
-    val openUrlEvent = SingleLiveEvent<String>()
-
     private val _isFollowed = MutableLiveData<Boolean>() //TODO rework to map and filter by id
     val isFollowed: LiveData<Boolean>
         get() = _isFollowed
@@ -62,26 +60,20 @@ class VoterInfoViewModel(
     }
 
     fun getVoterInfo(electionId: Int, division: Division) {
+        showLoading.value = true
         viewModelScope.launch {
             val result = repository.getVoterInfo(
                     electionId,
                     division.state + " " + division.country
             )
+            showLoading.value = false
+
             if (result is Result.Success) {
                 _voterInfo.postValue(result.data)
             } else {
                 Log.e("VoterInfoViewModel", (result as Result.Error).message)
                 showErrorMessage.postValue(result.message)
             }
-        }
-    }
-
-    @SuppressLint("NullSafeMutableLiveData")
-    fun openUrl(url: String?) {
-        if (url != null) {
-            openUrlEvent.value = url
-        } else {
-            showErrorMessage.value = "Such information wasn't provided"
         }
     }
 

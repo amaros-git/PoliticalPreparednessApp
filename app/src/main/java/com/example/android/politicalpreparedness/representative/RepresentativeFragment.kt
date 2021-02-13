@@ -46,8 +46,6 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
 
     private val TAG = RepresentativeFragment::class.java.simpleName
 
-
-
     private lateinit var binding: FragmentRepresentativeBinding
 
     private lateinit var stateSpinnerAdapter: ArrayAdapter<CharSequence>

@@ -16,14 +16,6 @@
         <variable
             name="election"
             type="com.example.android.politicalpreparedness.data.network.models.Election" />
-
-        <variable
-            name="voterUrl"
-            type="String" />
-
-        <variable
-            name="ballotUrl"
-            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,14 +36,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_end="@dimen/margin_normal" />
-
-        <!--<androidx.appcompat.widget.Toolbar
-            android:id="@+id/election_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/padding_normal"
-            android:singleLine="true"
-            app:layout_constraintTop_toTopOf="parent" />-->
 
         <TextView
             android:id="@+id/election_date"
@@ -83,25 +67,26 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_big"
-            android:onClick="@{() -> viewModel.openUrl(voterUrl)}"
             android:text="@string/voting_locations"
+            android:visibility="invisible"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/election_header" />
+            app:layout_constraintTop_toBottomOf="@+id/election_header"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/ballot_information"
-
             style="@style/LightTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_big"
-            android:onClick="@{() -> viewModel.openUrl(ballotUrl)}"
             android:text="@string/ballot_information"
+            android:visibility="invisible"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/voting_locations" />
+            app:layout_constraintTop_toBottomOf="@+id/voting_locations"
+            tools:visibility="visible" />
 
 
         <androidx.constraintlayout.widget.Group
