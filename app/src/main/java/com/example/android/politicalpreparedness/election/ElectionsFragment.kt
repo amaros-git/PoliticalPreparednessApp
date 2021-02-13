@@ -80,11 +80,11 @@ class ElectionsFragment : Fragment() {
         setupListAdapter()
 
         viewModel.upcomingElections.observe(viewLifecycleOwner) { elections ->
-            upcomingListAdapter.submitMyList(elections, "Upcoming elections")
+            upcomingListAdapter.submitMyList(elections)
         }
 
         viewModel.savedElections.observe(viewLifecycleOwner) { elections ->
-            savedListAdapter.submitMyList(elections, "Saved elections")
+            savedListAdapter.submitMyList(elections)
         }
 
         return binding.root

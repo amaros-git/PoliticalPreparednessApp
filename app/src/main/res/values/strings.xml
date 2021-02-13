@@ -28,5 +28,6 @@
     <string name="representative_title">Representatives Search</string>
     <string name="elections_title">Elections</string>
     <string name="launch_title">Political Preparedness app</string>
+    <string name="saved_elections">Saved Elections</string>
 
 </resources>

@@ -1,9 +1,8 @@
 package com.example.android.politicalpreparedness.election
 
+import android.annotation.SuppressLint
 import android.app.Application
-import android.content.*
 import android.util.Log
-import androidx.core.content.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -14,7 +13,6 @@ import kotlinx.coroutines.launch
 import com.example.android.politicalpreparedness.data.Result
 import com.example.android.politicalpreparedness.data.network.models.Division
 import com.example.android.politicalpreparedness.utils.SingleLiveEvent
-import kotlinx.coroutines.Dispatchers
 
 class VoterInfoViewModel(
         private val electionId: Int,
@@ -45,19 +43,6 @@ class VoterInfoViewModel(
 
     }
 
-
-   /* fun checkFollowStatus(electionId: Int) {
-        if
-        viewModelScope.launch {
-
-        }
-        _isFollowed.value = if (followed.isNullOrEmpty()) {
-            false
-        } else {
-            followed.contains(electionId.toString())
-        }
-    }*/
-
     fun follow(electionId: Int) {
         changeFollowingStatus(electionId, true)
 
@@ -76,40 +61,6 @@ class VoterInfoViewModel(
         }
     }
 
-    /*fun followElection(electionId: Int) {
-        //get current set
-        val currentFollowed = sharedPref.getStringSet(FOLLOWED_ELECTIONS_PREFERENCES, emptySet())
-        currentFollowed?.let {
-            //add new id to the list with current followed
-            val list = it.toMutableList()
-            list.add(electionId.toString())
-            //save new followed set
-            val newFollowed = list.toSet()
-            sharedPref.edit {
-                remove(FOLLOWED_ELECTIONS_PREFERENCES)
-                putStringSet(FOLLOWED_ELECTIONS_PREFERENCES, newFollowed)
-            }
-        }
-        _isFollowed.value = true
-    }
-
-    fun unfollowElection(electionId: Int) {
-        //get current set
-        val currentFollowed = sharedPref.getStringSet(FOLLOWED_ELECTIONS_PREFERENCES, emptySet())
-        currentFollowed?.let {
-            //remove election id from the list with current followed
-            val list = it.toMutableList()
-            list.remove(electionId.toString())
-            //save new followed set
-            val newFollowed = list.toSet()
-            sharedPref.edit {
-                remove(FOLLOWED_ELECTIONS_PREFERENCES)
-                putStringSet(FOLLOWED_ELECTIONS_PREFERENCES, newFollowed)
-            }
-        }
-        _isFollowed.value = false
-    }*/
-
     fun getVoterInfo(electionId: Int, division: Division) {
         viewModelScope.launch {
             val result = repository.getVoterInfo(
@@ -125,25 +76,13 @@ class VoterInfoViewModel(
         }
     }
 
-
+    @SuppressLint("NullSafeMutableLiveData")
     fun openUrl(url: String?) {
-        url?.let {
-            openUrlEvent.value = it
+        if (url != null) {
+            openUrlEvent.value = url
+        } else {
+            showErrorMessage.value = "Such information wasn't provided"
         }
     }
-
-    //TODO: Add live data to hold voter info
-
-
-    //TODO: Add var and methods to populate voter info
-
-    //TODO: Add var and methods to support loading URLs
-
-    //TODO: Add var and methods to save and remove elections to local database
-    //TODO: cont'd -- Populate initial state of save button to reflect proper action based on election saved status
-
-    /**
-     * Hint: The saved state can be accomplished in multiple ways. It is directly related to how elections are saved/removed from the database.
-     */
 
 }
