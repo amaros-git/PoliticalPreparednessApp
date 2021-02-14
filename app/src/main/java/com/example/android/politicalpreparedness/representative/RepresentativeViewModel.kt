@@ -30,29 +30,19 @@ class RepresentativeViewModel(
     val representatives: LiveData<List<Representative>>
         get() = _representatives
 
-    /*  val cachedRepresentatives: LiveData<RepresentativeCache?> = repository.observerRepresentatives("usca").map { result ->
-          if (result is Result.Success) {
-              result.data
-          } else {
-              null
-          }
-      }*/
-
     private var locationManager: LocationManager? = null
 
     private val _locationAddress = MutableLiveData<Address?>()
     val locationAddress: LiveData<Address?>
         get() = _locationAddress
 
+    //is used to refresh recycler view from fragment
+    var lastAddress: Address? = null
 
-    /*init {
-        viewModelScope.launch {
-            repository.fillCache()
-        }
-    }
-*/
 
-    fun getRepresentative(address: Address) {
+    fun getRepresentative(address: Address, shouldRefresh: Boolean = false) {
+        lastAddress = address
+
         viewModelScope.launch {
             val result = repository.getRepresentatives(address.city + address.state)
             if (result is Result.Success) {
@@ -104,8 +94,9 @@ class RepresentativeViewModel(
             }
 
         }
-
-        refreshRepresentativesFromNetwork(address)
+        if (shouldRefresh) {
+            refreshRepresentativesFromNetwork(address)
+        }
     }
 
     private fun refreshRepresentativesFromNetwork(address: Address) {
@@ -131,6 +122,7 @@ class RepresentativeViewModel(
             address: Address
     ) {
         viewModelScope.launch {
+            repository.clearRepresentativeCache(address)
             repository.refreshRepresentativesCache(representatives, address)
         }
     }
@@ -180,6 +172,7 @@ class RepresentativeViewModel(
 
     override fun onCleared() {
         super.onCleared()
+        Log.d(TAG, "onCleared called" )
         locationManager?.removeUpdates(this)
     }
 

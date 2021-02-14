@@ -3,12 +3,13 @@ package com.example.android.politicalpreparedness.data.database
 import android.database.sqlite.SQLiteConstraintException
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
-import com.example.android.politicalpreparedness.data.DataSource
 import com.example.android.politicalpreparedness.data.Result
+import com.example.android.politicalpreparedness.data.database.elections.ElectionDatabase
+import com.example.android.politicalpreparedness.data.database.elections.ElectionUpdate
 import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCache
 import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCacheDataItem
 import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeDatabase
-import com.example.android.politicalpreparedness.data.database.representativescache.Test
+import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCacheLocation
 import com.example.android.politicalpreparedness.data.models.Election
 
 class LocalDataSource(
@@ -46,7 +47,11 @@ class LocalDataSource(
         }
     }
 
-    override suspend fun saveState(state: Test) {
+    override suspend fun clearRepresentativeCache(location: String) {
+        representativeDB.representativeDAO.deleteRepresentatives(location)
+    }
+
+    override suspend fun saveState(state: RepresentativeCacheLocation) {
         representativeDB.representativeDAO.insertState(state)
     }
 

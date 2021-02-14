@@ -2,9 +2,10 @@ package com.example.android.politicalpreparedness.data
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import com.example.android.politicalpreparedness.data.database.DataSource
 import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCache
 import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCacheDataItem
-import com.example.android.politicalpreparedness.data.database.representativescache.Test
+import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCacheLocation
 import com.example.android.politicalpreparedness.data.network.CivicsApi
 import com.example.android.politicalpreparedness.data.models.*
 import com.example.android.politicalpreparedness.representative.model.Representative
@@ -61,7 +62,7 @@ class ApplicationRepository(
             )
 
             localDataSource.saveState(
-                    Test(
+                    RepresentativeCacheLocation(
                             0, getCityState(address)
                     )
             )
@@ -82,40 +83,7 @@ class ApplicationRepository(
                 ?.firstOrNull()
     }
 
-/*
-    //TODO for test only
-    suspend fun fillCache() = withContext(ioDispatcher) {
-        val representative = RepresentativeCacheDataItem(
-                0, "usca", "Name", "Party"
-        )
 
-        val representative2 = RepresentativeCacheDataItem(
-                0, "usca", "eqewq", "eqe"
-        )
-
-        val test = Test(
-                0, "usca"
-        )
-
-        localDataSource.saveRepresentative(representative)
-        localDataSource.saveRepresentative(representative2)
-
-        localDataSource.saveState(test)
-    }*/
-
-    /*//TODO FOR TEST ONLY
-    private suspend fun insertMOARElections() {
-        for (i in 0..10) {
-            Log.d("TEST", i.toString())
-            val election = Election(
-                    i,
-                    "Test name$i",
-                    Date(0),
-                    Division(i.toString(), "us", "ca")
-            )
-            localDataSource.insertOrUpdate(election)
-        }
-    }*/
 
     /**
      * at the moment Google Civics API returns only one election, but it doesn't have state
@@ -150,6 +118,10 @@ class ApplicationRepository(
             location: String
     ): Result<RepresentativeCache> = withContext(ioDispatcher) {
         localDataSource.getRepresentatives(location)
+    }
+
+    suspend fun clearRepresentativeCache(address: Address) = withContext(ioDispatcher) {
+        localDataSource.clearRepresentativeCache(getCityState(address))
     }
 
 

@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 
 data class RepresentativeCache(
-        @Embedded val countryState: Test,
+        @Embedded val countryState: RepresentativeCacheLocation,
         @Relation(
                 parentColumn = "city_state",
                 entityColumn = "city_state"

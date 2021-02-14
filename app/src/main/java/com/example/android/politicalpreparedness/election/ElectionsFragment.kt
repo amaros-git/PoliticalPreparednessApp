@@ -4,13 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.base.BaseFragment
 import com.example.android.politicalpreparedness.data.ApplicationRepository
-import com.example.android.politicalpreparedness.data.database.ElectionDatabase
+import com.example.android.politicalpreparedness.data.database.elections.ElectionDatabase
 import com.example.android.politicalpreparedness.data.database.LocalDataSource
 import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeDatabase
 import com.example.android.politicalpreparedness.data.network.CivicsApi

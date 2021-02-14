@@ -17,7 +17,7 @@ import androidx.fragment.app.viewModels
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.base.BaseFragment
 import com.example.android.politicalpreparedness.data.ApplicationRepository
-import com.example.android.politicalpreparedness.data.database.ElectionDatabase
+import com.example.android.politicalpreparedness.data.database.elections.ElectionDatabase
 import com.example.android.politicalpreparedness.data.database.LocalDataSource
 import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeDatabase
 import com.example.android.politicalpreparedness.data.network.CivicsApi
@@ -86,16 +86,12 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
         restoreFieldsIfNeeded(savedInstanceState)
 
         _viewModel.representatives.observe(viewLifecycleOwner) { list ->
-            Log.d(TAG, "Representatives:")
+            /*Log.d(TAG, "Representatives:")
             list.forEach {
                 Log.d(TAG, it.toString())
-            }
+            }*/
             listAdapter.submitMyList(list, getString(R.string.my_representatives))
         }
-
-       /* _viewModel.cachedRepresentatives.observe(viewLifecycleOwner) { representative ->
-            Log.d(TAG, "cached representatives: $representative")
-        }*/
 
         _viewModel.locationAddress.observe(viewLifecycleOwner) {
             it?.let { setAddressToFields(it) }
@@ -117,6 +113,13 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
         }
 
         setupViews()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        _viewModel.lastAddress?.let {
+            _viewModel.getRepresentative(it)
+        }
     }
 
     private fun setupViews() {
@@ -194,7 +197,7 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
     private fun findRepresentatives(address: Address) {
         hideKeyboard()
         if (isAddressValid(address)) {
-            _viewModel.getRepresentative(address)
+            _viewModel.getRepresentative(address, true)
         } else {
             _viewModel.showErrorMessage.value = getString(R.string.address_check_error)
         }

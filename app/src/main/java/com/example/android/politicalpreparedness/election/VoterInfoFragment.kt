@@ -12,7 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.android.politicalpreparedness.base.BaseFragment
 import com.example.android.politicalpreparedness.data.ApplicationRepository
-import com.example.android.politicalpreparedness.data.database.ElectionDatabase
+import com.example.android.politicalpreparedness.data.database.elections.ElectionDatabase
 import com.example.android.politicalpreparedness.data.database.LocalDataSource
 import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeDatabase
 import com.example.android.politicalpreparedness.data.network.CivicsApi

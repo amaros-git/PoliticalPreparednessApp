@@ -1,4 +1,4 @@
-package com.example.android.politicalpreparedness.data.database
+package com.example.android.politicalpreparedness.data.database.elections
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
