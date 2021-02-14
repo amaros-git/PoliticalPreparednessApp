@@ -3,6 +3,7 @@ package com.example.android.politicalpreparedness.data
 import androidx.lifecycle.LiveData
 import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCache
 import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCacheDataItem
+import com.example.android.politicalpreparedness.data.database.representativescache.Test
 import com.example.android.politicalpreparedness.data.network.CivicsApi
 import com.example.android.politicalpreparedness.data.models.*
 import com.example.android.politicalpreparedness.representative.model.Representative
@@ -37,6 +38,26 @@ class ApplicationRepository(
                 localDataSource.insertOrUpdate(it) //elections shall be observed
             }
         }
+    }
+
+    //TODO for test only
+    suspend fun fillCache() = withContext(ioDispatcher) {
+        val representative = RepresentativeCacheDataItem(
+                0, "usca", "Name", "Party"
+        )
+
+        val representative2 = RepresentativeCacheDataItem(
+                0, "usca", "eqewq", "eqe"
+        )
+
+        val test = Test(
+                0, "usca"
+        )
+
+        localDataSource.saveRepresentative(representative)
+        localDataSource.saveRepresentative(representative2)
+
+        localDataSource.saveState(test)
     }
 
     /*//TODO FOR TEST ONLY

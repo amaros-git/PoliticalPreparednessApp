@@ -6,11 +6,18 @@ import androidx.room.*
 @Dao
 interface RepresentativeDAO {
 
-  /*  @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRepresentative(representative: RepresentativeCacheDataItem)
-*/
-  @Transaction
-  @Query("SELECT * FROM test")
+    /*  @Insert(onConflict = OnConflictStrategy.REPLACE)
+      suspend fun insertRepresentative(representative: RepresentativeCacheDataItem)
+  */
+    @Transaction
+    @Query("SELECT * FROM test")
     fun observeRepresentatives(): LiveData<List<RepresentativeCache>>
+
+
+    @Insert
+    fun insertState(state: Test)
+
+    @Insert
+    fun insertRepresentative(representative: RepresentativeCacheDataItem)
 
 }

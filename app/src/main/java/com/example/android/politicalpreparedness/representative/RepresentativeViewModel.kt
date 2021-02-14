@@ -32,9 +32,9 @@ class RepresentativeViewModel(
     val representatives: LiveData<List<Representative>>
         get() = _representatives
 
-    val cachedRepresentatives: LiveData<List<RepresentativeCache>?> = repository.observerRepresentatives().map {
-        if (it is Result.Success) {
-            it.data
+    val cachedRepresentatives: LiveData<List<RepresentativeCache>?> = repository.observerRepresentatives().map { result ->
+        if (result is Result.Success) {
+            result.data
         } else {
             null
         }
@@ -45,6 +45,13 @@ class RepresentativeViewModel(
     private val _locationAddress = MutableLiveData<Address?>()
     val locationAddress: LiveData<Address?>
         get() = _locationAddress
+
+
+    init {
+        viewModelScope.launch {
+            repository.fillCache()
+        }
+    }
 
 
     fun getRepresentative(address: Address) {

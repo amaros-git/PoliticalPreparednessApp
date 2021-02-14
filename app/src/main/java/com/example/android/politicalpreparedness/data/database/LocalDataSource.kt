@@ -8,6 +8,7 @@ import com.example.android.politicalpreparedness.data.Result
 import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCache
 import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCacheDataItem
 import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeDatabase
+import com.example.android.politicalpreparedness.data.database.representativescache.Test
 import com.example.android.politicalpreparedness.data.models.Election
 
 class LocalDataSource(
@@ -40,6 +41,14 @@ class LocalDataSource(
         return representativeDB.representativeDAO.observeRepresentatives().map {
             Result.Success(it)
         }
+    }
+
+    override suspend fun saveState(state: Test) {
+        representativeDB.representativeDAO.insertState(state)
+    }
+
+    override suspend fun saveRepresentative(representative: RepresentativeCacheDataItem) {
+        representativeDB.representativeDAO.insertRepresentative(representative)
     }
 
     override suspend fun deleteAllElections() {

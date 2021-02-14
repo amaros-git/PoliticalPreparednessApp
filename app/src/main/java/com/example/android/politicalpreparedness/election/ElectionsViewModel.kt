@@ -48,15 +48,14 @@ class ElectionsViewModel(
 
     fun refreshUpcomingElections() {
         showLoading.value = true
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch() {
             try {
                 repository.refreshElections()
-                showLoading.postValue(false)
+                showLoading.value = false
             } catch (e: Exception) {
-                showLoading.postValue(false)
-                showErrorMessage.postValue(
+                showLoading.value = false
+                showErrorMessage.value =
                         convertExceptionToToastString(app.applicationContext, e)
-                )
             }
         }
     }
