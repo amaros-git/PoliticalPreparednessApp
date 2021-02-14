@@ -93,11 +93,8 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
             listAdapter.submitMyList(list, getString(R.string.my_representatives))
         }
 
-        _viewModel.cachedRepresentatives.observe(viewLifecycleOwner) { list ->
-            Log.d(TAG, "cached representatives:")
-            list?.forEach {
-                Log.d(TAG, it.toString())
-            }
+        _viewModel.cachedRepresentatives.observe(viewLifecycleOwner) { representative ->
+            Log.d(TAG, "cached representatives: $representative")
         }
 
         _viewModel.locationAddress.observe(viewLifecycleOwner) {

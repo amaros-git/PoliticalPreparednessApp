@@ -16,7 +16,9 @@ import com.example.android.politicalpreparedness.base.BaseViewModel
 import com.example.android.politicalpreparedness.data.ApplicationRepository
 import com.example.android.politicalpreparedness.data.Result
 import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCache
+import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCacheDataItem
 import com.example.android.politicalpreparedness.data.models.Address
+import com.example.android.politicalpreparedness.data.models.Official
 import com.example.android.politicalpreparedness.representative.model.Representative
 import com.example.android.politicalpreparedness.utils.convertExceptionToToastString
 import kotlinx.coroutines.launch
@@ -32,7 +34,7 @@ class RepresentativeViewModel(
     val representatives: LiveData<List<Representative>>
         get() = _representatives
 
-    val cachedRepresentatives: LiveData<List<RepresentativeCache>?> = repository.observerRepresentatives().map { result ->
+    val cachedRepresentatives: LiveData<RepresentativeCache?> = repository.observerRepresentatives("usca").map { result ->
         if (result is Result.Success) {
             result.data
         } else {

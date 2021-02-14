@@ -23,8 +23,8 @@ class ApplicationRepository(
     fun observeElections(): LiveData<Result<List<Election>>> =
             localDataSource.observeElections()
 
-    fun observerRepresentatives(): LiveData<Result<List<RepresentativeCache>>> =
-            localDataSource.observeRepresentatives()
+    fun observerRepresentatives(location: String): LiveData<Result<RepresentativeCache>> =
+            localDataSource.observeRepresentatives(location)
 
     /**
      * Throws, check CivicsApiService interface

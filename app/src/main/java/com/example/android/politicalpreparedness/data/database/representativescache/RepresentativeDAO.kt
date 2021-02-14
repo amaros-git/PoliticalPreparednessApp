@@ -10,8 +10,8 @@ interface RepresentativeDAO {
       suspend fun insertRepresentative(representative: RepresentativeCacheDataItem)
   */
     @Transaction
-    @Query("SELECT * FROM test")
-    fun observeRepresentatives(): LiveData<List<RepresentativeCache>>
+    @Query("SELECT * FROM test WHERE country_state = :location")
+    fun observeRepresentatives(location: String): LiveData<RepresentativeCache>
 
 
     @Insert

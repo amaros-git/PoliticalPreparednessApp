@@ -37,8 +37,8 @@ class LocalDataSource(
         }
     }
 
-    override fun observeRepresentatives(): LiveData<Result<List<RepresentativeCache>>> {
-        return representativeDB.representativeDAO.observeRepresentatives().map {
+    override fun observeRepresentatives(location: String): LiveData<Result<RepresentativeCache>> {
+        return representativeDB.representativeDAO.observeRepresentatives(location).map {
             Result.Success(it)
         }
     }
