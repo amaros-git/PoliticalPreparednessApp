@@ -5,19 +5,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.example.android.politicalpreparedness.data.DataSource
 import com.example.android.politicalpreparedness.data.Result
+import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCache
+import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCacheDataItem
+import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeDatabase
 import com.example.android.politicalpreparedness.data.models.Election
 
-class LocalDataSource(private val database: ElectionDatabase) : DataSource {
-
-    override suspend fun getElections(): Result<List<Election>> {
-        TODO("Not yet implemented")
-    }
+class LocalDataSource(
+        private val electionDB: ElectionDatabase,
+        private val representativeDB: RepresentativeDatabase
+        ) : DataSource {
 
     override suspend fun insertOrUpdate(election: Election) {
         try {
-            database.electionDao.insertElection(election)
+            electionDB.electionDao.insertElection(election)
         } catch (e: SQLiteConstraintException) { //already exists, update
-            database.electionDao.updateElection(
+            electionDB.electionDao.updateElection(
                     ElectionUpdate(
                             election.id,
                             election.name,
@@ -29,7 +31,13 @@ class LocalDataSource(private val database: ElectionDatabase) : DataSource {
     }
 
     override fun observeElections(): LiveData<Result<List<Election>>> {
-        return database.electionDao.observeElections().map {
+        return electionDB.electionDao.observeElections().map {
+            Result.Success(it)
+        }
+    }
+
+    override fun observeRepresentatives(): LiveData<Result<List<RepresentativeCache>>> {
+        return representativeDB.representativeDAO.observeRepresentatives().map {
             Result.Success(it)
         }
     }
@@ -39,11 +47,11 @@ class LocalDataSource(private val database: ElectionDatabase) : DataSource {
     }
 
     override suspend fun changeFollowingStatus(electionId: Int, shouldFollow: Boolean) {
-        database.electionDao.changeFollowingStatus(electionId, shouldFollow)
+        electionDB.electionDao.changeFollowingStatus(electionId, shouldFollow)
     }
 
     override suspend fun getElection(electionId: Int): Result<Election> {
-        val election = database.electionDao.getElection(electionId)
+        val election = electionDB.electionDao.getElection(electionId)
         return if (null != election) {
             Result.Success(election)
         } else {

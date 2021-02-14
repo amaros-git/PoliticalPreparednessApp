@@ -12,6 +12,7 @@ import com.example.android.politicalpreparedness.base.BaseFragment
 import com.example.android.politicalpreparedness.data.ApplicationRepository
 import com.example.android.politicalpreparedness.data.database.ElectionDatabase
 import com.example.android.politicalpreparedness.data.database.LocalDataSource
+import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeDatabase
 import com.example.android.politicalpreparedness.data.network.CivicsApi
 import com.example.android.politicalpreparedness.databinding.FragmentElectionBinding
 import com.example.android.politicalpreparedness.election.adapter.ElectionListAdapter
@@ -54,7 +55,10 @@ class ElectionsFragment : BaseFragment() {
         ElectionsViewModelFactory(
                 requireActivity().application,
                 ApplicationRepository(
-                        LocalDataSource(ElectionDatabase.getInstance(requireContext())),
+                        LocalDataSource(
+                                ElectionDatabase.getInstance(requireContext()),
+                                RepresentativeDatabase.getInstance(requireContext())
+                        ),
                         CivicsApi
                 )
         )

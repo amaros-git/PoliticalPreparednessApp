@@ -10,10 +10,12 @@ import android.location.LocationManager
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.base.BaseViewModel
 import com.example.android.politicalpreparedness.data.ApplicationRepository
 import com.example.android.politicalpreparedness.data.Result
+import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCache
 import com.example.android.politicalpreparedness.data.models.Address
 import com.example.android.politicalpreparedness.representative.model.Representative
 import com.example.android.politicalpreparedness.utils.convertExceptionToToastString
@@ -29,6 +31,14 @@ class RepresentativeViewModel(
     private val _representatives = MutableLiveData<List<Representative>>()
     val representatives: LiveData<List<Representative>>
         get() = _representatives
+
+    val cachedRepresentatives: LiveData<List<RepresentativeCache>?> = repository.observerRepresentatives().map {
+        if (it is Result.Success) {
+            it.data
+        } else {
+            null
+        }
+    }
 
     private var locationManager: LocationManager? = null
 

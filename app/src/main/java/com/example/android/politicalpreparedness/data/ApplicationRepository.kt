@@ -1,6 +1,8 @@
 package com.example.android.politicalpreparedness.data
 
 import androidx.lifecycle.LiveData
+import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCache
+import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCacheDataItem
 import com.example.android.politicalpreparedness.data.network.CivicsApi
 import com.example.android.politicalpreparedness.data.models.*
 import com.example.android.politicalpreparedness.representative.model.Representative
@@ -17,7 +19,11 @@ class ApplicationRepository(
     private val TAG = ApplicationRepository::class.java.simpleName
 
 
-    fun observeElections(): LiveData<Result<List<Election>>> = localDataSource.observeElections()
+    fun observeElections(): LiveData<Result<List<Election>>> =
+            localDataSource.observeElections()
+
+    fun observerRepresentatives(): LiveData<Result<List<RepresentativeCache>>> =
+            localDataSource.observeRepresentatives()
 
     /**
      * Throws, check CivicsApiService interface
