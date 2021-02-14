@@ -7,9 +7,9 @@ import com.example.android.politicalpreparedness.data.ApplicationRepository
 import com.example.android.politicalpreparedness.data.Result
 import com.example.android.politicalpreparedness.data.network.models.Election
 import com.example.android.politicalpreparedness.utils.SingleLiveEvent
+import com.example.android.politicalpreparedness.utils.convertExceptionToToastString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
 
 
 class ElectionsViewModel(
@@ -24,30 +24,39 @@ class ElectionsViewModel(
         }
     }
 
-    //filter out elections with isFollowed == true
+    //filter out elections with isFollowed == true else null
     val savedElections: LiveData<List<Election>?> = repository.observeElections().map { result ->
-        if (result is Result.Success) {
-            val followed = mutableListOf<Election>()
-            result.data.forEach {
-                if (it.isFollowed) {
-                    followed.add(it)
-                }
-            }
-            followed
-        } else {
-            null
-        }
+        savedElectionsMapper(result)
     }
 
     val openVoterInfoEvent = SingleLiveEvent<Election>()
 
 
+    private fun savedElectionsMapper(result: Result<List<Election>>) =
+            if (result is Result.Success) {
+                val followed = mutableListOf<Election>()
+                result.data.forEach {
+                    if (it.isFollowed) {
+                        followed.add(it)
+                    }
+                }
+                followed
+            } else {
+                null
+            }
+
+
     fun refreshUpcomingElections() {
+        showLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 repository.refreshElections()
+                showLoading.postValue(false)
             } catch (e: Exception) {
-                //TODO
+                showLoading.postValue(false)
+                showErrorMessage.postValue(
+                        convertExceptionToToastString(app.applicationContext, e)
+                )
             }
         }
     }

@@ -1,9 +1,11 @@
 package com.example.android.politicalpreparedness.election
 
+import android.graphics.Paint
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.constraintlayout.widget.Group
+import androidx.core.text.HtmlCompat
 import androidx.databinding.BindingAdapter
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.data.network.models.Address
@@ -25,12 +27,11 @@ fun addressVisibility(group: Group, address: Address?) { //TODO rework. What is 
 @BindingAdapter("app:showDate")
 fun showDate(textView: TextView, date: Date?) {
     date?.let {
-        val dateString = SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US).format(it)
+        val dateString = SimpleDateFormat("EEE, d MMM yyyy, HH:mm:ss", Locale.US).format(it)
         textView.text = dateString
     }
 }
 
-//TODO use resources
 @BindingAdapter("app:setText")
 fun setText(button: Button, isFollowed: Boolean) {
     if (isFollowed) {
@@ -39,4 +40,3 @@ fun setText(button: Button, isFollowed: Boolean) {
         button.text = button.context.getString(R.string.follow_election)
     }
 }
-

@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.base.BaseViewModel
 import com.example.android.politicalpreparedness.data.ApplicationRepository
 import com.example.android.politicalpreparedness.data.network.models.VoterInfoResponse
@@ -13,6 +14,8 @@ import kotlinx.coroutines.launch
 import com.example.android.politicalpreparedness.data.Result
 import com.example.android.politicalpreparedness.data.network.models.Division
 import com.example.android.politicalpreparedness.utils.SingleLiveEvent
+import com.example.android.politicalpreparedness.utils.convertExceptionToToastString
+import kotlinx.coroutines.Dispatchers
 
 class VoterInfoViewModel(
         private val electionId: Int,
@@ -25,17 +28,17 @@ class VoterInfoViewModel(
     val voterInfo: LiveData<VoterInfoResponse>
         get() = _voterInfo
 
-    private val _isFollowed = MutableLiveData<Boolean>() //TODO rework to map and filter by id
+    private val _isFollowed = MutableLiveData<Boolean>()
     val isFollowed: LiveData<Boolean>
         get() = _isFollowed
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getElection(electionId)
             if (result is Result.Success) {
-                _isFollowed.value = result.data.isFollowed
+                _isFollowed.postValue(result.data.isFollowed)
             } else {
-                _isFollowed.value = false
+                _isFollowed.postValue(false)
             }
         }
 
@@ -61,19 +64,32 @@ class VoterInfoViewModel(
 
     fun getVoterInfo(electionId: Int, division: Division) {
         showLoading.value = true
-        viewModelScope.launch {
-            val result = repository.getVoterInfo(
-                    electionId,
-                    division.state + " " + division.country
-            )
-            showLoading.value = false
-
-            if (result is Result.Success) {
-                _voterInfo.postValue(result.data)
-            } else {
-                Log.e("VoterInfoViewModel", (result as Result.Error).message)
-                showErrorMessage.postValue(result.message)
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                tryToGetVoterInfo(electionId, division)
+                showLoading.postValue(false)
+            } catch (e: Exception) {
+                showLoading.postValue(false)
+                showErrorMessage.postValue(
+                        convertExceptionToToastString(app.applicationContext, e)
+                )
             }
+        }
+    }
+
+    private suspend fun tryToGetVoterInfo(electionId: Int, division: Division) {
+        val result = repository.getVoterInfo(
+                electionId,
+                division.state + " " + division.country
+        )
+
+        if (result is Result.Success) {
+            _voterInfo.postValue(result.data)
+        } else {
+            Log.e(TAG, (result as Result.Error).message)
+            showErrorMessage.postValue(
+                    app.applicationContext.getString(R.string.wrong_response)
+            )
         }
     }
 

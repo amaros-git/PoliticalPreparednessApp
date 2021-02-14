@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.android.politicalpreparedness.R
+import com.example.android.politicalpreparedness.base.BaseFragment
 import com.example.android.politicalpreparedness.data.ApplicationRepository
 import com.example.android.politicalpreparedness.data.database.ElectionDatabase
 import com.example.android.politicalpreparedness.data.database.LocalDataSource
@@ -38,7 +39,7 @@ import com.example.android.politicalpreparedness.utils.setTitle
 //TODO: Populate recycler adapters
 
 
-class ElectionsFragment : Fragment() {
+class ElectionsFragment : BaseFragment() {
 
     private val TAG = ElectionsFragment::class.java.simpleName
 
@@ -49,7 +50,7 @@ class ElectionsFragment : Fragment() {
     private lateinit var savedListAdapter: ElectionListAdapter
 
 
-    private val viewModel by viewModels<ElectionsViewModel> {
+    override val _viewModel by viewModels<ElectionsViewModel> {
         ElectionsViewModelFactory(
                 requireActivity().application,
                 ApplicationRepository(
@@ -64,13 +65,13 @@ class ElectionsFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
 
         binding = FragmentElectionBinding.inflate(inflater)
-        binding.viewModel = viewModel
+        binding.viewModel = _viewModel
         binding.lifecycleOwner = this.viewLifecycleOwner
 
         setTitle(getString(R.string.elections_title))
         setDisplayHomeAsUpEnabled(true)
 
-        viewModel.openVoterInfoEvent.observe(viewLifecycleOwner) { election ->
+        _viewModel.openVoterInfoEvent.observe(viewLifecycleOwner) { election ->
             findNavController().navigate(
                     ElectionsFragmentDirections
                             .actionElectionsFragmentToVoterInfoFragment(election)
@@ -79,11 +80,11 @@ class ElectionsFragment : Fragment() {
 
         setupListAdapter()
 
-        viewModel.upcomingElections.observe(viewLifecycleOwner) { elections ->
+        _viewModel.upcomingElections.observe(viewLifecycleOwner) { elections ->
             upcomingListAdapter.submitMyList(elections)
         }
 
-        viewModel.savedElections.observe(viewLifecycleOwner) { elections ->
+        _viewModel.savedElections.observe(viewLifecycleOwner) { elections ->
             savedListAdapter.submitMyList(elections)
         }
 
@@ -93,14 +94,14 @@ class ElectionsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.refreshUpcomingElections()
+        _viewModel.refreshUpcomingElections()
     }
 
     private fun setupListAdapter() {
-        upcomingListAdapter = ElectionListAdapter(viewModel)
+        upcomingListAdapter = ElectionListAdapter(_viewModel)
         binding.upcomingElections.adapter = upcomingListAdapter
 
-        savedListAdapter = ElectionListAdapter(viewModel)
+        savedListAdapter = ElectionListAdapter(_viewModel)
         binding.savedElections.adapter = savedListAdapter
     }
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import com.example.android.politicalpreparedness.data.network.CivicsApi
 import com.example.android.politicalpreparedness.data.network.models.*
 import com.example.android.politicalpreparedness.representative.model.Representative
+import com.example.android.politicalpreparedness.utils.convertExceptionToToastString
 import com.squareup.moshi.JsonDataException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -12,6 +13,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.io.IOException
 import retrofit2.HttpException
 import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 import java.util.*
 
 class ApplicationRepository(
@@ -25,27 +27,17 @@ class ApplicationRepository(
 
     fun observeElections(): LiveData<Result<List<Election>>> = localDataSource.observeElections()
 
-    /** Throws the following
-     * @throws HttpException
-     * @throws SocketTimeoutException
-     * @throws Exception no data is received
-     * @throws JsonDataException error parsing jaon
-     * @throws IOException error reading json
-     *
+    /**
+     * Throws, check CivicsApiService interface
      */
     suspend fun refreshElections() = withContext(ioDispatcher) {
         val response = network.retrofitService.getElections()
-        Log.d(TAG, "elections network response = $response")
 
         if ((null != response) && (response.elections.isNotEmpty())) {
             response.elections.forEach {
                 addDummyStateIfIsEmptyInDivision(it) //TODO REMOVE ONCE elections are fixed
                 localDataSource.insertOrUpdate(it) //elections shall be observed
             }
-
-            //insertMOARElections()
-        } else {
-            throw Exception("connection is OK, but no elections received")
         }
     }
 
@@ -76,66 +68,36 @@ class ApplicationRepository(
     }
 
     /**
-     * @throws HttpException
-     * @throws SocketTimeoutException
-     * @throws Exception is no data received
+     * throws. Check CivicsApiService interface
      */
     suspend fun getVoterInfo(
             electionId: Int,
             address: String,
             officialOnly: Boolean = false
     ): Result<VoterInfoResponse> = withContext(ioDispatcher) {
-        return@withContext try {
-            val response = network.retrofitService.getVoterInfo(electionId, address, officialOnly)
-            Log.d(TAG, "voterinfo network response = $response")
-
-            if (null != response) {
-                Result.Success(response)
-            } else {
-                Result.Error("connection is OK, but no voterinfo received")
-            }
-        } catch (e: Exception) {
-            Result.Error("Exception: " + convertExceptionToString(e))
+        val response = network.retrofitService.getVoterInfo(electionId, address, officialOnly)
+        if (null != response) {
+            Result.Success(response)
+        } else {
+            Result.Error("connection is OK, but no voterinfo received")
         }
     }
 
+    /**
+     * throws. Check CivicsApiService interface
+     */
     suspend fun getRepresentatives(
             address: String
     ): Result<List<Representative>> = withContext(ioDispatcher) {
-        return@withContext try {
-            val response = network.retrofitService.getRepresentatives(address)
-            if (null != response) {
-                Log.d(TAG, "response = $response")
-                val representatives = response.offices.flatMap { office -> office.getRepresentatives(response.officials) }
-                /*representatives.forEach {
-                    Log.d(TAG, "representative = $it")
-                }*/
-                Result.Success(representatives)
-            } else {
-                Result.Error("connection is OK, but no representatives received")
-            }
-        } catch (e: Exception) {
-            Result.Error("Exception: " + convertExceptionToString(e))
+        val response = network.retrofitService.getRepresentatives(address)
+        if (null != response) {
+            val representatives = response.offices.flatMap { office -> office.getRepresentatives(response.officials) }
+            Result.Success(representatives)
+        } else {
+            Result.Error("connection is OK, but no representatives received")
         }
     }
 
-    private fun convertExceptionToString(e: Exception): String = when (e) {
-        is HttpException -> {
-            e.localizedMessage ?: "http exception"
-        }
-        is SocketTimeoutException -> {
-            e.localizedMessage ?: "socket timeout exception"
-        }
-        is JsonDataException -> {
-            e.localizedMessage ?: "json data exception"
-        }
-        is IOException -> {
-            e.localizedMessage ?: "IO exception"
-        }
-        else -> {
-            "Unknown exception: ${e.localizedMessage}"
-        }
-    }
 
     suspend fun changeFollowingStatus(
             electionId: Int,

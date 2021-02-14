@@ -8,8 +8,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="election_information">Election Information</string>
     <string name="correspondence_address">Correspondence Address</string>
-    <string name="voting_locations">Voting Locations</string>
-    <string name="ballot_information">Ballot information</string>
+    <string name="voting_locations">Show voting locations</string>
+    <string name="ballot_information">Show ballot information</string>
     <string name="use_my_location">USE MY LOCATION</string>
     <string name="description_profile_photo">Profile photo of the representative</string>
     <string name="representative_search">Representative Search</string>
@@ -29,5 +29,9 @@
     <string name="elections_title">Elections</string>
     <string name="launch_title">Political Preparedness app</string>
     <string name="saved_elections">Saved Elections</string>
+    <string name="cannot_connect_services">Cannot connect remote services</string>
+    <string name="cannot_connect_services_check">Cannot connect remote services, please check if internet is enabled</string>
+    <string name="wrong_response">Connection was OK, but wrong data are received</string>
+    <string name="please_retart_app">Internal error occurred, please restart application</string>
 
 </resources>

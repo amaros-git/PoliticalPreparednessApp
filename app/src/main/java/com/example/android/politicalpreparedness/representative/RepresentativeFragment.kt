@@ -1,13 +1,8 @@
 package com.example.android.politicalpreparedness.representative
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
-import android.location.Geocoder
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -31,7 +26,6 @@ import com.example.android.politicalpreparedness.representative.adapter.Represen
 import com.example.android.politicalpreparedness.utils.setDisplayHomeAsUpEnabled
 import com.example.android.politicalpreparedness.utils.setTitle
 import com.google.android.material.appbar.AppBarLayout
-import java.util.*
 
 class RepresentativeFragment : BaseFragment() { //TODO move location listener
 
@@ -84,11 +78,8 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
                 R.array.states,
                 R.layout.spinner_item
         )
-        initStateSpinner()
 
         restoreFieldsIfNeeded(savedInstanceState)
-
-        setupListAdapter()
 
         _viewModel.representatives.observe(viewLifecycleOwner) { list ->
             Log.d(TAG, "Representatives:")
@@ -109,17 +100,31 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
         super.onStart()
 
         binding.buttonLocation.setOnClickListener {
-            hideKeyboard()
-            _viewModel.startAddressLocation()
+            getMyLocation()
         }
+
         binding.buttonSearch.setOnClickListener {
             val address = getAddressFromFields()
             findRepresentatives(address)
         }
 
-        coordinateMotion()
+        setupViews()
+    }
 
-        checkLocationPermission()
+    private fun setupViews() {
+        initStateSpinner()
+        configureAnimation()
+        setupListAdapter()
+    }
+
+    private fun getMyLocation() {
+        hideKeyboard()
+
+        if(!isLocationPermissionGranted()) {
+            requestLocationPermission()
+        } else {
+            _viewModel.startAddressLocation()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -146,7 +151,7 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
         }
     }
 
-    private fun coordinateMotion() {
+    private fun configureAnimation() {
         val appBarLayout: AppBarLayout = binding.appbarLayout
         val motionLayout: MotionLayout = binding.motionLayout
         val listener = AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
@@ -199,13 +204,6 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
     private fun setupListAdapter() {
         listAdapter = RepresentativeListAdapter(_viewModel)
         binding.representatives.adapter = listAdapter
-    }
-
-
-    private fun checkLocationPermission() {
-        if (!isLocationPermissionGranted()) {
-            requestLocationPermission()
-        }
     }
 
     private fun isLocationPermissionGranted(): Boolean {

@@ -18,12 +18,15 @@ import com.example.android.politicalpreparedness.data.Result
 import com.example.android.politicalpreparedness.data.network.models.Address
 import com.example.android.politicalpreparedness.data.network.models.VoterInfoResponse
 import com.example.android.politicalpreparedness.representative.model.Representative
+import com.example.android.politicalpreparedness.utils.convertExceptionToToastString
 import kotlinx.coroutines.launch
 import java.util.*
 
 class RepresentativeViewModel(
         private val app: Application,
         private val repository: ApplicationRepository) : BaseViewModel(app), LocationListener {
+
+    private val TAG = RepresentativeViewModel::class.java.simpleName
 
     private val _representatives = MutableLiveData<List<Representative>>()
     val representatives: LiveData<List<Representative>>
@@ -39,13 +42,24 @@ class RepresentativeViewModel(
     fun getRepresentative(address: Address) {
         showLoading.value = true
         viewModelScope.launch {
-            val result = repository.getRepresentatives(address.toFormattedString())
-            showLoading.value = false
-            if (result is Result.Success) {
-                _representatives.value = result.data
-            } else {
-                showErrorMessage.value = (result as Result.Error).message
+            try {
+                tryToGetRepresentative(address)
+                showLoading.value = false
+            } catch(e: Exception) {
+                showLoading.value = false
+                showErrorMessage.postValue(
+                        convertExceptionToToastString(app.applicationContext, e)
+                )
             }
+        }
+    }
+
+    private suspend fun tryToGetRepresentative(address: Address) {
+        val result = repository.getRepresentatives(address.toFormattedString())
+        if (result is Result.Success) {
+            _representatives.value = result.data
+        } else {
+            showErrorMessage.value = (result as Result.Error).message
         }
     }
 
@@ -57,15 +71,21 @@ class RepresentativeViewModel(
     }
 
     override fun onLocationChanged(location: Location) {
-        val address = geoCodeLocation(location)
-
-        _locationAddress.value = address
-
-        //we need location only once
-        locationManager?.removeUpdates(this)
+        try {
+            val address = geoCodeLocation(location)
+            _locationAddress.value = address
+            //we need location only once
+            locationManager?.removeUpdates(this)
+        } catch (e: Exception) {
+            Log.d(TAG, "Exception on GPS occurred")
+            e.printStackTrace()
+            showErrorMessage.value = "Please enable Location services"
+        }
     }
 
-
+    /**
+     * @throws IOException if gps disabled. ALso if internet is disabled too
+     */
     private fun geoCodeLocation(location: Location): Address {
         val geocoder = Geocoder(app.applicationContext, Locale.getDefault())
         return geocoder.getFromLocation(location.latitude, location.longitude, 1)
@@ -79,27 +99,5 @@ class RepresentativeViewModel(
         super.onCleared()
         locationManager?.removeUpdates(this)
     }
-/*
-    fun setAddress(address: Address) {
-        _currentAddress.value = address
-    }*/
-    //TODO: Establish live data for representatives and address
-
-    //TODO: Create function to fetch representatives from API from a provided address
-
-    /**
-     *  The following code will prove helpful in constructing a representative from the API. This code combines the two nodes of the RepresentativeResponse into a single official :
-
-    val (offices, officials) = getRepresentativesDeferred.await()
-    _representatives.value = offices.flatMap { office -> office.getRepresentatives(officials) }
-
-    Note: getRepresentatives in the above code represents the method used to fetch data from the API
-    Note: _representatives in the above code represents the established mutable live data housing representatives
-
-     */
-
-    //TODO: Create function get address from geo location
-
-    //TODO: Create function to get address from individual fields
 
 }

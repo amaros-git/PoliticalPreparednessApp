@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="test"
+            type="String" />
+
+        <variable
             name="viewModel"
             type="com.example.android.politicalpreparedness.election.VoterInfoViewModel" />
 
@@ -28,14 +32,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_begin="@dimen/margin_normal" />
+            app:layout_constraintGuide_begin="@dimen/margin_small" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="@dimen/margin_normal" />
+            app:layout_constraintGuide_end="@dimen/margin_small" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:fadeVisible="@{viewModel.showLoading.booleanValue()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/election_date"
@@ -66,7 +81,7 @@
             style="@style/LightTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_big"
+            android:layout_marginTop="@dimen/margin_normal"
             android:text="@string/voting_locations"
             android:visibility="invisible"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
@@ -79,7 +94,7 @@
             style="@style/LightTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_big"
+            android:layout_marginTop="@dimen/margin_normal"
             android:text="@string/ballot_information"
             android:visibility="invisible"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
@@ -97,10 +112,6 @@
             app:addressVisibility="@{address}"
             app:constraint_referenced_ids="state_correspondence_header,address_text" />
 
-        <!-- TODO: Add visual styling and content -->
-
-        <!-- TODO: Add data binding -->
-
         <TextView
             android:id="@+id/state_correspondence_header"
             style="@style/TitleTextStyle"
@@ -115,10 +126,10 @@
 
         <TextView
             android:id="@+id/address_text"
-            style="@style/LightTextStyle"
+            style="@style/RegularTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_big"
+            android:layout_marginTop="@dimen/margin_normal"
             android:text="@{address.toFormattedString()}"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintHorizontal_bias="0.0"
@@ -137,8 +148,6 @@
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:setText="@{viewModel.isFollowed().booleanValue()}"
             tools:text="Follow election" />
-
-        <!-- TODO: Add button to save election to Room -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -3,6 +3,7 @@ package com.example.android.politicalpreparedness.election
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Intent
+import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
@@ -57,6 +58,13 @@ class VoterInfoFragment : BaseFragment() {
         setTitle(election.name)
         setDisplayHomeAsUpEnabled(true)
 
+        return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        _viewModel.getVoterInfo(election.id, election.division)
+
         _viewModel.voterInfo.observe(viewLifecycleOwner) { response ->
             updateVoterInfo(response)
         }
@@ -64,8 +72,6 @@ class VoterInfoFragment : BaseFragment() {
         binding.followButton.setOnClickListener {
             changeFollowingStatus()
         }
-
-        return binding.root
     }
 
     private fun changeFollowingStatus() {
@@ -81,6 +87,7 @@ class VoterInfoFragment : BaseFragment() {
     private fun enableLink(view: TextView, url: String?) {
         url?.let {
             view.visibility = View.VISIBLE
+            view.paintFlags = view.paintFlags or Paint.UNDERLINE_TEXT_FLAG
             view.setOnClickListener { setIntent(view, url) }
         }
     }
@@ -118,10 +125,4 @@ class VoterInfoFragment : BaseFragment() {
             }
         }
     }
-
-    override fun onStart() {
-        super.onStart()
-        _viewModel.getVoterInfo(election.id, election.division)
-    }
-
 }

@@ -37,12 +37,13 @@ private val retrofit = Retrofit.Builder()
  *  Documentation for the Google Civics API Service can be found at https://developers.google.com/civic-information/docs/v2
  */
 
-/** All methods throws the following:
+/** All methods may throw the following:
  * @throws HttpException
  * @throws SocketTimeoutException
  * @throws Exception no data is received
  * @throws JsonDataException error parsing jaon
  * @throws IOException error reading json
+ * @throws UnknownHostException
  *
  */
 interface CivicsApiService {
