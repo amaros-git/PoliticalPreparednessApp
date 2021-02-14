@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "test")
 data class Test (
     @PrimaryKey(autoGenerate = true) val id: Long,
-    @ColumnInfo(name = "country_state") val countryState: String
+    @ColumnInfo(name = "city_state") val cityState: String
 )

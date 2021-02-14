@@ -10,15 +10,11 @@ import android.location.LocationManager
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.base.BaseViewModel
 import com.example.android.politicalpreparedness.data.ApplicationRepository
 import com.example.android.politicalpreparedness.data.Result
-import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCache
-import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCacheDataItem
-import com.example.android.politicalpreparedness.data.models.Address
-import com.example.android.politicalpreparedness.data.models.Official
+import com.example.android.politicalpreparedness.data.models.*
 import com.example.android.politicalpreparedness.representative.model.Representative
 import com.example.android.politicalpreparedness.utils.convertExceptionToToastString
 import kotlinx.coroutines.launch
@@ -34,13 +30,13 @@ class RepresentativeViewModel(
     val representatives: LiveData<List<Representative>>
         get() = _representatives
 
-    val cachedRepresentatives: LiveData<RepresentativeCache?> = repository.observerRepresentatives("usca").map { result ->
-        if (result is Result.Success) {
-            result.data
-        } else {
-            null
-        }
-    }
+    /*  val cachedRepresentatives: LiveData<RepresentativeCache?> = repository.observerRepresentatives("usca").map { result ->
+          if (result is Result.Success) {
+              result.data
+          } else {
+              null
+          }
+      }*/
 
     private var locationManager: LocationManager? = null
 
@@ -49,20 +45,79 @@ class RepresentativeViewModel(
         get() = _locationAddress
 
 
-    init {
+    /*init {
         viewModelScope.launch {
             repository.fillCache()
         }
     }
-
+*/
 
     fun getRepresentative(address: Address) {
+        viewModelScope.launch {
+            val result = repository.getRepresentatives(address.city + address.state)
+            if (result is Result.Success) {
+                result.data.representatives.forEach {
+                    Log.d(TAG, it.toString())
+                }
+                val representatives = mutableListOf<Representative>()
+                result.data.representatives.forEach {
+
+                    val channels = mutableListOf<Channel>()
+                    if (null != it.facebookId) {
+                        channels.add(Channel(
+                                "Facebook",
+                                it.facebookId
+                        ))
+                    }
+                    if (null != it.twitterId) {
+                        channels.add(Channel(
+                                "Twitter",
+                                it.twitterId
+                        ))
+                    }
+
+                    val wwwUrl = (it.wwwUrl) ?: it.wwwUrl!!
+
+                    val official = Official(
+                            it.name!!,
+                            null,
+                            it.partyName,
+                            null,
+                            listOf(wwwUrl),
+                            it.photoUrl,
+                            channels)
+
+                    val office = Office(
+                            it.name,
+                            Division(
+                                    it.divisionId!!,
+                                    it.cityState,
+                                    it.cityState
+                            ),
+                            emptyList()
+                    )
+
+                    representatives.add(Representative(official, office))
+                }
+
+                _representatives.value = representatives
+            }
+
+        }
+
+        refreshRepresentativesFromNetwork(address)
+    }
+
+    private fun refreshRepresentativesFromNetwork(address: Address) {
         showLoading.value = true
         viewModelScope.launch {
             try {
-                tryToGetRepresentative(address)
+                val result = tryToGetRepresentative(address)
+                if (result is Result.Success) {
+                    refreshRepresentativesCache(result.data, address)
+                }
                 showLoading.value = false
-            } catch(e: Exception) {
+            } catch (e: Exception) {
                 showLoading.value = false
                 showErrorMessage.postValue(
                         convertExceptionToToastString(app.applicationContext, e)
@@ -71,13 +126,24 @@ class RepresentativeViewModel(
         }
     }
 
-    private suspend fun tryToGetRepresentative(address: Address) {
-        val result = repository.getRepresentatives(address.toFormattedString())
+    private fun refreshRepresentativesCache(
+            representatives: List<Representative>,
+            address: Address
+    ) {
+        viewModelScope.launch {
+            repository.refreshRepresentativesCache(representatives, address)
+        }
+    }
+
+    private suspend fun tryToGetRepresentative(address: Address): Result<List<Representative>> {
+        val result = repository.refreshRepresentativesFromNetwork(address.toFormattedString())
         if (result is Result.Success) {
             _representatives.value = result.data
         } else {
             showErrorMessage.value = (result as Result.Error).message
         }
+
+        return result
     }
 
     @SuppressLint("MissingPermission")

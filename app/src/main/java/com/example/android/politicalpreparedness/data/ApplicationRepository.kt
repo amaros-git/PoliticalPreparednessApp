@@ -1,5 +1,6 @@
 package com.example.android.politicalpreparedness.data
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCache
 import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCacheDataItem
@@ -23,8 +24,6 @@ class ApplicationRepository(
     fun observeElections(): LiveData<Result<List<Election>>> =
             localDataSource.observeElections()
 
-    fun observerRepresentatives(location: String): LiveData<Result<RepresentativeCache>> =
-            localDataSource.observeRepresentatives(location)
 
     /**
      * Throws, check CivicsApiService interface
@@ -40,6 +39,50 @@ class ApplicationRepository(
         }
     }
 
+    suspend fun refreshRepresentativesCache(
+            representatives: List<Representative>,
+            address: Address
+    ) = withContext(ioDispatcher) {
+        Log.d(TAG, "refreshRepresentativesCache called")
+
+        representatives.forEach {
+            localDataSource.saveRepresentative(RepresentativeCacheDataItem(
+                    0,
+                    getCityState(address),
+                    address.city,
+                    address.state,
+                    it.official.name,
+                    it.official.party,
+                    it.official.photoUrl,
+                    getTwitterId(it.official.channels),
+                    getFacebookId(it.official.channels),
+                    it.office.division.id,
+                    it.official.urls?.first())
+            )
+
+            localDataSource.saveState(
+                    Test(
+                            0, getCityState(address)
+                    )
+            )
+        }
+    }
+
+    private fun getCityState(address: Address) = address.city + address.state
+
+    private fun getFacebookId(channels: List<Channel>?): String? {
+        return channels?.filter { channel -> channel.type == "Facebook" }
+                ?.map { channel -> channel.id }
+                ?.firstOrNull()
+    }
+
+    private fun getTwitterId(channels: List<Channel>?): String? {
+        return channels?.filter { channel -> channel.type == "Twitter" }
+                ?.map { channel -> channel.id }
+                ?.firstOrNull()
+    }
+
+/*
     //TODO for test only
     suspend fun fillCache() = withContext(ioDispatcher) {
         val representative = RepresentativeCacheDataItem(
@@ -58,7 +101,7 @@ class ApplicationRepository(
         localDataSource.saveRepresentative(representative2)
 
         localDataSource.saveState(test)
-    }
+    }*/
 
     /*//TODO FOR TEST ONLY
     private suspend fun insertMOARElections() {
@@ -102,10 +145,18 @@ class ApplicationRepository(
         }
     }
 
+
+    suspend fun getRepresentatives(
+            location: String
+    ): Result<RepresentativeCache> = withContext(ioDispatcher) {
+        localDataSource.getRepresentatives(location)
+    }
+
+
     /**
      * throws. Check CivicsApiService interface
      */
-    suspend fun getRepresentatives(
+    suspend fun refreshRepresentativesFromNetwork(
             address: String
     ): Result<List<Representative>> = withContext(ioDispatcher) {
         val response = network.retrofitService.getRepresentatives(address)

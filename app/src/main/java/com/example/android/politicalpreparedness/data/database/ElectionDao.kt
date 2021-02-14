@@ -27,12 +27,12 @@ interface ElectionDao {
 
 
     @Update(entity = Election::class)
-    fun updateElection(electionUpdate: ElectionUpdate)
+    suspend fun updateElection(electionUpdate: ElectionUpdate)
 
     @Query("UPDATE election_table SET isFollowed = :shouldFollow WHERE id = :electionId")
-    fun changeFollowingStatus(electionId: Int, shouldFollow: Boolean)
+    suspend fun changeFollowingStatus(electionId: Int, shouldFollow: Boolean)
 
     @Query("SELECT * FROM election_table WHERE id = :electionId")
-    fun getElection(electionId: Int): Election?
+    suspend fun getElection(electionId: Int): Election?
 
 }

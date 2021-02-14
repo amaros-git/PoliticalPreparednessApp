@@ -6,8 +6,8 @@ import androidx.room.Relation
 data class RepresentativeCache(
         @Embedded val countryState: Test,
         @Relation(
-                parentColumn = "country_state",
-                entityColumn = "country_state"
+                parentColumn = "city_state",
+                entityColumn = "city_state"
         )
         val representatives: List<RepresentativeCacheDataItem>
 )

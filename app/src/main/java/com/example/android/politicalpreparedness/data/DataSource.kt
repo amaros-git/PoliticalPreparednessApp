@@ -12,7 +12,7 @@ interface DataSource {
 
     fun observeElections(): LiveData<Result<List<Election>>>
 
-    fun observeRepresentatives(location: String): LiveData<Result<RepresentativeCache>>
+    suspend fun getRepresentatives(location: String): Result<RepresentativeCache>
 
     suspend fun deleteAllElections()
 

@@ -37,9 +37,12 @@ class LocalDataSource(
         }
     }
 
-    override fun observeRepresentatives(location: String): LiveData<Result<RepresentativeCache>> {
-        return representativeDB.representativeDAO.observeRepresentatives(location).map {
-            Result.Success(it)
+    override suspend fun getRepresentatives(location: String): Result<RepresentativeCache> {
+        val representatives = representativeDB.representativeDAO.getRepresentatives(location)
+        return if (null !=  representatives) {
+            Result.Success(representatives)
+        } else {
+            Result.Error("cache is empty")
         }
     }
 

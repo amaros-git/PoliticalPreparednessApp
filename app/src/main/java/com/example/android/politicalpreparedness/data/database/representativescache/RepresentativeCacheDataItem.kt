@@ -9,11 +9,14 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "representatives")
 data class RepresentativeCacheDataItem(
         @PrimaryKey(autoGenerate = true) val id: Long,
-        @ColumnInfo(name = "country_state") val countryState: String,
+        @ColumnInfo(name = "city_state") val cityState: String, //this is a key to link with Representatives Location
+        @ColumnInfo(name = "city") val country: String,
+        @ColumnInfo(name = "state") val state: String,
         @ColumnInfo(name = "name") val name: String? = null,
         @ColumnInfo(name = "party_name") val partyName: String? = null,
         @ColumnInfo(name = "photo_url") val photoUrl: String? = null,
-        @ColumnInfo(name = "twitter_Url") val twitterUrl: String? = null,
-        @ColumnInfo(name = "facebook_url") val facebookUrl: String? = null,
+        @ColumnInfo(name = "twitter_id") val twitterId: String? = null,
+        @ColumnInfo(name = "facebook_id") val facebookId: String? = null,
+        @ColumnInfo(name = "division_id") val divisionId: String? = null,
         @ColumnInfo(name = "www_url") val wwwUrl: String? = null
 )
