@@ -1,9 +1,8 @@
-package com.example.android.politicalpreparedness.data.network.models
+package com.example.android.politicalpreparedness.data.database
 
-import android.os.Parcelable
 import androidx.room.*
+import com.example.android.politicalpreparedness.data.models.Division
 import com.squareup.moshi.*
-import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 /**

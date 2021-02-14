@@ -10,13 +10,11 @@ import android.location.LocationManager
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.base.BaseViewModel
 import com.example.android.politicalpreparedness.data.ApplicationRepository
 import com.example.android.politicalpreparedness.data.Result
-import com.example.android.politicalpreparedness.data.network.models.Address
-import com.example.android.politicalpreparedness.data.network.models.VoterInfoResponse
+import com.example.android.politicalpreparedness.data.models.Address
 import com.example.android.politicalpreparedness.representative.model.Representative
 import com.example.android.politicalpreparedness.utils.convertExceptionToToastString
 import kotlinx.coroutines.launch

@@ -1,14 +1,12 @@
 package com.example.android.politicalpreparedness.election
 
-import android.graphics.Paint
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.constraintlayout.widget.Group
-import androidx.core.text.HtmlCompat
 import androidx.databinding.BindingAdapter
 import com.example.android.politicalpreparedness.R
-import com.example.android.politicalpreparedness.data.network.models.Address
+import com.example.android.politicalpreparedness.data.models.Address
 import java.text.SimpleDateFormat
 import java.util.*
 

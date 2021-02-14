@@ -1,13 +1,11 @@
 package com.example.android.politicalpreparedness.data.database
 
 import android.database.sqlite.SQLiteConstraintException
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.example.android.politicalpreparedness.data.DataSource
 import com.example.android.politicalpreparedness.data.Result
-import com.example.android.politicalpreparedness.data.network.models.Election
-import com.example.android.politicalpreparedness.data.network.models.ElectionUpdate
+import com.example.android.politicalpreparedness.data.models.Election
 
 class LocalDataSource(private val database: ElectionDatabase) : DataSource {
 

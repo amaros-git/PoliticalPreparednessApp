@@ -1,7 +1,7 @@
 package com.example.android.politicalpreparedness.data
 
 import androidx.lifecycle.LiveData
-import com.example.android.politicalpreparedness.data.network.models.Election
+import com.example.android.politicalpreparedness.data.models.Election
 
 interface DataSource {
 

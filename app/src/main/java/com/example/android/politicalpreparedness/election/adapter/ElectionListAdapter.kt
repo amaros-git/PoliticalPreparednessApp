@@ -1,13 +1,12 @@
 package com.example.android.politicalpreparedness.election.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.politicalpreparedness.databinding.ElectionItemBinding
-import com.example.android.politicalpreparedness.data.network.models.Election
+import com.example.android.politicalpreparedness.data.models.Election
 import com.example.android.politicalpreparedness.databinding.HeaderBinding
 import com.example.android.politicalpreparedness.election.ElectionsViewModel
 import kotlinx.coroutines.CoroutineScope

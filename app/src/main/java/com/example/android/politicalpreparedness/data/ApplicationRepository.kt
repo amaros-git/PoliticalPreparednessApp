@@ -1,20 +1,12 @@
 package com.example.android.politicalpreparedness.data
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.android.politicalpreparedness.data.network.CivicsApi
-import com.example.android.politicalpreparedness.data.network.models.*
+import com.example.android.politicalpreparedness.data.models.*
 import com.example.android.politicalpreparedness.representative.model.Representative
-import com.example.android.politicalpreparedness.utils.convertExceptionToToastString
-import com.squareup.moshi.JsonDataException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.io.IOException
-import retrofit2.HttpException
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
-import java.util.*
 
 class ApplicationRepository(
         private val localDataSource: DataSource,

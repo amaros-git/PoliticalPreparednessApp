@@ -1,4 +1,4 @@
-package com.example.android.politicalpreparedness.data.network.models
+package com.example.android.politicalpreparedness.data.models
 
 data class State (
     val name: String,

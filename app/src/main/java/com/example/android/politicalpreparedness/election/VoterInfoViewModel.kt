@@ -1,6 +1,5 @@
 package com.example.android.politicalpreparedness.election
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -9,11 +8,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.base.BaseViewModel
 import com.example.android.politicalpreparedness.data.ApplicationRepository
-import com.example.android.politicalpreparedness.data.network.models.VoterInfoResponse
+import com.example.android.politicalpreparedness.data.models.VoterInfoResponse
 import kotlinx.coroutines.launch
 import com.example.android.politicalpreparedness.data.Result
-import com.example.android.politicalpreparedness.data.network.models.Division
-import com.example.android.politicalpreparedness.utils.SingleLiveEvent
+import com.example.android.politicalpreparedness.data.models.Division
 import com.example.android.politicalpreparedness.utils.convertExceptionToToastString
 import kotlinx.coroutines.Dispatchers
 

@@ -15,8 +15,8 @@ import com.example.android.politicalpreparedness.data.ApplicationRepository
 import com.example.android.politicalpreparedness.data.database.ElectionDatabase
 import com.example.android.politicalpreparedness.data.database.LocalDataSource
 import com.example.android.politicalpreparedness.data.network.CivicsApi
-import com.example.android.politicalpreparedness.data.network.models.Election
-import com.example.android.politicalpreparedness.data.network.models.VoterInfoResponse
+import com.example.android.politicalpreparedness.data.models.Election
+import com.example.android.politicalpreparedness.data.models.VoterInfoResponse
 import com.example.android.politicalpreparedness.databinding.FragmentVoterInfoBinding
 import com.example.android.politicalpreparedness.utils.setDisplayHomeAsUpEnabled
 import com.example.android.politicalpreparedness.utils.setTitle

@@ -18,7 +18,7 @@ abstract class BaseFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         _viewModel.showErrorMessage.observe(this) {
-            Toast.makeText(activity, it, Toast.LENGTH_LONG).show()
+            Toast.makeText(activity, it, Toast.LENGTH_SHORT).show()
         }
 
         _viewModel.navigationCommand.observe(this) { command ->

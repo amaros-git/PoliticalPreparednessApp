@@ -2,8 +2,7 @@ package com.example.android.politicalpreparedness.data.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.android.politicalpreparedness.data.network.models.Election
-import com.example.android.politicalpreparedness.data.network.models.ElectionUpdate
+import com.example.android.politicalpreparedness.data.models.Election
 
 @Dao
 interface ElectionDao {

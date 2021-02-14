@@ -1,4 +1,4 @@
-package com.example.android.politicalpreparedness.data.network.models
+package com.example.android.politicalpreparedness.data.models
 
 import com.example.android.politicalpreparedness.representative.model.Representative
 import com.squareup.moshi.Json

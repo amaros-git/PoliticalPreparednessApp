@@ -5,7 +5,7 @@ import androidx.lifecycle.*
 import com.example.android.politicalpreparedness.base.BaseViewModel
 import com.example.android.politicalpreparedness.data.ApplicationRepository
 import com.example.android.politicalpreparedness.data.Result
-import com.example.android.politicalpreparedness.data.network.models.Election
+import com.example.android.politicalpreparedness.data.models.Election
 import com.example.android.politicalpreparedness.utils.SingleLiveEvent
 import com.example.android.politicalpreparedness.utils.convertExceptionToToastString
 import kotlinx.coroutines.Dispatchers
