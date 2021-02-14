@@ -35,13 +35,4 @@ interface ElectionDao {
     @Query("SELECT * FROM election_table WHERE id = :electionId")
     fun getElection(electionId: Int): Election?
 
-
-    //TODO: Add select all election query
-
-    //TODO: Add select single election query
-
-    //TODO: Add delete query
-
-    //TODO: Add clear query
-
 }
