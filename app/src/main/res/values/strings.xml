@@ -32,8 +32,8 @@
     <string name="cannot_connect_services_check">Cannot connect remote services, please check if internet is enabled</string>
     <string name="wrong_response">Connection was OK, but wrong data are received</string>
     <string name="please_retart_app">Internal error occurred, please restart application</string>
-    <string name="enable_location_services">Please enable location services to use this option</string>
-    <string name="wrong_location">Something worng with you location. Are you on the Earth ?</string>
+    <string name="enable_location_services">Please enable location services. If enabled, please wait and try later</string>
+    <string name="wrong_location">Something wrong with you location. Are you on the Earth ?</string>
     <string name="my_representatives">My Representatives</string>
 
 </resources>

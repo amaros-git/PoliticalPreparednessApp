@@ -155,4 +155,14 @@ class RepresentativeViewModel(
         Log.d(TAG, "onStatusChanged")
     }
 
+    override fun onProviderEnabled(provider: String) {
+        Log.d(TAG, "onStatusChanged")
+    }
+
+
+    override fun onProviderDisabled(provider: String) {
+        showErrorMessage.value =
+                app.applicationContext.getString(R.string.enable_location_services)
+    }
+
 }
