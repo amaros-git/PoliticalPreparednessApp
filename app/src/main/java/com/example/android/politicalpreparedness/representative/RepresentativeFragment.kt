@@ -25,7 +25,6 @@ import com.example.android.politicalpreparedness.data.network.CivicsApi
 import com.example.android.politicalpreparedness.data.models.Address
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
-import com.example.android.politicalpreparedness.representative.model.Representative
 import com.example.android.politicalpreparedness.utils.setDisplayHomeAsUpEnabled
 import com.example.android.politicalpreparedness.utils.setTitle
 import com.google.android.material.appbar.AppBarLayout
@@ -65,7 +64,9 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
     private val startForPermissionResult = registerForActivityResult(
             ActivityResultContracts.RequestPermission()) { result ->
         Log.d(TAG, "permission result = $result")
-        if (!result) {
+        if (result) {
+            getMyLocation()
+        } else {
             Toast.makeText(
                     requireContext(),
                     getString(R.string.enable_location_services),
@@ -74,7 +75,6 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
                     .show()
         }
     }
-
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -137,7 +137,7 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
     private fun getMyLocation() {
         hideKeyboard()
 
-        if(!isLocationPermissionGranted()) {
+        if (!isLocationPermissionGranted()) {
             requestLocationPermission()
         } else {
             _viewModel.startAddressLocation()
@@ -197,7 +197,7 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
     }
 
     private fun isAddressValid(address: Address): Boolean {
-            return (address.city.isNotEmpty()) && (address.state.isNotEmpty())
+        return (address.city.isNotEmpty()) && (address.state.isNotEmpty())
     }
 
     private fun findRepresentatives(address: Address) {

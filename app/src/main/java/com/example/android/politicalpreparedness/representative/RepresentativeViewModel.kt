@@ -16,7 +16,7 @@ import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.base.BaseViewModel
 import com.example.android.politicalpreparedness.data.ApplicationRepository
 import com.example.android.politicalpreparedness.data.Result
-import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCacheDataItem
+import com.example.android.politicalpreparedness.data.database.representativescache.convertCacheItemToRepresentative
 import com.example.android.politicalpreparedness.data.models.*
 import com.example.android.politicalpreparedness.representative.model.Representative
 import com.example.android.politicalpreparedness.utils.convertExceptionToToastString
@@ -64,56 +64,7 @@ class RepresentativeViewModel(
         }
     }
 
-    private fun convertCacheItemToRepresentative(
-            representativeCacheItem: RepresentativeCacheDataItem
-    ) =
-            Representative(
-                    createOfficial(representativeCacheItem),
-                    createOffice(representativeCacheItem)
-            )
 
-    private fun createListOfChannels(cacheItem: RepresentativeCacheDataItem): List<Channel>? {
-        val channels = mutableListOf<Channel>()
-        if (null != cacheItem.facebookId) {
-            channels.add(Channel("Facebook", cacheItem.facebookId))
-        }
-        if (null != cacheItem.twitterId) {
-            channels.add(Channel("Twitter", cacheItem.twitterId))
-        }
-
-        return if (channels.isEmpty()) null else channels
-    }
-
-    private fun createOfficial(
-            representativeCacheItem: RepresentativeCacheDataItem
-    ): Official {
-        val urls = if (representativeCacheItem.wwwUrl.isNullOrBlank()) {
-            null
-        } else {
-            listOf(representativeCacheItem.wwwUrl)
-        }
-        val channels = createListOfChannels(representativeCacheItem)
-
-        return Official(
-                representativeCacheItem.name,
-                null,
-                representativeCacheItem.partyName,
-                null,
-                urls,
-                representativeCacheItem.photoUrl,
-                channels)
-    }
-
-    private fun createOffice(representativeCacheItem: RepresentativeCacheDataItem) =
-            Office(
-                    representativeCacheItem.name,
-                    Division(
-                            representativeCacheItem.divisionId,
-                            representativeCacheItem.cityState,
-                            representativeCacheItem.cityState
-                    ),
-                    emptyList()
-            )
 
 
     private fun refreshRepresentativesFromNetwork(address: Address) {

@@ -18,30 +18,8 @@ import com.example.android.politicalpreparedness.election.adapter.ElectionListAd
 import com.example.android.politicalpreparedness.utils.setDisplayHomeAsUpEnabled
 import com.example.android.politicalpreparedness.utils.setTitle
 
-/*viewModel.upcomingElections.observe(viewLifecycleOwner) { result ->
-            Log.d(TAG, "Observed elections: ")
-            (result as Result.Success).data.forEach {
-                Log.d(TAG, it.toString())
-            }
-        }
-
-        viewModel.refreshUpcomingElections()*/
-
-
-//TODO: Add ViewModel values and create ViewModel
-
-//TODO: Add binding values
-
-//TODO: Link elections to voter info
-
-//TODO: Initiate recycler adapters
-
-//TODO: Populate recycler adapters
-
 
 class ElectionsFragment : BaseFragment() {
-
-    private val TAG = ElectionsFragment::class.java.simpleName
 
     private lateinit var binding: FragmentElectionBinding
 

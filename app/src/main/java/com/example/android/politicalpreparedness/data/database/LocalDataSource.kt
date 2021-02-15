@@ -12,6 +12,7 @@ import com.example.android.politicalpreparedness.data.database.representativesca
 import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCacheLocation
 import com.example.android.politicalpreparedness.data.models.Election
 
+
 class LocalDataSource(
         private val electionDB: ElectionDatabase,
         private val representativeDB: RepresentativeDatabase

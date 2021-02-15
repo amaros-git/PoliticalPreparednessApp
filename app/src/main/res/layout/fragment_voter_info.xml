@@ -150,4 +150,5 @@
             tools:text="Follow election" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

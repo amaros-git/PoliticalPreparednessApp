@@ -26,7 +26,7 @@
     <string name="follow_election">FOLLOW ELECTION</string>
     <string name="representative_title">Representatives Search</string>
     <string name="elections_title">Elections</string>
-    <string name="launch_title">Political Preparedness app</string>
+    <string name="launch_title">Welcome</string>
     <string name="saved_elections">Saved Elections</string>
     <string name="cannot_connect_services">Cannot connect remote services</string>
     <string name="cannot_connect_services_check">Cannot connect remote services, please check if internet is enabled</string>

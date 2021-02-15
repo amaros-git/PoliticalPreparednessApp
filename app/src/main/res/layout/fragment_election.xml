@@ -10,7 +10,6 @@
             type="com.example.android.politicalpreparedness.election.ElectionsViewModel" />
     </data>
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,7 +25,6 @@
             android:text="@string/upcoming_elections"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -71,10 +69,6 @@
             app:layout_constraintTop_toBottomOf="@+id/saved_elections_title"
             tools:layout_editor_absoluteX="0dp" />
 
-
-        <!-- TODO: Add Upcoming Election Recycler and Header -->
-
-        <!-- TODO: Add Saved Election Recycler and Header -->
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

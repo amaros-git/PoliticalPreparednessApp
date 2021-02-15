@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="headerText"
             type="String" />
@@ -13,9 +14,9 @@
         style="@style/TitleTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="textStart"
-        android:text="@{headerText}"
         android:padding="@dimen/margin_normal"
+        android:text="@{headerText}"
+        android:textAlignment="textStart"
         android:textAppearance="?android:attr/textAppearanceLarge"
         tools:text="Header" />
 </layout>

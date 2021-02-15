@@ -25,8 +25,6 @@ import com.example.android.politicalpreparedness.utils.setTitle
 
 class VoterInfoFragment : BaseFragment() {
 
-    private val TAG = VoterInfoFragment::class.java.simpleName
-
     private lateinit var binding: FragmentVoterInfoBinding
 
     override val _viewModel by viewModels<VoterInfoViewModel> {
@@ -118,7 +116,7 @@ class VoterInfoFragment : BaseFragment() {
                     voterInfo.state?.get(0)?.electionAdministrationBody?.correspondenceAddress
 
             // not sure how it should be handled the case when more than one state on the list,
-            // I will use the first element
+            // I will use the first elements
             if (!voterInfo.state.isNullOrEmpty()) {
                 val votingUrl =
                         voterInfo.state[0].electionAdministrationBody.votingLocationFinderUrl
@@ -129,4 +127,5 @@ class VoterInfoFragment : BaseFragment() {
             }
         }
     }
+
 }

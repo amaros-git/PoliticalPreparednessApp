@@ -1,9 +1,7 @@
 package com.example.android.politicalpreparedness.representative
 
-import android.provider.Settings.Global.getString
 import android.view.View
 import android.widget.ImageView
-import android.widget.Spinner
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import com.example.android.politicalpreparedness.R

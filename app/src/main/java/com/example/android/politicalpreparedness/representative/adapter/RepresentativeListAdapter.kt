@@ -3,7 +3,6 @@ package com.example.android.politicalpreparedness.representative.adapter
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
+
 
 class RepresentativeListAdapter(private val viewModel: RepresentativeViewModel) :
         ListAdapter<RepresentativeDataItem, RecyclerView.ViewHolder>(RepresentativeDiffCallback()) {

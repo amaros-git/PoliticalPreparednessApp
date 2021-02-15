@@ -15,10 +15,12 @@ import com.example.android.politicalpreparedness.data.models.Division
 import com.example.android.politicalpreparedness.utils.convertExceptionToToastString
 import kotlinx.coroutines.Dispatchers
 
+
 class VoterInfoViewModel(
         private val electionId: Int,
         private val app: Application,
-        private val repository: ApplicationRepository) : BaseViewModel(app) {
+        private val repository: ApplicationRepository
+) : BaseViewModel(app) {
 
     private val TAG = VoterInfoViewModel::class.java.simpleName
 
@@ -29,6 +31,7 @@ class VoterInfoViewModel(
     private val _isFollowed = MutableLiveData<Boolean>()
     val isFollowed: LiveData<Boolean>
         get() = _isFollowed
+
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -41,6 +44,7 @@ class VoterInfoViewModel(
         }
 
     }
+
 
     fun follow(electionId: Int) {
         changeFollowingStatus(electionId, true)

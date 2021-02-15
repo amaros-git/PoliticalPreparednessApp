@@ -8,7 +8,6 @@
         <variable
             name="viewModel"
             type="com.example.android.politicalpreparedness.representative.RepresentativeViewModel" />
-
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -140,11 +139,11 @@
             </androidx.constraintlayout.motion.widget.MotionLayout>
 
             <TextView
-                style="@style/TitleTextStyle"
                 android:id="@+id/my_representatives"
-                android:layout_margin="@dimen/margin_small"
+                style="@style/TitleTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_small"
                 android:text="@string/my_representatives" />
 
         </com.google.android.material.appbar.AppBarLayout>
@@ -165,4 +164,5 @@
             motion:visibilityMode="ignore" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 </layout>
