@@ -18,7 +18,6 @@
     <string name="enter_city">Enter city</string>
     <string name="enter_zip_code">Enter zip code</string>
     <string name="address_check_error">Please check fields, state and city are mandatory</string>
-    <string name="my_representatives">My Representatives</string>
     <string name="facebook_icon">Picture with facebook icon</string>
     <string name="picture_with_twitter_icon">Picture with twitter icon</string>
     <string name="picture_with_www_icon">Picture with www icon</string>
@@ -35,5 +34,6 @@
     <string name="please_retart_app">Internal error occurred, please restart application</string>
     <string name="enable_location_services">Please enable location services to use this option</string>
     <string name="wrong_location">Something worng with you location. Are you on the Earth ?</string>
+    <string name="my_representatives">My Representatives</string>
 
 </resources>

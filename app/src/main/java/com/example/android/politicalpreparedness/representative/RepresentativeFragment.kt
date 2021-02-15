@@ -96,8 +96,7 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
         restoreFieldsIfNeeded(savedInstanceState)
 
         _viewModel.representatives.observe(viewLifecycleOwner) { list ->
-            Log.d(TAG, "Submiting")
-            listAdapter.submitMyList(list, getString(R.string.my_representatives))
+            listAdapter.submitMyList(list)
         }
 
         _viewModel.locationAddress.observe(viewLifecycleOwner) {
