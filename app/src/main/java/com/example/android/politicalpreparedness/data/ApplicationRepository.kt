@@ -95,9 +95,9 @@ class ApplicationRepository(
                     representative.official.name,
                     representative.official.party,
                     representative.official.photoUrl,
-                    representative.official.urls?.first(),
                     getTwitterId(representative.official.channels),
                     getFacebookId(representative.official.channels),
+                    representative.official.urls?.first(),
                     representative.office.division.id
             )
 

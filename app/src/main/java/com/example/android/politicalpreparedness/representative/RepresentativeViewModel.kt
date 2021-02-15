@@ -7,6 +7,7 @@ import android.location.Geocoder
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -49,12 +50,12 @@ class RepresentativeViewModel(
         viewModelScope.launch {
             val result = repository.getRepresentatives(address.city + address.state)
             if (result is Result.Success) {
-                val representativeCache = mutableListOf<Representative>()
+                val representatives = mutableListOf<Representative>()
                 result.data.representatives.forEach {
-                    representativeCache.add(convertCacheItemToRepresentative(it))
+                    representatives.add(convertCacheItemToRepresentative(it))
                 }
 
-                _representatives.value = representativeCache
+                _representatives.value = representatives
             }
         }
 
@@ -161,6 +162,23 @@ class RepresentativeViewModel(
         locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 1f, this)
     }
 
+    /**
+     * @throws IOException if gps disabled. ALso if internet is disabled too
+     */
+    private fun geoCodeLocation(location: Location): Address {
+        val geocoder = Geocoder(app.applicationContext, Locale.getDefault())
+        return geocoder.getFromLocation(location.latitude, location.longitude, 1)
+                .map { address ->
+                    Address(address.thoroughfare, address.subThoroughfare, address.locality, address.adminArea, address.postalCode)
+                }
+                .first()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        locationManager?.removeUpdates(this)
+    }
+
     override fun onLocationChanged(location: Location) {
         try {
             val address = geoCodeLocation(location)
@@ -182,21 +200,8 @@ class RepresentativeViewModel(
         }
     }
 
-    /**
-     * @throws IOException if gps disabled. ALso if internet is disabled too
-     */
-    private fun geoCodeLocation(location: Location): Address {
-        val geocoder = Geocoder(app.applicationContext, Locale.getDefault())
-        return geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                .map { address ->
-                    Address(address.thoroughfare, address.subThoroughfare, address.locality, address.adminArea, address.postalCode)
-                }
-                .first()
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        locationManager?.removeUpdates(this)
+    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+        Log.d(TAG, "onStatusChanged")
     }
 
 }

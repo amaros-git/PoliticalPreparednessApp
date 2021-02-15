@@ -20,6 +20,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 class RepresentativeListAdapter(private val viewModel: RepresentativeViewModel) :
         ListAdapter<RepresentativeDataItem, RecyclerView.ViewHolder>(RepresentativeDiffCallback()) {
@@ -30,8 +31,6 @@ class RepresentativeListAdapter(private val viewModel: RepresentativeViewModel) 
     }
 
     private val TAG = RepresentativeListAdapter::class.java.simpleName
-
-    private var itemsBackup: MutableList<RepresentativeDataItem>? = null
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
@@ -66,14 +65,6 @@ class RepresentativeListAdapter(private val viewModel: RepresentativeViewModel) 
     fun removeAllItems() {
         adapterScope.launch {
             withContext(Dispatchers.Main) {
-                if (null != itemsBackup) {
-                    val size = itemsBackup!!.size
-                    Log.d(TAG, "removeAllItems")
-                    notifyItemRangeRemoved(0, size)
-                    itemsBackup!!.clear()
-
-                }
-                itemsBackup = null
                 submitMyList(emptyList())
             }
         }
@@ -89,8 +80,6 @@ class RepresentativeListAdapter(private val viewModel: RepresentativeViewModel) 
                 } else {
                     list.map { RepresentativeDataItem.RepresentativeItem(it) }
                 }
-
-                itemsBackup = items.toMutableList()
 
                 withContext(Dispatchers.Main) {
                     submitList(items)
@@ -160,7 +149,11 @@ class RepresentativeViewHolder(val binding: RepresantiveItemBinding) :
     private fun setIntent(url: String) {
         val uri = Uri.parse(url)
         val intent = Intent(ACTION_VIEW, uri)
-        itemView.context.startActivity(intent)
+        try {
+            itemView.context.startActivity(intent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }
 

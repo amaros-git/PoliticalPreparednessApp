@@ -198,7 +198,7 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
     }
 
     private fun isAddressValid(address: Address): Boolean {
-            return (address.city.isNotEmpty()) || (address.state.isNotEmpty())
+            return (address.city.isNotEmpty()) && (address.state.isNotEmpty())
     }
 
     private fun findRepresentatives(address: Address) {
@@ -241,9 +241,4 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
 
-  /*  private fun refreshAdapter(list: List<Representative>) {
-        for (i in list.indices) {
-            listAdapter.notifyItemRemoved(i)
-        }
-    }*/
 }
