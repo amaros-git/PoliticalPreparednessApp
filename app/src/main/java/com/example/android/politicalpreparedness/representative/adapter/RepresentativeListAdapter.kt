@@ -3,6 +3,7 @@ package com.example.android.politicalpreparedness.representative.adapter
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,13 +29,17 @@ class RepresentativeListAdapter(private val viewModel: RepresentativeViewModel) 
         private const val ITEM_VIEW_TYPE_ITEM = 1
     }
 
+    private val TAG = RepresentativeListAdapter::class.java.simpleName
+
+    private var itemsBackup: MutableList<RepresentativeDataItem>? = null
+
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             ITEM_VIEW_TYPE_HEADER -> Header.from(parent)
             ITEM_VIEW_TYPE_ITEM -> RepresentativeViewHolder.from(parent)
-             else -> throw ClassCastException("Unknown viewType $viewType")
+            else -> throw ClassCastException("Unknown viewType $viewType")
         }
     }
 
@@ -58,6 +63,22 @@ class RepresentativeListAdapter(private val viewModel: RepresentativeViewModel) 
         }
     }
 
+    fun removeAllItems() {
+        adapterScope.launch {
+            withContext(Dispatchers.Main) {
+                if (null != itemsBackup) {
+                    val size = itemsBackup!!.size
+                    Log.d(TAG, "removeAllItems")
+                    notifyItemRangeRemoved(0, size)
+                    itemsBackup!!.clear()
+
+                }
+                itemsBackup = null
+                submitMyList(emptyList())
+            }
+        }
+    }
+
     fun submitMyList(list: List<Representative>?, headerText: String? = null) {
         list?.let {
             adapterScope.launch {
@@ -68,6 +89,8 @@ class RepresentativeListAdapter(private val viewModel: RepresentativeViewModel) 
                 } else {
                     list.map { RepresentativeDataItem.RepresentativeItem(it) }
                 }
+
+                itemsBackup = items.toMutableList()
 
                 withContext(Dispatchers.Main) {
                     submitList(items)
@@ -174,7 +197,7 @@ class RepresentativeDiffCallback : DiffUtil.ItemCallback<RepresentativeDataItem>
 }
 
 sealed class RepresentativeDataItem {
-    data class RepresentativeItem(val representative : Representative) : RepresentativeDataItem() {
+    data class RepresentativeItem(val representative: Representative) : RepresentativeDataItem() {
         override val _representative: Representative = representative
     }
 
@@ -182,5 +205,5 @@ sealed class RepresentativeDataItem {
         override val _representative: Representative? = null
     }
 
-    abstract val _representative : Representative?
+    abstract val _representative: Representative?
 }

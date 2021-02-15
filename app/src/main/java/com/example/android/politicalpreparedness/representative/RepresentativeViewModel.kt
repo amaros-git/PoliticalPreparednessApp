@@ -11,14 +11,17 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.android.politicalpreparedness.R
 import com.example.android.politicalpreparedness.base.BaseViewModel
 import com.example.android.politicalpreparedness.data.ApplicationRepository
 import com.example.android.politicalpreparedness.data.Result
+import com.example.android.politicalpreparedness.data.database.representativescache.RepresentativeCacheDataItem
 import com.example.android.politicalpreparedness.data.models.*
 import com.example.android.politicalpreparedness.representative.model.Representative
 import com.example.android.politicalpreparedness.utils.convertExceptionToToastString
 import kotlinx.coroutines.launch
 import java.util.*
+
 
 class RepresentativeViewModel(
         private val app: Application,
@@ -46,58 +49,71 @@ class RepresentativeViewModel(
         viewModelScope.launch {
             val result = repository.getRepresentatives(address.city + address.state)
             if (result is Result.Success) {
+                val representativeCache = mutableListOf<Representative>()
                 result.data.representatives.forEach {
-                    Log.d(TAG, it.toString())
-                }
-                val representatives = mutableListOf<Representative>()
-                result.data.representatives.forEach {
-
-                    val channels = mutableListOf<Channel>()
-                    if (null != it.facebookId) {
-                        channels.add(Channel(
-                                "Facebook",
-                                it.facebookId
-                        ))
-                    }
-                    if (null != it.twitterId) {
-                        channels.add(Channel(
-                                "Twitter",
-                                it.twitterId
-                        ))
-                    }
-
-                    val wwwUrl = (it.wwwUrl) ?: it.wwwUrl!!
-
-                    val official = Official(
-                            it.name!!,
-                            null,
-                            it.partyName,
-                            null,
-                            listOf(wwwUrl),
-                            it.photoUrl,
-                            channels)
-
-                    val office = Office(
-                            it.name,
-                            Division(
-                                    it.divisionId!!,
-                                    it.cityState,
-                                    it.cityState
-                            ),
-                            emptyList()
-                    )
-
-                    representatives.add(Representative(official, office))
+                    representativeCache.add(convertCacheItemToRepresentative(it))
                 }
 
-                _representatives.value = representatives
+                _representatives.value = representativeCache
             }
-
         }
+
         if (shouldRefresh) {
             refreshRepresentativesFromNetwork(address)
         }
     }
+
+    private fun convertCacheItemToRepresentative(
+            representativeCacheItem: RepresentativeCacheDataItem
+    ) =
+            Representative(
+                    createOfficial(representativeCacheItem),
+                    createOffice(representativeCacheItem)
+            )
+
+    private fun createListOfChannels(cacheItem: RepresentativeCacheDataItem): List<Channel>? {
+        val channels = mutableListOf<Channel>()
+        if (null != cacheItem.facebookId) {
+            channels.add(Channel("Facebook", cacheItem.facebookId))
+        }
+        if (null != cacheItem.twitterId) {
+            channels.add(Channel("Twitter", cacheItem.twitterId))
+        }
+
+        return if (channels.isEmpty()) null else channels
+    }
+
+    private fun createOfficial(
+            representativeCacheItem: RepresentativeCacheDataItem
+    ): Official {
+        val urls = if (representativeCacheItem.wwwUrl.isNullOrBlank()) {
+            null
+        } else {
+            listOf(representativeCacheItem.wwwUrl)
+        }
+        val channels = createListOfChannels(representativeCacheItem)
+
+        return Official(
+                representativeCacheItem.name,
+                null,
+                representativeCacheItem.partyName,
+                null,
+                urls,
+                representativeCacheItem.photoUrl,
+                channels)
+    }
+
+    private fun createOffice(representativeCacheItem: RepresentativeCacheDataItem) =
+            Office(
+                    representativeCacheItem.name,
+                    Division(
+                            representativeCacheItem.divisionId,
+                            representativeCacheItem.cityState,
+                            representativeCacheItem.cityState
+                    ),
+                    emptyList()
+            )
+
 
     private fun refreshRepresentativesFromNetwork(address: Address) {
         showLoading.value = true
@@ -152,9 +168,17 @@ class RepresentativeViewModel(
             //we need location only once
             locationManager?.removeUpdates(this)
         } catch (e: Exception) {
+            val message = when (e) {
+                is NullPointerException -> {
+                    app.applicationContext.getString(R.string.wrong_location)
+                }
+                else -> {
+                    app.applicationContext.getString(R.string.enable_location_services)
+                }
+            }
             Log.d(TAG, "Exception on GPS occurred")
             e.printStackTrace()
-            showErrorMessage.value = "Please enable Location services"
+            showErrorMessage.value = message
         }
     }
 
@@ -172,7 +196,6 @@ class RepresentativeViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        Log.d(TAG, "onCleared called" )
         locationManager?.removeUpdates(this)
     }
 

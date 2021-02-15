@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.content.ContextCompat
@@ -24,6 +25,7 @@ import com.example.android.politicalpreparedness.data.network.CivicsApi
 import com.example.android.politicalpreparedness.data.models.Address
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
+import com.example.android.politicalpreparedness.representative.model.Representative
 import com.example.android.politicalpreparedness.utils.setDisplayHomeAsUpEnabled
 import com.example.android.politicalpreparedness.utils.setTitle
 import com.google.android.material.appbar.AppBarLayout
@@ -62,7 +64,15 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
 
     private val startForPermissionResult = registerForActivityResult(
             ActivityResultContracts.RequestPermission()) { result ->
-        Log.d(TAG, "permission result = $result") //TODO if false show snack bar with settings
+        Log.d(TAG, "permission result = $result")
+        if (!result) {
+            Toast.makeText(
+                    requireContext(),
+                    getString(R.string.enable_location_services),
+                    Toast.LENGTH_LONG
+            )
+                    .show()
+        }
     }
 
 
@@ -86,10 +96,7 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
         restoreFieldsIfNeeded(savedInstanceState)
 
         _viewModel.representatives.observe(viewLifecycleOwner) { list ->
-            /*Log.d(TAG, "Representatives:")
-            list.forEach {
-                Log.d(TAG, it.toString())
-            }*/
+            Log.d(TAG, "Submiting")
             listAdapter.submitMyList(list, getString(R.string.my_representatives))
         }
 
@@ -150,6 +157,17 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
         }
     }
 
+    private fun configureAnimation() {
+        val appBarLayout: AppBarLayout = binding.appbarLayout
+        val motionLayout: MotionLayout = binding.motionLayout
+        val listener = AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+            val seekPosition = -verticalOffset / appBarLayout.totalScrollRange.toFloat()
+            motionLayout.progress = seekPosition
+        }
+
+        appBarLayout.addOnOffsetChangedListener(listener)
+    }
+
     private fun restoreFieldsIfNeeded(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             val line1 = (it.getString(Extra_address_line1)) ?: ""
@@ -160,17 +178,6 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
 
             setAddressToFields(Address(line1, line2, city, state, zip))
         }
-    }
-
-    private fun configureAnimation() {
-        val appBarLayout: AppBarLayout = binding.appbarLayout
-        val motionLayout: MotionLayout = binding.motionLayout
-        val listener = AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
-            val seekPosition = -verticalOffset / appBarLayout.totalScrollRange.toFloat()
-            motionLayout.progress = seekPosition
-        }
-
-        appBarLayout.addOnOffsetChangedListener(listener)
     }
 
     private fun getAddressFromFields() =
@@ -196,6 +203,7 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
 
     private fun findRepresentatives(address: Address) {
         hideKeyboard()
+        listAdapter.removeAllItems()
         if (isAddressValid(address)) {
             _viewModel.getRepresentative(address, true)
         } else {
@@ -232,4 +240,10 @@ class RepresentativeFragment : BaseFragment() { //TODO move location listener
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
+
+  /*  private fun refreshAdapter(list: List<Representative>) {
+        for (i in list.indices) {
+            listAdapter.notifyItemRemoved(i)
+        }
+    }*/
 }

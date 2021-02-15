@@ -23,7 +23,7 @@ interface DataSource {
 
     suspend fun getElection(electionId: Int): Result<Election>
 
-    suspend fun saveState(state: RepresentativeCacheLocation)
+    suspend fun saveLocation(state: RepresentativeCacheLocation)
 
     suspend fun saveRepresentative(representative: RepresentativeCacheDataItem)
 }

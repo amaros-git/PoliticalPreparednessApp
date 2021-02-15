@@ -51,7 +51,7 @@ class LocalDataSource(
         representativeDB.representativeDAO.deleteRepresentatives(location)
     }
 
-    override suspend fun saveState(state: RepresentativeCacheLocation) {
+    override suspend fun saveLocation(state: RepresentativeCacheLocation) {
         representativeDB.representativeDAO.insertState(state)
     }
 
